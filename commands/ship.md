@@ -80,21 +80,26 @@ Run production build. For packaging projects, run release command too.
    ```
    Types: feat, fix, update, docs, test, chore
 
-4. Push and tag:
+4. **ASK USER**: "How do you want to ship this release?"
+   - **Option A: Create PR** - Creates a PR for review before merging
+   - **Option B: Merge to main** - Merges directly to main and pushes
 
-   **Direct push:**
-   ```bash
-   git tag -a "v$VERSION" -m "Release v$VERSION"
-   git push origin <branch> && git push origin "v$VERSION"
-   ```
+5. Execute chosen workflow:
 
-   **PR workflow:**
+   **Option A - Create PR:**
    ```bash
    git push origin <feature-branch>
    gh pr create --title "Release v$VERSION" --body "Release v$VERSION"
-   # After merge:
-   git checkout main && git pull && git tag -a "v$VERSION" -m "Release v$VERSION"
-   git push origin "v$VERSION"
+   ```
+   Stop here. User will merge PR manually later.
+
+   **Option B - Merge to main:**
+   ```bash
+   git checkout main
+   git pull origin main
+   git merge <feature-branch>
+   git tag -a "v$VERSION" -m "Release v$VERSION"
+   git push origin main && git push origin "v$VERSION"
    ```
 
 ---
