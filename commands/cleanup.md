@@ -1,118 +1,74 @@
 # Dead Code Cleanup
 
-Find and safely remove unused code from the codebase.
+Find and safely remove unused code.
 
-## Targets for Cleanup
+## Targets
 
-1. **Unused imports** - Imported but never used
-2. **Unused exports** - Exported but never imported elsewhere
-3. **Unused functions** - Defined but never called
-4. **Unused variables** - Declared but never read
-5. **Unreachable code** - Code after return/throw
-6. **Commented-out code** - Old code left in comments
-7. **Deprecated code** - Marked for removal
+1. Unused imports, exports, functions, variables
+2. Unreachable code (after return/throw)
+3. Commented-out code
+4. Deprecated code
 
 ## Safety Protocol
 
-**Before removing anything:**
-1. Use LSP to verify no references exist
-2. Search codebase for string references (dynamic imports)
-3. Check if used in tests
-4. Check if exported in public API
+**Before removing:**
+1. LSP verify no references
+2. Search for string references (dynamic imports)
+3. Check test usage
+4. Check public API exports
 
 **Never remove:**
-- Public API exports without deprecation period
-- Code referenced by external packages
-- Configuration used by build tools
-- Files listed in .cleanupignore
+- Public API exports without deprecation
+- Externally referenced code
+- Build tool configurations
+- Files in .cleanupignore
 
 ## Workflow
 
 ### Step 1: Analysis
 
-Use linting tools to find unused code:
-
 **TypeScript/JavaScript:**
 ```bash
-# ESLint no-unused-vars
 npx eslint . --rule 'no-unused-vars: error' --format json
-
-# TypeScript unused
 npx tsc --noEmit 2>&1 | grep "declared but"
-
-# Find unused exports
 npx ts-unused-exports tsconfig.json
 ```
 
 **Elixir:**
 ```bash
-# Credo checks for unused
 mix credo --strict
 ```
 
-### Step 2: Categorize Findings
+### Step 2: Categorize
 
-Group by risk level:
+**Safe (High Confidence):** Unused locals, private functions, unreachable code
 
-```markdown
-### Safe to Remove (High Confidence)
-- Unused local variables
-- Unused private functions
-- Unreachable code after return
+**Review First (Medium):** Unused exports, unused parameters
 
-### Review Before Removing (Medium Confidence)
-- Unused exports (might be used externally)
-- Unused parameters (might be for API compatibility)
-
-### Keep for Now (Low Confidence)
-- Potentially dynamic references
-- Public API members
-- Test utilities
-```
+**Keep (Low):** Dynamic references, public API, test utilities
 
 ### Step 3: Remove Systematically
 
-**Approach:**
-1. Start with highest confidence items
-2. Make atomic commits per category
-3. Run tests after each removal batch
+1. Start with highest confidence
+2. Atomic commits per category
+3. Test after each batch
 4. Stop if tests fail
 
-**For each removal:**
 ```bash
-# Verify no references
 rg "functionName" --type ts
-
-# Check LSP references
-# Use LSP findReferences tool
-
-# Remove the code
-# Run tests
 npm test
 ```
 
-### Step 4: Handle Commented Code
-
-Find commented-out code blocks:
+### Step 4: Commented Code
 
 ```bash
-# Find large comment blocks that look like code
-rg "^\s*//.*\{" --type ts  # JS/TS style
-rg "^\s*#.*def\s" --type py  # Python style
+rg "^\s*//.*\{" --type ts
+rg "^\s*#.*def\s" --type py
 ```
 
-**Decision tree for commented code:**
-- Is it in git history? → Remove, can recover from git
-- Is it a TODO/note? → Keep or convert to issue
-- Is it alternate implementation? → Remove or document why kept
+**Decision:** In git history? Remove. TODO/note? Keep or create issue. Alternate implementation? Remove or document.
 
-### Step 5: Verify Cleanup
-
-After cleanup:
-1. Run full test suite
-2. Run type checker
-3. Run linter
-4. Build the project
+### Step 5: Verify
 
 ```bash
 npm run typecheck && npm run lint && npm test && npm run build
@@ -124,21 +80,21 @@ npm run typecheck && npm run lint && npm test && npm run build
 ## Cleanup Report
 
 ### Removed
-- **Unused imports:** [count] across [files] files
-- **Unused functions:** [count]
-- **Unused variables:** [count]
-- **Commented code:** [count] blocks
-- **Lines removed:** [total]
+- Unused imports: [count] in [files] files
+- Unused functions: [count]
+- Unused variables: [count]
+- Commented code: [count] blocks
+- Lines removed: [total]
 
 ### Kept (Needs Review)
-- [item]: [reason kept]
+- [item]: [reason]
 
 ### Verification
 - Tests: Pass
 - Types: Pass
 - Build: Pass
 
-### Commits Created
+### Commits
 1. `chore: remove unused imports`
 2. `chore: remove dead functions`
 3. `chore: remove commented code`
@@ -146,7 +102,7 @@ npm run typecheck && npm run lint && npm test && npm run build
 
 ## Options
 
-- `/cleanup imports` - Only clean unused imports
-- `/cleanup functions` - Only clean unused functions
-- `/cleanup comments` - Only clean commented-out code
-- `/cleanup --dry-run` - Report what would be removed without changes
+- `/cleanup imports` - Only imports
+- `/cleanup functions` - Only functions
+- `/cleanup comments` - Only commented code
+- `/cleanup --dry-run` - Report without changes

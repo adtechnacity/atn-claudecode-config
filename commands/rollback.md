@@ -1,162 +1,89 @@
 # Safe Rollback
 
-Safely revert changes when something goes wrong.
+Safely revert changes. Handles code rollbacks and tag management.
 
 ## Modes
 
 ### 1. Rollback Commit: `/rollback commit [hash]`
 
-Revert a specific commit.
-
 ```bash
-# Show the commit to be reverted
-git show [hash] --stat
-
-# Create revert commit
-git revert [hash] --no-edit
-
-# Or revert without committing (to review first)
-git revert [hash] --no-commit
+git show [hash] --stat           # Preview
+git revert [hash] --no-edit      # Create revert commit
+git revert [hash] --no-commit    # Or preview first
 ```
 
 ### 2. Rollback to Release: `/rollback release [tag]`
 
-Roll back to a previous release version.
-
 ```bash
-# List recent tags
-git tag -l --sort=-version:refname | head -10
-
-# Show what would change
-git diff [tag]..HEAD --stat
-
-# Create rollback branch
-git checkout -b rollback/to-[tag]
+git tag -l --sort=-version:refname | head -10   # List tags
+git diff [tag]..HEAD --stat                      # Preview changes
+git checkout -b rollback/to-[tag]                # Create branch
 git reset --hard [tag]
 ```
 
-### 3. Rollback File: `/rollback file [path]`
-
-Restore a specific file to its previous state.
-
+**Tag cleanup (ask user):** After rollback, offer to delete tags for broken releases:
 ```bash
-# Show file history
-git log --oneline -10 -- [path]
-
-# Restore from specific commit
-git checkout [commit] -- [path]
-
-# Or restore from HEAD~1
-git checkout HEAD~1 -- [path]
+git tag -d v$BAD_VERSION                    # Local (REQUIRES CONFIRMATION)
+git push origin --delete v$BAD_VERSION      # Remote (REQUIRES CONFIRMATION)
 ```
 
-### 4. Rollback Last N Commits: `/rollback last [n]`
+**Re-shipping:** Use next patch version (v1.2.3 failed -> v1.2.4), or reuse if tag deleted.
 
-Undo the last N commits.
+### 3. Delete Tag: `/rollback tag [tag]`
+
+Remove tag without code rollback (accidental tag, typo, wrong commit).
 
 ```bash
-# Show what will be undone
-git log --oneline -[n]
+git show [tag] --stat
+git tag -d [tag]                         # Local
+git push origin --delete [tag]           # Remote (REQUIRES CONFIRMATION)
+```
 
-# Soft reset (keep changes staged)
-git reset --soft HEAD~[n]
+### 4. Rollback File: `/rollback file [path]`
 
-# Or mixed reset (keep changes unstaged)
-git reset HEAD~[n]
+```bash
+git log --oneline -10 -- [path]      # File history
+git checkout [commit] -- [path]      # Restore from commit
+git checkout HEAD~1 -- [path]        # Or from previous
+```
 
-# Or hard reset (discard changes) - requires confirmation
-git reset --hard HEAD~[n]
+### 5. Rollback Last N: `/rollback last [n]`
+
+```bash
+git log --oneline -[n]           # Preview
+git reset --soft HEAD~[n]        # Keep staged
+git reset HEAD~[n]               # Keep unstaged
+git reset --hard HEAD~[n]        # Discard (REQUIRES CONFIRMATION)
 ```
 
 ## Safety Protocol
 
-**Before any rollback:**
-1. Create a backup branch
-2. Verify current state is clean
-3. Understand what will be affected
-
+**Before rollback:**
 ```bash
-# Always create backup first
 git branch backup/before-rollback-$(date +%Y%m%d-%H%M%S)
-
-# Check for uncommitted changes
 git status
 ```
 
 **After rollback:**
-1. Run tests to verify stability
-2. Check for broken dependencies
-3. Document the reason for rollback
+1. Run tests
+2. Check dependencies
+3. Document reason
 
-## Rollback Workflow
+## Workflow
 
-### Step 1: Assess the Situation
-
-```bash
-# Current state
-git status
-git log --oneline -10
-
-# What's deployed (if applicable)
-git describe --tags --abbrev=0
-```
-
-### Step 2: Identify Rollback Target
-
-Ask the user:
-- What commit/release to roll back to?
-- Should changes be preserved or discarded?
-- Is this production or development?
-
-### Step 3: Execute Rollback
-
-Based on the mode, execute the appropriate rollback.
-
-### Step 4: Verify
-
-```bash
-# Run tests
-npm test
-
-# Check build
-npm run build
-
-# Verify the issue is resolved
-```
-
-### Step 5: Document
-
-Create a record of the rollback:
-
-```markdown
-## Rollback Record
-
-**Date:** [timestamp]
-**Reason:** [why rollback was needed]
-**From:** [commit/tag rolled back from]
-**To:** [commit/tag rolled back to]
-**Verification:** [how we verified the rollback worked]
-**Follow-up:** [what needs to happen next]
-```
+1. **Assess:** `git status`, `git log --oneline -10`, `git describe --tags --abbrev=0`
+2. **Identify target:** Ask user what to rollback to, preserve or discard changes, production or dev
+3. **Execute:** Run appropriate rollback mode
+4. **Verify:** Run tests, check build
+5. **Document:** Record rollback details
 
 ## Emergency Rollback (Production)
 
-For production issues:
-
 ```bash
-# 1. Create backup
 git branch backup/prod-$(date +%Y%m%d-%H%M%S)
-
-# 2. Checkout last known good
 git checkout [last-good-tag]
-
-# 3. Force push to deploy branch (REQUIRES CONFIRMATION)
-# git push --force origin [deploy-branch]
-
-# 4. Deploy (platform specific)
+# git push --force origin [deploy-branch]  # REQUIRES CONFIRMATION
 ```
-
-**WARNING:** Force pushes require explicit user confirmation.
 
 ## Output Format
 
@@ -164,12 +91,14 @@ git checkout [last-good-tag]
 ## Rollback Summary
 
 ### Action Taken
-- **Type:** [commit/release/file revert]
-- **Target:** [what was rolled back to]
-- **Backup:** [backup branch name]
+- **Type:** [commit/release/file/tag revert]
+- **Target:** [rollback target]
+- **Backup:** [backup branch]
 
-### Changes Reverted
-- [List of changes undone]
+### Tags Affected
+- **Deleted:** [list or "None"]
+- **Current version:** [tag at HEAD]
+- **Recommended next:** [version for re-ship]
 
 ### Verification
 - Tests: [Pass/Fail]
@@ -177,11 +106,13 @@ git checkout [last-good-tag]
 - Issue resolved: [Yes/No]
 
 ### Next Steps
-- [Required follow-up actions]
+- [Follow-up actions]
 ```
 
 ## Options
 
 - `--hard` - Discard all changes (requires confirmation)
-- `--no-backup` - Skip backup branch creation (not recommended)
-- `--dry-run` - Show what would happen without making changes
+- `--no-backup` - Skip backup (not recommended)
+- `--dry-run` - Preview without changes
+- `--delete-tags` - Delete tags newer than target
+- `--keep-tags` - Skip tag cleanup prompt

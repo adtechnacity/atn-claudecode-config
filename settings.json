@@ -15,7 +15,12 @@
       "Skill(debug)",
       "Skill(cleanup)",
       "Skill(rollback)",
-      "Skill(perf)"
+      "Skill(perf)",
+      "Skill(context)",
+      "Skill(changelog)",
+      "Skill(estimate)",
+      "Skill(init)",
+      "Skill(migrate)"
     ],
     "deny": [
       "Bash(rm -rf /)",
@@ -27,8 +32,12 @@
       "Bash(chmod -R 777:*)",
       "Bash(curl*|*sh)",
       "Bash(wget*|*sh)"
-    ]
+    ],
+    "defaultMode": "plan"
   },
+  "model": "opus",
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "latest",
   "hooks": {
     "PreToolUse": [
       {
@@ -41,6 +50,14 @@
           {
             "type": "command",
             "command": "/Users/luis/Documents/Projects/.claude/hooks/validate-before-push.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/branch-protection.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/dependency-check.sh"
           }
         ]
       },
@@ -50,6 +67,10 @@
           {
             "type": "command",
             "command": "/Users/luis/Documents/Projects/.claude/hooks/prevent-secrets-edit.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/prevent-large-file-edit.sh"
           }
         ]
       },
@@ -59,6 +80,10 @@
           {
             "type": "command",
             "command": "/Users/luis/Documents/Projects/.claude/hooks/prevent-secrets-edit.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/prevent-large-file-edit.sh"
           }
         ]
       }
@@ -70,6 +95,10 @@
           {
             "type": "command",
             "command": "/Users/luis/Documents/Projects/.claude/hooks/notify-on-completion.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/test-reminder.sh"
           }
         ]
       },
@@ -79,6 +108,10 @@
           {
             "type": "command",
             "command": "/Users/luis/Documents/Projects/.claude/hooks/auto-format-on-save.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/lint-on-save.sh"
           }
         ]
       },
@@ -88,6 +121,10 @@
           {
             "type": "command",
             "command": "/Users/luis/Documents/Projects/.claude/hooks/auto-format-on-save.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/lint-on-save.sh"
           }
         ]
       }

@@ -4,126 +4,56 @@ Profile, analyze, and optimize application performance.
 
 ## Analysis Modes
 
-### 1. Frontend Performance: `/perf frontend`
+### 1. Frontend: `/perf frontend`
 
-Analyze web application performance.
-
-**Using Chrome DevTools MCP:**
+**Chrome DevTools MCP:**
 ```
-# Start performance trace
-mcp__chrome-devtools__performance_start_trace with reload=true, autoStop=true
-
-# After trace completes, analyze insights
+mcp__chrome-devtools__performance_start_trace (reload=true, autoStop=true)
 mcp__chrome-devtools__performance_analyze_insight
 ```
 
-**Key Metrics (Core Web Vitals):**
-- **LCP** (Largest Contentful Paint) - Target: <2.5s
-- **FID** (First Input Delay) - Target: <100ms
-- **CLS** (Cumulative Layout Shift) - Target: <0.1
-- **TTFB** (Time to First Byte) - Target: <800ms
+**Core Web Vitals:**
+- LCP < 2.5s
+- FID < 100ms
+- CLS < 0.1
+- TTFB < 800ms
 
-**Bundle Analysis:**
-```bash
-# Analyze bundle size (Next.js)
-npx @next/bundle-analyzer
+**Bundle Analysis:** `npx @next/bundle-analyzer` | `npx vite-bundle-visualizer` | `npx webpack-bundle-analyzer stats.json`
 
-# Analyze bundle (Vite)
-npx vite-bundle-visualizer
+### 2. Backend: `/perf backend`
 
-# Generic webpack
-npx webpack-bundle-analyzer stats.json
-```
+**Node.js:** `npx clinic doctor -- node server.js`
+**Elixir:** `:observer.start()` or Benchee
 
-### 2. Backend Performance: `/perf backend`
+### 3. Database: `/perf db`
 
-Analyze server-side performance.
+Check query logs, N+1 patterns, execution plans: `EXPLAIN ANALYZE SELECT ...;`
 
-**For Node.js:**
-```bash
-# Profile with clinic
-npx clinic doctor -- node server.js
+### 4. Function: `/perf function [name]`
 
-# Memory profiling
-node --inspect server.js
-# Then use Chrome DevTools Memory tab
-```
+Add timing, run with representative data, analyze.
 
-**For Elixir:**
-```bash
-# Observer
-:observer.start()
+## Common Issues
 
-# Benchee for benchmarking
-mix run benchmark.exs
-```
+**Frontend:**
+- Unnecessary re-renders (missing memo/useMemo/useCallback)
+- Large bundles (missing code splitting)
+- Unoptimized images
+- Blocking resources
+- Layout thrashing
 
-### 3. Database Performance: `/perf db`
+**Backend:**
+- N+1 queries
+- Missing indexes
+- Memory leaks
+- Blocking I/O
+- Missing caching
 
-Analyze database query performance.
+## Optimization Priority
 
-**Identify slow queries:**
-- Check query logs
-- Look for N+1 patterns
-- Analyze execution plans
-
-```sql
-EXPLAIN ANALYZE SELECT ...;
-```
-
-### 4. Specific Function: `/perf function [name]`
-
-Profile a specific function.
-
-**Approach:**
-1. Add timing instrumentation
-2. Run with representative data
-3. Analyze results
-
-```typescript
-// Timing wrapper
-console.time('functionName');
-const result = await functionName(args);
-console.timeEnd('functionName');
-```
-
-## Common Performance Issues
-
-### React/Frontend
-- [ ] **Unnecessary re-renders** - Missing memo/useMemo/useCallback
-- [ ] **Large bundle** - Missing code splitting
-- [ ] **Unoptimized images** - Missing lazy loading, wrong format
-- [ ] **Blocking resources** - Render-blocking CSS/JS
-- [ ] **Layout thrashing** - Forced synchronous layouts
-
-### Backend
-- [ ] **N+1 queries** - Missing eager loading
-- [ ] **Missing indexes** - Slow database queries
-- [ ] **Memory leaks** - Growing memory over time
-- [ ] **Blocking operations** - Sync I/O in async context
-- [ ] **Missing caching** - Repeated expensive operations
-
-## Optimization Suggestions
-
-After identifying issues, suggest:
-
-### Quick Wins (Low effort, high impact)
-- Add database indexes
-- Enable caching
-- Compress assets
-- Lazy load images
-
-### Medium Effort
-- Implement memoization
-- Add code splitting
-- Optimize queries
-- Add CDN
-
-### Larger Refactors
-- Restructure data fetching
-- Implement pagination
-- Add background jobs
-- Database denormalization
+**Quick wins:** indexes, caching, compression, lazy loading
+**Medium:** memoization, code splitting, query optimization, CDN
+**Large:** data fetching restructure, pagination, background jobs, denormalization
 
 ## Output Format
 
@@ -131,40 +61,18 @@ After identifying issues, suggest:
 ## Performance Analysis Report
 
 ### Overview
-- **Scope:** [What was analyzed]
-- **Duration:** [Analysis time]
-- **Environment:** [Dev/Staging/Prod]
+Scope | Duration | Environment
 
 ### Metrics
-
 | Metric | Current | Target | Status |
-|--------|---------|--------|--------|
-| LCP | X.Xs | <2.5s | Pass/Fail |
-| FID | Xms | <100ms | Pass/Fail |
-| CLS | X.XX | <0.1 | Pass/Fail |
 
 ### Issues Found
-
-#### Critical
-1. [Issue] - [Impact] - [Suggested fix]
-
-#### High Priority
-2. [Issue] - [Impact] - [Suggested fix]
-
-#### Medium Priority
-3. [Issue] - [Impact] - [Suggested fix]
+#### Critical/High/Medium
+[Issue] - [Impact] - [Fix]
 
 ### Recommendations
-
-1. **[Action]** - [Expected improvement]
-2. **[Action]** - [Expected improvement]
-
-### Before/After (if optimizations applied)
-- [Metric]: [Before] → [After]
+[Action] - [Expected improvement]
 ```
 
-## Tools Integration
-
-- **Chrome DevTools MCP** - Web performance traces
-- **Explore Agent** - Find performance patterns in code
-- **LSP** - Identify render triggers, dependency chains
+## Tools
+Chrome DevTools MCP, Explore Agent, LSP

@@ -1,164 +1,88 @@
 # Debugging Assistant
 
-Systematic debugging workflow to find and fix issues efficiently.
+Systematic debugging workflow to find and fix issues.
 
-## Initial Context Gathering
+## Initial Context
 
-Ask the user for (or extract from their message):
-1. **Error message/behavior** - What's happening?
+Gather from the user:
+1. **Error/behavior** - What's happening?
 2. **Expected behavior** - What should happen?
-3. **Reproduction steps** - How to trigger the bug?
-4. **Recent changes** - What changed before this started?
+3. **Reproduction steps** - How to trigger it?
+4. **Recent changes** - What changed?
 
-## Debugging Workflow
+## Workflow
 
-### Step 1: Reproduce the Issue
-
-First, understand and reproduce:
-
+### 1. Reproduce
 ```bash
-# Check recent commits that might have introduced the bug
 git log --oneline -20
-
-# See what files changed recently
 git diff HEAD~5 --stat
 ```
 
-### Step 2: Locate the Problem
+### 2. Locate
 
-Use the Explore agent to trace the execution path:
+**Runtime errors:** Parse stack trace, identify failing line, trace to root cause.
 
-**For runtime errors:**
-- Parse the stack trace
-- Identify the failing file and line
-- Trace back to the root cause
+**Logic errors:** Map data flow, find where actual diverges from expected.
 
-**For logic errors:**
-- Identify the affected feature
-- Map the data flow
-- Find where actual diverges from expected
+**Performance:** Profile operation, identify bottlenecks (N+1 queries, memory leaks).
 
-**For performance issues:**
-- Profile the slow operation
-- Identify bottlenecks
-- Check for N+1 queries, memory leaks
+### 3. Investigate
 
-### Step 3: Investigate Root Cause
+Use **Read**, **Grep**, **LSP**, **Bash** to examine code and run with debug output.
 
-Tools to use:
+### 4. Identify Candidates
 
-1. **Read** - Examine the failing code
-2. **Grep** - Find related patterns
-3. **LSP** - Check definitions, references, types
-4. **Bash** - Run the code with debug output
+Rank by likelihood:
+- **Most Likely (80%+)**: [Cause] - [Evidence]
+- **Possible (50-80%)**: [Cause] - [Evidence]
+- **Less Likely (<50%)**: [Cause] - [Evidence]
 
-**Add strategic logging:**
-```typescript
-// Temporary debug logging
-console.log('[DEBUG] functionName:', { param1, param2, result });
-```
+### 5. Verify Hypothesis
 
-### Step 4: Identify Candidates
+For each candidate: write a failing test or add logging to confirm.
 
-List possible causes ranked by likelihood:
+### 6. Implement Fix
 
-```markdown
-## Root Cause Analysis
+1. Propose fix to user
+2. Get approval before implementing
+3. Make minimal change
+4. Remove debug code
 
-### Most Likely (80%+)
-1. [Cause] - [Evidence]
+### 7. Add Regression Test
 
-### Possible (50-80%)
-2. [Cause] - [Evidence]
+Create a test that would have caught this bug and prevents future regressions.
 
-### Less Likely (<50%)
-3. [Cause] - [Evidence]
-```
-
-### Step 5: Verify Hypothesis
-
-For each candidate:
-1. Write a test that would fail with the bug
-2. Or add logging to confirm the theory
-3. Run and observe
-
-### Step 6: Implement Fix
-
-Once root cause is confirmed:
-1. **Propose the fix** to the user
-2. **Get approval** before implementing
-3. **Make minimal change** to fix the issue
-4. **Remove debug code** after fixing
-
-### Step 7: Add Regression Test
-
-Create a test that:
-- Would have caught this bug
-- Prevents future regressions
-- Documents the expected behavior
-
-```typescript
-it('should handle [edge case] correctly', () => {
-  // Arrange
-  const input = /* the problematic input */;
-
-  // Act
-  const result = functionUnderTest(input);
-
-  // Assert
-  expect(result).toBe(/* expected output */);
-});
-```
-
-### Step 8: Verify Fix
-
+### 8. Verify Fix
 ```bash
-# Run tests
 npm test
-
-# Run the specific reproduction case
-# Verify the error no longer occurs
+# Run reproduction case - verify error gone
 ```
 
-## Common Debugging Patterns
+## Common Patterns
 
-### Async/Promise Issues
-- Check for missing `await`
-- Look for race conditions
-- Verify error handling in promises
+| Category | Check For |
+|----------|-----------|
+| Async | Missing `await`, race conditions, unhandled promise errors |
+| State | Stale closures, timing issues, mutation of immutable state |
+| Types | null/undefined access, incorrect type guards |
+| API | Request/response format, auth, CORS |
 
-### State Management Issues
-- Check for stale closures
-- Verify state update timing
-- Look for mutation of immutable state
-
-### Type Errors
-- Check for `null`/`undefined` access
-- Verify type assertions
-- Look for incorrect type guards
-
-### API/Network Issues
-- Check request/response format
-- Verify authentication
-- Look for CORS issues
-
-## Output Format
+## Output
 
 ```markdown
 ## Debug Report
 
 ### Issue
-[Description of the bug]
+[Description]
 
 ### Root Cause
-[Explanation of why it happened]
+[Why it happened]
 
 ### Fix
-[Description of the fix]
+[What was changed]
 
 ### Files Changed
-- [file1]: [change description]
-- [file2]: [change description]
+- [file]: [change]
 
 ### Testing
 - [x] Bug no longer reproduces
@@ -166,5 +90,5 @@ npm test
 - [x] All tests pass
 
 ### Prevention
-[How to prevent similar issues in the future]
+[How to prevent similar issues]
 ```
