@@ -1,0 +1,96 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(audit-docs)",
+      "Skill(audit-tests)",
+      "Skill(commit)",
+      "Skill(frontend-design:frontend-design)",
+      "Skill(audit-comments)",
+      "Skill(frontend-design)",
+      "Skill(ship)",
+      "Skill(ship:*)",
+      "Skill(pr)",
+      "Skill(review)",
+      "Skill(deps)",
+      "Skill(debug)",
+      "Skill(cleanup)",
+      "Skill(rollback)",
+      "Skill(perf)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf .)",
+      "Bash(> /dev/sda)",
+      "Bash(mkfs:*)",
+      "Bash(dd if=:*)",
+      "Bash(chmod -R 777:*)",
+      "Bash(curl*|*sh)",
+      "Bash(wget*|*sh)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/enforce-commit-skill.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/validate-before-push.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/prevent-secrets-edit.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/prevent-secrets-edit.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/notify-on-completion.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/auto-format-on-save.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/luis/Documents/Projects/.claude/hooks/auto-format-on-save.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
