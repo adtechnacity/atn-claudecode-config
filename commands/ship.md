@@ -8,6 +8,25 @@ Ship the current changes to production with comprehensive quality checks.
 
 **IMPORTANT**: Execute all steps sequentially. Do NOT stop for user input except for the version update prompt (Phase 3).
 
+## Integration
+
+Active hooks during this workflow:
+- **`enforce-commit-skill.sh`** - Ensures commit follows quality workflow
+- **`prevent-secrets-edit.sh`** - Blocks edits to sensitive files
+- **`auto-format-on-save.sh`** - Auto-formats files after edits
+- **`validate-before-push.sh`** - Validates before git push (warns about protected branches)
+- **`notify-on-completion.sh`** - Desktop notification when builds complete
+
+Related agents:
+- **`git-commit-validator`** - Handles commit validation
+- **`security-scanner`** - Comprehensive security audit
+- **`performance-analyzer`** - Performance bottleneck analysis
+- **`typescript-code-reviewer`** - TypeScript code quality (if applicable)
+
+Related commands:
+- **`/commit`** - Used internally for the commit step
+- **`/rollback`** - If something goes wrong after shipping
+
 ## Build System Detection
 
 Detect the project's build system and run appropriate commands:
@@ -29,23 +48,26 @@ If a script/command is not available, skip that check.
 
 Perform these audits inline using their agent integrations. Do NOT defer any work.
 
-### 1. Code Audit (MANDATORY)
+### 1.1 Code Audit (MANDATORY)
 
 Follow audit-code.md inline:
 - Use `subagent_type: "feature-dev:code-explorer"` for hot paths analysis
 - Use `subagent_type: "feature-dev:code-reviewer"` for security and quality review
+- Use `security-scanner` agent for comprehensive OWASP/CVE analysis
+- Use `performance-analyzer` agent for performance bottleneck detection
 - Fix all Critical and High issues immediately (do not defer)
 - Medium/Low issues may be noted but prioritize fixing them too
 
-### 2. Test Audit (MANDATORY)
+### 1.2 Test Audit (MANDATORY)
 
 Follow audit-tests.md inline:
 - Use `subagent_type: "feature-dev:code-reviewer"` for test quality assessment
 - Use `subagent_type: "feature-dev:code-explorer"` for coverage gap analysis
+- For TypeScript projects, use `typescript-code-reviewer` agent
 - Write all missing high-value tests now (do not defer)
 - Tests must pass before continuing
 
-### 3. Docs Audit (MANDATORY)
+### 1.3 Docs Audit (MANDATORY)
 
 Follow audit-docs.md inline:
 - Use `subagent_type: "feature-dev:code-explorer"` to map architecture
@@ -61,6 +83,12 @@ Follow audit-docs.md inline:
 ## Phase 2: Validation (MANDATORY)
 
 Run ALL available checks using the detected build system. If ANY fails, STOP and fix the issue before retrying.
+
+**Validation order:**
+1. Type check
+2. Lint
+3. Test
+4. Build
 
 ---
 
@@ -85,6 +113,8 @@ Run the production build using the detected build system.
 
 For projects with packaging (npm pack, mix release, cargo build --release), run that too.
 
+**Note:** The `notify-on-completion.sh` hook will send a desktop notification when the build completes.
+
 ---
 
 ## Phase 5: Git Workflow (MANDATORY)
@@ -97,7 +127,37 @@ Execute ALL steps:
    - Format: `<type>: <description>`
    - Types: feat, fix, update, docs, test, chore
    - Keep concise, no AI attribution
+   - Use heredoc format (required by enforce-commit-skill.sh):
+     ```bash
+     git commit -m "$(cat <<'EOF'
+     <type>: <description>
+     EOF
+     )"
+     ```
 4. Push to the appropriate branch
+   - The `validate-before-push.sh` hook will:
+     - Warn if uncommitted changes exist
+     - Block force-push to protected branches (main, master)
+     - Remind about `/ship` workflow
+
+---
+
+## Phase 6: Post-Ship (RECOMMENDED)
+
+After successful push:
+
+1. **Verify deployment** (if CI/CD is configured):
+   - Check CI pipeline status
+   - Verify deployment succeeded
+
+2. **Document the release**:
+   - Tag with version if not auto-tagged
+   - Update changelog if maintained manually
+
+3. **If something goes wrong**:
+   - Use `/rollback` command to safely revert
+   - `/rollback commit <hash>` - Revert specific commit
+   - `/rollback release <tag>` - Rollback to previous release
 
 ---
 
@@ -117,3 +177,20 @@ Execute ALL steps:
 - Documentation: Update it now
 
 The only acceptable "deferred" items are truly optional enhancements that don't affect correctness or security.
+
+---
+
+## Troubleshooting
+
+**If push is blocked by validate-before-push.sh:**
+- Check for uncommitted changes: `git status`
+- Commit any remaining changes first
+
+**If commit is blocked by enforce-commit-skill.sh:**
+- Ensure you're using heredoc format for commit message
+- Or use `/commit` command directly
+
+**If something breaks after shipping:**
+- Use `/rollback` command immediately
+- Document what went wrong
+- Fix and re-ship

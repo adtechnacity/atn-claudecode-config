@@ -4,6 +4,19 @@ description: Audit code comments for relevance, remove unnecessary ones, add mis
 
 Audit all code comments to ensure they add value. Remove redundant/outdated comments and add comments where complex logic needs explanation. This improves maintainability for both humans and AI assistants.
 
+## Integration
+
+This command is used by:
+- **`/commit`** (Step 1) - Comment audit before committing
+- **`/ship`** - Indirectly via `/commit` workflow
+
+Related commands:
+- **`/cleanup`** - Can also remove commented-out code blocks
+- **`/review`** - May identify comment quality issues
+
+Active hooks:
+- **`auto-format-on-save.sh`** - Handles code formatting automatically after edits
+
 ## Comment Quality Principles
 
 **Good comments explain WHY, not WHAT.** Code shows what it does; comments should explain non-obvious reasoning.
@@ -21,7 +34,7 @@ Audit all code comments to ensure they add value. Remove redundant/outdated comm
 ### Comments to Remove
 - **Redundant**: Restates what code obviously does (`// increment counter`)
 - **Outdated**: Doesn't match current code behavior
-- **Commented-out code**: Dead code should be deleted, not commented
+- **Commented-out code**: Dead code should be deleted, not commented (use `/cleanup`)
 - **Noise**: Divider lines, obvious section headers, empty comments
 - **Apologetic**: "Sorry this is hacky" - fix it or accept it
 
@@ -29,8 +42,8 @@ Audit all code comments to ensure they add value. Remove redundant/outdated comm
 
 | Agent | Purpose |
 |-------|---------|
-| `code-reviewer` | Identify low-value comments |
-| `code-explorer` | Identify complex code lacking explanation |
+| `feature-dev:code-reviewer` | Identify low-value comments |
+| `feature-dev:code-explorer` | Identify complex code lacking explanation |
 
 ## Phase 1: Find Low-Value Comments
 
@@ -48,7 +61,7 @@ For agent findings with ≥80 confidence:
 
 **Remove:**
 - Redundant and noise comments
-- Commented-out code blocks
+- Commented-out code blocks (or use `/cleanup` command)
 - Outdated comments (or update if salvageable)
 
 **Add:**
@@ -56,14 +69,17 @@ For agent findings with ≥80 confidence:
 - Context for business logic and API quirks
 - Doc comments for key public interfaces
 
+**Note:** The `auto-format-on-save.sh` hook will automatically format files after edits.
+
 ## Phase 4: Verification
 
 Run the project's type checker and tests to ensure no regressions.
 
 ### Summary Report
-- Comments removed
-- Comments added (with location)
+- Comments removed (with locations)
+- Comments added (with locations)
 - Commented-out code deleted
+- Files modified
 
 ## Guidelines
 
@@ -71,3 +87,4 @@ Run the project's type checker and tests to ensure no regressions.
 - When uncertain about adding, skip it - don't over-comment
 - Prefer refactoring unclear code over adding explanatory comments
 - **Normalize comment format**: Ensure consistent style across the project (e.g., sentence case, punctuation, spacing). Match the predominant pattern in the codebase.
+- For large amounts of commented-out code, consider using `/cleanup` command instead

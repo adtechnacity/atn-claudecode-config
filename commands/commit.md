@@ -8,6 +8,24 @@ Commit the current changes locally after ensuring the codebase passes all qualit
 
 **CRITICAL**: ALL steps below are MANDATORY. Execute each step fully before proceeding to the next. Do NOT skip any step.
 
+## Integration
+
+This command is enforced by:
+- **`enforce-commit-skill.sh`** (PreToolUse hook) - Blocks direct `git commit`, requires this workflow
+
+Active hooks during this workflow:
+- **`prevent-secrets-edit.sh`** - Blocks edits to sensitive files (.env, credentials, keys)
+- **`auto-format-on-save.sh`** - Auto-formats files after edits
+
+Related agents:
+- **`git-commit-validator`** - Handles comprehensive commit validation
+- **`security-scanner`** - For security checks (patterns used in Step 1)
+
+Next steps after committing:
+- **`git push`** - Push directly to remote (validate-before-push hook will run)
+- **`/pr`** - Create a pull request (optional)
+- **`/ship`** - Full production release workflow
+
 ## Build System Detection
 
 Detect the project's build system and run appropriate commands:
@@ -39,11 +57,24 @@ If a script/command is not available, skip that check.
    - Use `subagent_type: "feature-dev:code-explorer"` for codebase navigation
    - Apply all recommended changes before continuing
 
+3. **Security Check**: Scan for secrets in staged changes
+   ```bash
+   git diff --cached | grep -iE "(api[_-]?key|secret|password|token|credential|AKIA)" || true
+   ```
+   - If secrets detected, **STOP** and alert user
+   - For comprehensive security audit, use `security-scanner` agent
+
 ---
 
 ## Step 2: Validation (MANDATORY)
 
 Run ALL available checks using the detected build system. If ANY fails, STOP and fix the issue before retrying.
+
+**Validation order:**
+1. Type check (catches type errors early)
+2. Lint (catches style and common issues)
+3. Test (catches behavioral regressions)
+4. Build (catches compilation/bundling issues)
 
 ---
 
@@ -51,9 +82,15 @@ Run ALL available checks using the detected build system. If ANY fails, STOP and
 
 ```bash
 git status              # See modified, added, deleted files
-git diff                # Review actual code changes
+git diff --cached       # Review staged changes
 git log --oneline -10   # Recent commit message patterns
 ```
+
+**Verify:**
+- No unintended files are staged (`.env`, `node_modules`, `.DS_Store`)
+- All necessary files are included
+- No large binary files accidentally staged
+- No debug code or console.logs in production files
 
 ---
 
@@ -62,6 +99,10 @@ git log --oneline -10   # Recent commit message patterns
 - Include all modified and new files that are part of the change
 - Exclude build artifacts
 - Do NOT stage files containing secrets (.env, credentials, API keys)
+
+```bash
+git add <files>
+```
 
 ---
 
@@ -93,6 +134,17 @@ git log --oneline -10   # Recent commit message patterns
 
 **DO NOT include:** AI attribution, emoji prefixes, body text, generic messages
 
+### Execute Commit
+
+Use heredoc format (required by enforce-commit-skill.sh hook):
+
+```bash
+git commit -m "$(cat <<'EOF'
+<type>: <description>
+EOF
+)"
+```
+
 ---
 
 ## Step 6: Verify Commit (MANDATORY)
@@ -104,8 +156,15 @@ git log -1    # Display the created commit
 
 ---
 
-## Notes
+## After Committing
 
+**Options (not enforced):**
+- `git push` - Push to remote (validate-before-push.sh hook will check for issues)
+- `/pr` - Create a pull request with proper description (optional)
+- `/ship` - Full production release with audits and version bump
+
+**Notes:**
 - This command is for LOCAL commits only
-- Use `/ship` to push changes to the repository
+- Use `/ship` to push changes to the repository with full audits
 - Secrets and sensitive files should never be committed
+- The `validate-before-push.sh` hook will warn about uncommitted changes and protected branches

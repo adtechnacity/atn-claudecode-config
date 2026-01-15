@@ -4,25 +4,41 @@ description: Audit codebase and update documentation for accuracy
 
 Audit the codebase to ensure documentation accurately reflects the implementation.
 
+## Integration
+
+This command is used by:
+- **`/ship`** (Phase 1) - Mandatory docs audit before production release
+
+Related commands:
+- **`/setup`** - Creates initial CLAUDE.md and project documentation
+- **`/review`** - May identify documentation gaps during code review
+
+Related skills:
+- **`api-designer`** - For API documentation (OpenAPI, GraphQL SDL)
+- **`schema-designer`** - For database schema documentation
+
 ## Agent Integration
 
 | Agent | Phase | Purpose |
 |-------|-------|---------|
-| `code-explorer` | Codebase Analysis | Map architecture faster than manual file reading |
+| `feature-dev:code-explorer` | Codebase Analysis | Map architecture faster than manual file reading |
 
 Spawn via Task tool with `subagent_type` set to `feature-dev:code-explorer`.
 
 ## Phase 1: Codebase Analysis
 
 ### 1.1 Read Existing Documentation
+
 Manually read project documentation completely:
 - README.md (or equivalent)
-- CLAUDE.md or other project memory files
+- CLAUDE.md or other project memory files (may have been created by `/setup`)
 - Specification documents (PRD, SPEC, etc.)
+- API documentation (OpenAPI specs, GraphQL schemas)
 
 Note current claims, features, and specifications as baseline for gap analysis.
 
 ### 1.2 Map Implementation with Code Explorer
+
 Launch `feature-dev:code-explorer` with prompt:
 > "Map the architecture of this codebase. Document: (1) Core types and data structures, (2) Entry points and main flows, (3) External integrations and APIs, (4) Storage/persistence layer, (5) Key modules and their responsibilities. For each area, note key interfaces, functions, and behaviors."
 
@@ -47,6 +63,14 @@ Compare agent findings against documentation:
 - Features implemented but not documented
 - Incorrect specifications (wrong thresholds, limits)
 
+### 2.4 API Documentation Gaps
+- Endpoints not documented
+- Request/response schemas outdated
+- Missing error code documentation
+- Authentication/authorization not documented
+
+**Tip:** Use `api-designer` skill for comprehensive API documentation updates.
+
 ## Phase 3: Documentation Updates
 
 ### 3.1 Update README
@@ -64,6 +88,11 @@ Compare agent findings against documentation:
 ### 3.3 Update Specifications (if needed)
 - Flag implementation gaps for product decision
 - Update specifications that differ from code
+
+### 3.4 Update API Documentation
+- Use `api-designer` skill for OpenAPI/GraphQL updates
+- Ensure all endpoints are documented
+- Update request/response examples
 
 ## Phase 4: Verification
 
@@ -83,3 +112,4 @@ Compare agent findings against documentation:
 - Flag product decisions needed (don't assume intent)
 - Keep documentation concise but complete
 - Preserve existing structure where possible
+- For new projects, `/setup` command creates initial documentation structure
