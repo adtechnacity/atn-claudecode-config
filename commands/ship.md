@@ -67,10 +67,23 @@ Run production build. For packaging projects, run release command too.
 
 ---
 
-## Phase 5: Git Workflow (MANDATORY)
+## Phase 5: Changelog (PROMPT USER)
+
+Ask: "Update CHANGELOG.md?"
+
+If yes, generate changelog content for this version:
+```bash
+/changelog --from=<previous-tag> --to=v$VERSION --append
+```
+
+This must happen BEFORE the git workflow so changelog is included in the release commit.
+
+---
+
+## Phase 6: Git Workflow (MANDATORY)
 
 1. `git status` and review
-2. Stage files (exclude build artifacts)
+2. Stage files (exclude build artifacts, include CHANGELOG.md if updated)
 
 3. **Ensure on release branch before committing:**
    ```bash
@@ -116,19 +129,34 @@ Run production build. For packaging projects, run release command too.
 
 ---
 
-## Phase 6: Changelog (PROMPT USER)
+## Phase 7: GitHub Release (MANDATORY)
 
-Ask: "Update CHANGELOG.md?"
+Create a GitHub release using the changelog content:
 
-If yes:
-```bash
-/changelog --from=<previous-tag> --to=v$VERSION --append
-git add CHANGELOG.md && git commit -m "docs: Update CHANGELOG for v$VERSION" && git push
+1. Extract release notes for this version from CHANGELOG.md (or use generated notes if no changelog)
+2. Create the release:
+   ```bash
+   gh release create "v$VERSION" --title "v$VERSION - <short description>" --notes "<changelog content for this version>" --verify-tag
+   ```
+
+**Release notes format:**
 ```
+## Added
+- New feature 1
+- New feature 2
+
+## Changed
+- Change 1
+
+## Fixed
+- Bug fix 1
+```
+
+Use `--verify-tag` to ensure the tag exists.
 
 ---
 
-## Phase 7: Post-Ship
+## Phase 8: Post-Ship
 
 1. Verify CI/deployment status
 2. If issues: use `/rollback`
