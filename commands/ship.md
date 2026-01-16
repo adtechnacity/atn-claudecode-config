@@ -23,21 +23,16 @@ Skip unavailable commands.
 
 ## Phase 1: Audits (MANDATORY)
 
-Complete ALL audits and fixes before Phase 2.
+Complete ALL audits and fixes before Phase 2. Run each skill sequentially.
 
 ### 1.1 Code Audit
-- Use code-explorer for hot paths, code-reviewer for security/quality
-- Use security-scanner for OWASP/CVE, performance-analyzer for bottlenecks
-- Fix Critical/High issues immediately
+Run `/audit-code` to completion. Fix all Critical/High issues before proceeding.
 
 ### 1.2 Test Audit
-- Use code-reviewer for test quality, code-explorer for coverage gaps
-- Write missing high-value tests now
-- Tests must pass
+Run `/audit-tests` to completion. All tests must pass before proceeding.
 
 ### 1.3 Docs Audit
-- Use code-explorer to map architecture
-- Fix documentation discrepancies
+Run `/audit-docs` to completion. Fix all documentation discrepancies before proceeding.
 
 **CHECKPOINT**: All Critical/High fixed, tests passing, docs updated.
 
@@ -85,13 +80,9 @@ This must happen BEFORE the git workflow so changelog is included in the release
 1. `git status` and review
 2. Stage files (exclude build artifacts, include CHANGELOG.md if updated)
 
-3. **Ensure on release branch before committing:**
+3. **Create release branch:**
    ```bash
-   # Check if on protected branch
-   CURRENT_BRANCH=$(git branch --show-current)
-   if [[ "$CURRENT_BRANCH" =~ ^(main|master|production|develop)$ ]]; then
-     git checkout -b "release/v$VERSION"
-   fi
+   git checkout -b "release/v$VERSION"
    ```
 
 4. Commit with heredoc:

@@ -71,7 +71,24 @@ Include modified/new files. Exclude build artifacts and secrets.
 
 ---
 
-## Step 5: Create Commit
+## Step 5: Create Branch (if on protected branch)
+
+Before committing, ensure you're on a feature branch:
+
+```bash
+CURRENT_BRANCH=$(git branch --show-current)
+if [[ "$CURRENT_BRANCH" =~ ^(main|master|production|develop)$ ]]; then
+  # Create branch: <type>/<short-description>
+  # Example: feat/add-user-auth, fix/login-bug, docs/update-readme
+  git checkout -b "<type>/<short-description>"
+fi
+```
+
+Branch naming: Use commit type as prefix, kebab-case description (2-4 words max).
+
+---
+
+## Step 6: Create Commit
 
 ### Format
 
@@ -96,7 +113,7 @@ EOF
 
 ---
 
-## Step 6: Verify
+## Step 7: Verify
 
 ```bash
 git status
