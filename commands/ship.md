@@ -71,7 +71,17 @@ Run production build. For packaging projects, run release command too.
 
 1. `git status` and review
 2. Stage files (exclude build artifacts)
-3. Commit with heredoc:
+
+3. **Ensure on release branch before committing:**
+   ```bash
+   # Check if on protected branch
+   CURRENT_BRANCH=$(git branch --show-current)
+   if [[ "$CURRENT_BRANCH" =~ ^(main|master|production|develop)$ ]]; then
+     git checkout -b "release/v$VERSION"
+   fi
+   ```
+
+4. Commit with heredoc:
    ```bash
    git commit -m "$(cat <<'EOF'
    <type>: <description>
@@ -80,26 +90,28 @@ Run production build. For packaging projects, run release command too.
    ```
    Types: feat, fix, update, docs, test, chore
 
-4. **ASK USER**: "How do you want to ship this release?"
+5. **ASK USER**: "How do you want to ship this release?"
    - **Option A: Create PR** - Creates a PR for review before merging
-   - **Option B: Merge to main** - Merges directly to main and pushes
+   - **Option B: Push to main** - Merges to main and pushes
 
-5. Execute chosen workflow:
+6. Execute chosen workflow:
 
    **Option A - Create PR:**
    ```bash
-   git push origin <feature-branch>
+   git push origin <current-branch>
    gh pr create --title "Release v$VERSION" --body "Release v$VERSION"
    ```
    Stop here. User will merge PR manually later.
 
-   **Option B - Merge to main:**
+   **Option B - Push to main:**
    ```bash
+   git push origin <current-branch>
+   git tag -a "v$VERSION" -m "Release v$VERSION"
+   git push origin "v$VERSION"
+   gh pr create --title "Release v$VERSION" --body "Release v$VERSION" --base main
+   gh pr merge --merge --delete-branch
    git checkout main
    git pull origin main
-   git merge <feature-branch>
-   git tag -a "v$VERSION" -m "Release v$VERSION"
-   git push origin main && git push origin "v$VERSION"
    ```
 
 ---
