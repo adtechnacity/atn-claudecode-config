@@ -61,6 +61,42 @@ git branch --merged $BASE | grep -vE '^\*|^\s*(main|master|develop|staging|produ
 git branch -r --merged origin/$BASE | grep -vE 'origin/(main|master|develop|staging|production|HEAD)'
 ```
 
+### Step 3.5: Verify Release Branches
+
+**IMPORTANT**: Before suggesting release branches for deletion, verify they have been properly released.
+
+For each branch matching `release/*` or `release-*` pattern:
+
+1. **Extract version** from branch name (e.g., `release/v1.2.0` → `v1.2.0`)
+
+2. **Check for corresponding tag:**
+   ```bash
+   git tag -l "v1.2.0" "1.2.0"  # Check both with and without 'v' prefix
+   ```
+
+3. **Check for GitHub release** (if gh CLI available):
+   ```bash
+   gh release view v1.2.0 --json tagName 2>/dev/null
+   ```
+
+4. **Classification:**
+   - ✅ **Safe to prune**: Tag exists AND GitHub release exists
+   - ⚠️ **Warning**: Tag exists but no GitHub release (may be intentional)
+   - ❌ **Protected**: No tag found - do NOT suggest for deletion
+
+**Display release branch status:**
+```markdown
+### Release Branch Verification
+
+| Branch | Tag | Release | Status |
+|--------|-----|---------|--------|
+| release/v1.2.0 | ✅ v1.2.0 | ✅ Released | Safe to prune |
+| release/v1.3.0 | ✅ v1.3.0 | ❌ Missing | ⚠️ Warn before prune |
+| release/v1.4.0 | ❌ Missing | ❌ Missing | 🛡️ Protected |
+```
+
+**Automatic protection**: Release branches without a corresponding tag are automatically excluded from the prune candidates and added to the protected list.
+
 ### Step 4: Display Candidates
 
 Show all branches that would be deleted:
@@ -103,6 +139,9 @@ If `--execute` WAS provided:
 ### Skipped (protected)
 - main, develop, etc.
 
+### Release Branches Protected (no tag/release)
+- release/v1.4.0 - No tag found
+
 ### Errors (if any)
 - [branch]: [error message]
 ```
@@ -113,4 +152,5 @@ If `--execute` WAS provided:
 2. **Protected branches** - main, master, develop, staging, production are never deleted
 3. **Current branch** - Never deletes the branch you're currently on
 4. **Merge verification** - Only deletes branches confirmed merged via `git branch --merged`
-5. **Confirmation** - Asks for confirmation before deleting when using `--execute`
+5. **Release branch verification** - Release branches require a corresponding tag before pruning; branches without tags are automatically protected
+6. **Confirmation** - Asks for confirmation before deleting when using `--execute`
