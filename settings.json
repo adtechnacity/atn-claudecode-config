@@ -8,6 +8,7 @@
       "Skill(feature-dev:feature-dev)",
       "Skill(audit-comments)",
       "Skill(frontend-design)",
+      "Skill(ralph-loop:ralph-loop)",
       "Skill(ship)",
       "Skill(ship:*)",
       "Skill(pr)",
@@ -21,7 +22,8 @@
       "Skill(changelog)",
       "Skill(estimate)",
       "Skill(init)",
-      "Skill(migrate)"
+      "Skill(migrate)",
+      "Skill(prune-branches)"
     ],
     "deny": [
       "Bash(rm -rf /)",
@@ -36,6 +38,8 @@
     ],
     "defaultMode": "plan"
   },
+  "outputStyle": "default",
+  "spinnerTipsEnabled": false,
   "model": "opus",
   "alwaysThinkingEnabled": true,
   "autoUpdatesChannel": "latest",
