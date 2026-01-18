@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.4] - 2026-01-18
+
+### Changed
+- `/ship` now uses `/audit-all` instead of running individual audits
+- `/ship` user prompts now use AskUserQuestion with selectable options
+- `/commit` branch logic now separates protected vs feature branch handling
+- Protected branches no longer offer "continue on current branch" option (blocked by hooks anyway)
+
 ## [0.2.3] - 2026-01-18
 
 ### Added
