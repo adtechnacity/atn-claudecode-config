@@ -1,2 +1,26 @@
-# Local settings (not shared)
+# Claude Code operational dirs
+cache/
+debug/
+file-history/
+ide/
+local/
+mcp-configs/
+paste-cache/
+plans/
+plugins/
+projects/
+session-env/
+shell-snapshots/
+statsig/
+telemetry/
+todos/
+
+# Claude Code operational files
+.lsp.json
+history.jsonl
+stats-cache.json
+security_warnings_state*
+
+# Settings
 settings.local.json
+settings.json
