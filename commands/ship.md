@@ -21,6 +21,36 @@ Skip unavailable commands.
 
 ---
 
+## Phase 0: Sync with Main (MANDATORY)
+
+Ensure feature branch is up-to-date with main before shipping.
+
+```bash
+git fetch origin main
+```
+
+Check if behind main:
+```bash
+git rev-list --count HEAD..origin/main
+```
+
+**If behind (count > 0):**
+
+Rebase onto latest main to incorporate recent changes:
+```bash
+git rebase origin/main
+```
+
+**If conflicts occur:**
+1. Resolve conflicts in each file
+2. `git add <resolved-files>`
+3. `git rebase --continue`
+4. Re-run validation after rebase completes
+
+**CHECKPOINT**: Branch is up-to-date with main before proceeding.
+
+---
+
 ## Phase 1: Audits (MANDATORY)
 
 Run `/audit-all` to completion. This runs all audits sequentially:

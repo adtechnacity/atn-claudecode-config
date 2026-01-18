@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.5] - 2026-01-18
+
+### Added
+- `/ship` Phase 0: Sync with Main - rebases feature branch onto latest main before shipping
+
 ## [0.2.4] - 2026-01-18
 
 ### Changed
