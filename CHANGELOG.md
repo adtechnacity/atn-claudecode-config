@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2026-01-18
+
+### Added
+- **Agents**: code-simplifier, feature-dev-code-explorer, feature-dev-code-architect, feature-dev-code-reviewer (converted from plugins)
+- **Commands**: feature-dev, ralph-loop, cancel-ralph, ralph-loop-help (converted from plugins)
+- **Skills**: frontend-design (converted from plugin)
+- **Hooks**: ralph-loop-stop.sh, ralph-loop-setup.sh, security-reminder.py (converted from plugins)
+
+### Changed
+- Converted 6 plugins (code-simplifier, feature-dev, frontend-design, ralph-loop, security-guidance, typescript-lsp) to local extensions for easier customization
+- Updated .gitignore to exclude Claude operational directories and settings
+- Fixed hook paths from non-existent directory to ~/.claude/hooks/
+- Disabled all converted plugins in enabledPlugins
+- Added prune-branches release verification for tag/release branch checking
+
 ## [0.1.0] - 2026-01-15
 
 ### Added
