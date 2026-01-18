@@ -38,22 +38,31 @@ git branch --show-current
 git status --short
 ```
 
-**Always prompt the user** - they may be working on something different from the current branch:
+**Branch logic:**
 
-**ASK USER**: "Current branch: `<branch-name>`. Is this the correct branch for these changes?"
+### If on protected branch (main, master, production, develop):
 
-Present options:
-- **Continue on current branch** - Use `<branch-name>` for this commit
-- **Create new branch** - Create a new feature branch for this work
+Commits are blocked by hooks. Must create a feature branch.
 
-**If creating a new branch:**
-Suggest format: `<type>/<short-description>` (kebab-case, 2-4 words)
-- Examples: `feat/add-user-auth`, `fix/login-bug`, `chore/update-deps`
-- Types: feat, fix, update, docs, test, chore
+**ASK USER** (use AskUserQuestion with options):
+- Header: "Branch"
+- Question: "You're on `<branch-name>` (protected). What would you like to name your feature branch?"
+- Options: Suggest 2-3 branch names based on staged changes
+  - Format: `<type>/<short-description>` (kebab-case, 2-4 words)
+  - Types: feat, fix, update, docs, test, chore
 
 ```bash
-git checkout -b "<user-provided-branch-name>"
+git checkout -b "<user-selected-branch-name>"
 ```
+
+### If on feature branch:
+
+**ASK USER** (use AskUserQuestion with options):
+- Header: "Branch"
+- Question: "Current branch: `<branch-name>`. Is this the correct branch for these changes?"
+- Options:
+  - **Continue on current branch** - Use `<branch-name>` for this commit
+  - **Create new branch** - Create a new feature branch for this work
 
 **MANDATORY**: Confirm branch before proceeding to Step 2.
 

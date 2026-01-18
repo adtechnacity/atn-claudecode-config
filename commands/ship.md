@@ -23,16 +23,11 @@ Skip unavailable commands.
 
 ## Phase 1: Audits (MANDATORY)
 
-Complete ALL audits and fixes before Phase 2. Run each skill sequentially.
-
-### 1.1 Code Audit
-Run `/audit-code` to completion. Fix all Critical/High issues before proceeding.
-
-### 1.2 Test Audit
-Run `/audit-tests` to completion. All tests must pass before proceeding.
-
-### 1.3 Docs Audit
-Run `/audit-docs` to completion. Fix all documentation discrepancies before proceeding.
+Run `/audit-all` to completion. This runs all audits sequentially:
+- Code audit (security, performance, maintainability)
+- Test audit (coverage, quality)
+- Docs audit (accuracy)
+- Comments audit (relevance)
 
 **CHECKPOINT**: All Critical/High fixed, tests passing, docs updated.
 
@@ -44,15 +39,20 @@ Run in order: Type check -> Lint -> Test -> Build. Fix failures before proceedin
 
 ---
 
-## Phase 3: Version Update (MANDATORY - user confirmation)
+## Phase 3: Version Update (MANDATORY)
 
-1. Check current version in project config
-2. Analyze changes for bump type:
-   - **patch** (0.0.x): Bug fixes
-   - **minor** (0.x.0): New features
-   - **major** (x.0.0): Breaking changes
-3. Present suggested bump, get confirmation
-4. Update version file(s)
+1. Check current version: `git tag --sort=-v:refname | head -1`
+2. Analyze changes for bump type
+
+**ASK USER** (use AskUserQuestion with options):
+- Header: "Version"
+- Question: "Version bump for this release? Current: v$CURRENT"
+- Options:
+  - **v$PATCH (patch)** - Bug fixes, small changes
+  - **v$MINOR (minor)** - New features
+  - **v$MAJOR (major)** - Breaking changes
+
+3. Update version file(s) if applicable
 
 ---
 
@@ -64,7 +64,12 @@ Run production build. For packaging projects, run release command too.
 
 ## Phase 5: Changelog (PROMPT USER)
 
-Ask: "Update CHANGELOG.md?"
+**ASK USER** (use AskUserQuestion with options):
+- Header: "Changelog"
+- Question: "Update CHANGELOG.md for v$VERSION?"
+- Options:
+  - **Yes** - Add changelog entry for this release
+  - **No** - Skip changelog update
 
 If yes, generate changelog content for this version:
 ```bash
@@ -94,20 +99,16 @@ This must happen BEFORE the git workflow so changelog is included in the release
    ```
    Types: feat, fix, update, docs, test, chore
 
-5. **ASK USER**: "How do you want to ship this release?"
-   - **Option A: Create PR** - Creates a PR for review before merging
-   - **Option B: Push to main** - Merges to main and pushes
+5. **ASK USER** (use AskUserQuestion with options):
+   - Header: "Ship method"
+   - Question: "How do you want to ship this release?"
+   - Options:
+     - **Push to main** - Merges to main, creates tag, and pushes
+     - **Create PR** - Creates a PR for review before merging
 
 6. Execute chosen workflow:
 
-   **Option A - Create PR:**
-   ```bash
-   git push origin <current-branch>
-   gh pr create --title "Release v$VERSION" --body "Release v$VERSION"
-   ```
-   Stop here. User will merge PR manually later.
-
-   **Option B - Push to main:**
+   **Push to main:**
    ```bash
    git push origin <current-branch>
    git tag -a "v$VERSION" -m "Release v$VERSION"
@@ -117,6 +118,13 @@ This must happen BEFORE the git workflow so changelog is included in the release
    git checkout main
    git pull origin main
    ```
+
+   **Create PR:**
+   ```bash
+   git push origin <current-branch>
+   gh pr create --title "Release v$VERSION" --body "Release v$VERSION"
+   ```
+   Stop here. User will merge PR manually later.
 
 ---
 
