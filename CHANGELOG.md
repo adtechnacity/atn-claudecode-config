@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2026-01-18
+
+### Changed
+- `/commit` command now proactively prompts for branch confirmation before starting
+- Added Step 8 to `/commit` with interactive next action prompt (PR, Ship, or Done)
+
 ## [0.2.0] - 2026-01-18
 
 ### Added
