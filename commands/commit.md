@@ -29,21 +29,33 @@ Skip unavailable commands.
 
 ---
 
-## Step 1: Ensure Feature Branch
+## Step 1: Confirm or Create Branch (PROACTIVE)
 
-Before any work, verify you're on a feature branch:
+**First**, check the current branch and staged changes:
 
 ```bash
-CURRENT_BRANCH=$(git branch --show-current)
-if [[ "$CURRENT_BRANCH" =~ ^(main|master|production|develop)$ ]]; then
-  # MUST create feature branch before proceeding
-  # Branch naming: <type>/<short-description> (kebab-case, 2-4 words)
-  # Example: feat/add-user-auth, fix/login-bug, chore/update-deps
-  git checkout -b "<type>/<short-description>"
-fi
+git branch --show-current
+git status --short
 ```
 
-**This is MANDATORY.** Do NOT proceed if on a protected branch.
+**Always prompt the user** - they may be working on something different from the current branch:
+
+**ASK USER**: "Current branch: `<branch-name>`. Is this the correct branch for these changes?"
+
+Present options:
+- **Continue on current branch** - Use `<branch-name>` for this commit
+- **Create new branch** - Create a new feature branch for this work
+
+**If creating a new branch:**
+Suggest format: `<type>/<short-description>` (kebab-case, 2-4 words)
+- Examples: `feat/add-user-auth`, `fix/login-bug`, `chore/update-deps`
+- Types: feat, fix, update, docs, test, chore
+
+```bash
+git checkout -b "<user-provided-branch-name>"
+```
+
+**MANDATORY**: Confirm branch before proceeding to Step 2.
 
 ---
 
@@ -123,10 +135,18 @@ git log -1
 
 ---
 
-## After Committing
+## Step 8: Next Action (PROMPT USER)
 
-- `git push` - Push to remote (validate-before-push.sh runs)
-- `/pr` - Create pull request
-- `/ship` - Full production release
+**ASK USER**: "Commit successful! What would you like to do next?"
 
-Secrets should never be committed. Use `/ship` for full audits.
+Present these options:
+- **Option A: Push and create PR** - Run `/pr` to push changes and create a pull request
+- **Option B: Ship to production** - Run `/ship` for full audits and production release
+- **Option C: Done for now** - End here (you can `git push` or continue working later)
+
+**Execute based on user choice:**
+- If A: Invoke `/pr` skill
+- If B: Invoke `/ship` skill
+- If C: Display summary and end
+
+**Note**: Use `/ship` for full security audits before production releases.
