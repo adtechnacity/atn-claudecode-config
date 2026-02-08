@@ -7,7 +7,7 @@ Commands, skills, hooks, and agents for [Claude Code](https://docs.anthropic.com
 ### Start a new product
 
 ```
-/context-scan
+/scan-context
 ```
 ```
 I'm building a SaaS analytics dashboard for e-commerce stores.
@@ -119,7 +119,7 @@ Design the database schema for a multi-tenant project management app
 
 | Flow | Commands |
 |------|----------|
-| **New project** | `/init` → `/context-scan` → `/feature-dev` → `/commit` → `/ship` |
+| **New project** | `/init` → `/scan-context` → `/feature-dev` → `/commit` → `/ship` |
 | **Major feature** | `/feature-dev` → `writing-plans` → `/review-plan` → `task-orchestration` → `/commit` → `/ship` |
 | **Quick change** | (edit) → `/commit` → `/pr` or `/ship` |
 | **Debug** | `/debug` or `/sentry-triage` → fix → `/commit` |
@@ -149,7 +149,7 @@ Design the database schema for a multi-tenant project management app
 | `/review-plan` | Review implementation plans for gaps |
 | `/codex-review` | Peer review with OpenAI Codex agents |
 | `/fix-pr-comments` | Fix automated PR review comments |
-| `/context-scan` | Prime Claude with project context |
+| `/scan-context` | Prime Claude with project context |
 
 ---
 
@@ -160,7 +160,7 @@ Design the database schema for a multi-tenant project management app
 | Command | Description |
 |---------|-------------|
 | `/init` | Initialize Claude config for a project |
-| `/context-scan` | Prime Claude with project context |
+| `/scan-context` | Prime Claude with project context |
 | `/feature-dev` | Guided 7-phase feature development |
 | `/commit` | Validate, simplify, and commit |
 | `/pr` | Create a pull request |
@@ -254,7 +254,7 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
                          └──────┬──────┘
                                 │
                          ┌──────▼──────┐
-                         │/context-scan│  Load context
+                         │/scan-context│  Load context
                          └──────┬──────┘
                                 │
               ┌─────────────────┼─────────────────┐

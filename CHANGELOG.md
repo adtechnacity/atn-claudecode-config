@@ -2,16 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.5] - 2026-02-08
+
+### Added
+- **`/worktree`**: Git worktree management command — create, list, remove, and cleanup worktrees for parallel feature development
+- **`finishing-a-development-branch`**: Added worktree integration references (pairs with `/worktree`)
+
+### Changed
+- `/context-scan` renamed to `/scan-context` — updated all references in README and CHANGELOG
+
 ## [0.3.4] - 2026-02-08
 
 ### Added
 - **README.md**: Project documentation with usage examples, workflow references, component tables, and architecture diagrams
 - **`/codex-review`**: Peer review command using OpenAI Codex agents — spawns 2 parallel agents (correctness + architecture), signal/noise filtering, verdict-based reporting
-- **`/context-scan`**: Enhanced with multi-project-type detection (13 types), smart exploration by project type, conventions/tooling detection, context budget rules
+- **`/scan-context`**: Enhanced with multi-project-type detection (13 types), smart exploration by project type, conventions/tooling detection, context budget rules
 
 ### Changed
 - `/performance`: Fixed self-references (`/perf` → `/performance`), replaced deprecated FID metric with INP < 200ms
-- `/context-scan`: Replaced fragile `ls -1 **/*.test.*` glob with portable `find` command
+- `/scan-context`: Replaced fragile `ls -1 **/*.test.*` glob with portable `find` command
 - `/ship`: Fixed tag creation ordering — tags now created after merge to main (not before)
 
 ## [0.3.3] - 2026-02-08
