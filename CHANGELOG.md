@@ -12,12 +12,14 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 - **Agents**: code-simplifier, feature-dev-code-architect, feature-dev-code-explorer, feature-dev-code-reviewer, git-commit-validator, test-generator, typescript-code-reviewer (replaced by built-in subagent types)
-- **Commands**: ralph-loop-help (consolidated)
+- **Commands**: ralph-loop-help (consolidated), review (consolidated into audit-code)
 - **Hooks**: auto-format-on-save.sh, lint-on-save.sh, test-reminder.sh (replaced by format-and-lint.sh)
 
 ### Changed
-- Updated all commands to use valid subagent types (Explore, general-purpose) instead of deleted custom agents
+- Consolidated /review into /audit-code with new Bug Review phase and TypeScript-specific review
+- Updated all commands to use valid subagent types (Explore, general-purpose) with enriched prompt guidance
 - Narrowed overly broad "private"/"secret" patterns in prevent-secrets-edit.sh to specific key patterns
+- Corrected inaccurate "Used by" integration references across audit commands
 - Removed stale code-simplifier agent references from enforce-commit-skill.sh
 - Added AppleScript variable sanitization in notify-on-completion.sh
 - Updated frontend-design and schema-designer skills

@@ -8,7 +8,7 @@ Audit comments to ensure they add value. Remove redundant/outdated comments, add
 
 Used by: **`/ship`** (via `/audit-all`)
 
-Related: **`/cleanup`** (commented-out code), **`/review`** (comment quality)
+Related: **`/cleanup`** (commented-out code), **`/audit-code`** (code quality)
 
 Hook: **`format-and-lint.sh`** handles formatting after edits
 

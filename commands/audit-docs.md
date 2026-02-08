@@ -6,7 +6,7 @@ Ensure documentation accurately reflects implementation.
 
 ## Integration
 
-Used by `/ship` (Phase 1). Related: `/review`, `/init`, `api-designer`, `schema-designer`
+Used by `/ship` (Phase 1). Related: `/audit-code`, `/init`, `api-designer`, `schema-designer`
 
 ## Phase 1: Codebase Analysis
 
