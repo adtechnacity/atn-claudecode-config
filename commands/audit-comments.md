@@ -33,12 +33,7 @@ Hook: **`format-and-lint.sh`** handles formatting after edits
 - Noise (dividers, obvious headers)
 - Apologetic ("sorry this is hacky")
 
-## Agent Integration
-
-| Agent | Purpose |
-|-------|---------|
-| `code-reviewer` | Find low-value comments |
-| `code-explorer` | Find complex code lacking explanation |
+Spawn agents via Task tool with `subagent_type: "Explore"` for investigation or `"general-purpose"` for review/fixes.
 
 ## Phase 1: Find Low-Value Comments
 

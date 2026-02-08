@@ -34,8 +34,10 @@ SENSITIVE_PATTERNS=(
     ".keystore"
     "keystore.json"
     "wallet.json"
-    "private"
-    "secret"
+    "private_key"
+    "private-key"
+    "secret_key"
+    "secret-key"
 )
 
 # Check if file path matches any sensitive pattern

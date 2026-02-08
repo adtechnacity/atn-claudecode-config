@@ -20,14 +20,6 @@ Hook: **`security-reminder.py`** catches insecure patterns on edits
 - `/review branch` - Review all changes on current branch vs main
 - `/review pr <number>` - Review a pull request
 
-## Agent Integration
-
-| Subagent Type | Purpose |
-|---------------|---------|
-| `code-reviewer` | Confidence-scored review (>=80 threshold) |
-| `typescript-code-reviewer` | TypeScript/React/Node.js specialist |
-| `security-scanner` | OWASP Top 10, CVE scanning |
-
 ## Phase 1: Gather Changes
 
 ```bash
@@ -46,7 +38,7 @@ gh pr diff <number>
 
 ## Phase 2: Code Review
 
-Launch via Task tool (`subagent_type: "code-reviewer"`):
+Launch via Task tool (`subagent_type: "general-purpose"`):
 
 > "Review the following changes for bugs, security vulnerabilities, performance issues, and code quality. Only report issues with confidence >= 80."
 
@@ -58,7 +50,7 @@ Launch via Task tool (`subagent_type: "code-reviewer"`):
 
 ## Phase 3: TypeScript-Specific Review (if applicable)
 
-Launch via Task tool (`subagent_type: "typescript-code-reviewer"`) for TypeScript/React files:
+Launch via Task tool (`subagent_type: "general-purpose"`) for TypeScript/React files:
 
 > "Production readiness review: type safety, React patterns, Node.js best practices."
 

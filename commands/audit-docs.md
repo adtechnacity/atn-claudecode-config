@@ -18,7 +18,7 @@ Note claims, features, specs as baseline.
 
 ### 1.2 Map Implementation
 
-Launch `code-explorer` (Task tool, `subagent_type: "code-explorer"`):
+Launch via Task tool (`subagent_type: "Explore"`):
 
 > "Map codebase architecture: (1) Core types/structures, (2) Entry points/flows, (3) External integrations/APIs, (4) Storage layer, (5) Key modules and responsibilities. Note interfaces, functions, behaviors."
 

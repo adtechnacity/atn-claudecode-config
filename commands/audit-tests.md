@@ -7,7 +7,7 @@ Audit test suite for coverage gaps and create high-value tests only.
 ## Integration
 
 Used by: **`/ship`** (Phase 1), **`/commit`** (Step 2)
-Related: **`/deps`**, **`/review`**, `typescript-code-reviewer` subagent type
+Related: **`/deps`**, **`/review`**
 
 ## Build System Detection
 
@@ -42,14 +42,14 @@ Related: **`/deps`**, **`/review`**, `typescript-code-reviewer` subagent type
 
 ### Phase 1: Audit Existing Tests
 
-Launch via Task tool (`subagent_type: "code-reviewer"`):
+Launch via Task tool (`subagent_type: "general-purpose"`):
 > "Review test files for redundancy. Flag: duplicate code paths, trivial tests, repetitive validation. Count tests per file."
 
 Consider consolidating/removing issues with >=80 confidence.
 
 ### Phase 2: Identify Coverage Gaps
 
-Launch via Task tool (`subagent_type: "code-explorer"`):
+Launch via Task tool (`subagent_type: "Explore"`):
 > "Identify critical untested paths. Prioritize: business logic, validation boundaries, error handling, edge cases. Skip: UI, delegating functions, framework wrappers."
 
 Risk priority: **Critical** (business logic) > **High** (security) > **Medium** (error handling) > **Low** (obvious utilities)

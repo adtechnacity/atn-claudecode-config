@@ -21,16 +21,7 @@ Related: **`/cleanup`**, **`/performance`**, **`/deps`**, **`/review`**
 
 Skip unavailable commands.
 
-## Agent Integration
-
-| Agent | Phase | Purpose |
-|-------|-------|---------|
-| `code-explorer` | Performance | Map hot paths and execution flows |
-| `code-reviewer` | Security, Maintainability, Reliability | Review with confidence scoring (>=80 threshold) |
-| `security-scanner` | Security | OWASP Top 10, CVE scanning, secret detection |
-| `performance-analyzer` | Performance | Core Web Vitals, bottleneck identification |
-
-Spawn agents via Task tool with appropriate `subagent_type`.
+Spawn agents via Task tool with `subagent_type: "Explore"` for investigation or `"general-purpose"` for review/fixes.
 
 ## Phase 1: Static Analysis
 

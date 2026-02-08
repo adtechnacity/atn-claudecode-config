@@ -23,7 +23,7 @@ if echo "$command" | grep -qE '\bgit\s+commit\b'; then
 
     # Block direct commits with helpful guidance
     cat <<'EOF'
-{"decision":"block","reason":"Direct git commit is not allowed.\n\nUse /commit to ensure quality checks:\n- Code simplification (code-simplifier agent)\n- Comment auditing (code-reviewer agent)\n- Validation (typecheck, lint, test, build)\n- Security scanning\n\nRun: /commit\n\nAfter committing:\n- git push (push to remote)\n- /pr (create pull request - optional)\n- /ship (full production release)"}
+{"decision":"block","reason":"Direct git commit is not allowed.\n\nUse /commit to ensure quality checks:\n- Security scanning\n- Validation (typecheck, lint, test, build)\n- Code review\n\nRun: /commit\n\nAfter committing:\n- git push (push to remote)\n- /pr (create pull request - optional)\n- /ship (full production release)"}
 EOF
     exit 2
 fi

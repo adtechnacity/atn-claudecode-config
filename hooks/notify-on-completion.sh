@@ -53,7 +53,13 @@ if [[ "$should_notify" == true ]] && command -v osascript &>/dev/null; then
         sound="Basso"
     fi
 
-    osascript -e "display notification \"$matched_command $status\" with title \"Claude Code\" sound name \"$sound\"" 2>/dev/null || true
+    # Sanitize variables for AppleScript (escape backslashes and double quotes)
+    safe_command="${matched_command//\\/\\\\}"
+    safe_command="${safe_command//\"/\\\"}"
+    safe_status="${status//\\/\\\\}"
+    safe_status="${safe_status//\"/\\\"}"
+
+    osascript -e "display notification \"$safe_command $safe_status\" with title \"Claude Code\" sound name \"$sound\"" 2>/dev/null || true
 fi
 
 # Always exit successfully - notifications should never block operations
