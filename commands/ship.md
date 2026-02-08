@@ -157,19 +157,22 @@ This must happen BEFORE the git workflow so changelog is included in the release
    ```
    If versioning enabled:
    ```bash
-   git tag -a "v$VERSION" -m "Release v$VERSION"
-   git push origin "v$VERSION"
    gh pr create --title "Release v$VERSION" --body "Release v$VERSION" --base main
    ```
    If versioning skipped:
    ```bash
    gh pr create --title "<commit-message>" --body "<summary of changes>" --base main
    ```
-   Then merge:
+   Then merge and tag:
    ```bash
    gh pr merge --merge --delete-branch
    git checkout main
    git pull origin main
+   ```
+   If versioning enabled, tag **after** merge so the tag sits on main:
+   ```bash
+   git tag -a "v$VERSION" -m "Release v$VERSION"
+   git push origin "v$VERSION"
    ```
 
    **Create PR:**
