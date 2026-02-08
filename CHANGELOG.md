@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - 2026-02-08
+
+### Added
+- **`/sentry-triage`**: Sentry error triage command — scan, categorize, investigate, fix, and update issues across projects
+- **`/review-plan`**: Plan review command — gap analysis, edge cases, consistency checks, and improvement suggestions
+- **`/fix-pr-comments`**: Automated PR review comment fixer — triage and fix CodeRabbit, CodeScene, SonarCloud, and other bot comments
+- **`/audit-ai`**: AI agent readiness audit — evaluate codebase for AI contributor ergonomics, pattern consistency, type safety, documentation, and navigability
+
+### Changed
+- `/commit` Step 4: Added code simplification step (from deleted code-simplifier agent) with enriched prompt for clarity, consistency, and maintainability refinement before committing
+
 ## [0.3.1] - 2026-02-08
 
 ### Changed
