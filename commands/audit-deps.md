@@ -101,8 +101,8 @@ npm run typecheck && npm test
 
 ## Options
 
-- `/deps` - Full audit (security + outdated + unused)
-- `/deps audit` - Security audit only
-- `/deps outdated` - Check for outdated only
-- `/deps unused` - Find unused dependencies only
-- `/deps update` - Apply safe updates (patch + minor)
+- `/audit-deps` - Full audit (security + outdated + unused)
+- `/audit-deps audit` - Security audit only
+- `/audit-deps outdated` - Check for outdated only
+- `/audit-deps unused` - Find unused dependencies only
+- `/audit-deps update` - Apply safe updates (patch + minor)

@@ -7,7 +7,7 @@ Audit test suite for coverage gaps and create high-value tests only.
 ## Integration
 
 Used by: **`/ship`** (via `/audit-all`)
-Related: **`/deps`**, **`/audit-code`**
+Related: **`/audit-deps`**, **`/audit-code`**
 
 ## Build System Detection
 

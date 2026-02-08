@@ -8,7 +8,7 @@ Comprehensive code audit focused on improving existing code, not adding features
 
 Used by: **`/ship`** (Phase 1), **`/commit`** (manual)
 
-Related: **`/cleanup`**, **`/performance`**, **`/deps`**
+Related: **`/cleanup`**, **`/performance`**
 
 ## Build System Detection
 
@@ -29,12 +29,8 @@ Spawn agents via Task tool with `subagent_type: "Explore"` for investigation or 
 Run type checker, linter, and tests. Document failures/warnings.
 
 ### 1.2 Check Dependencies
-- npm: `npm outdated && npm audit`
-- mix: `mix hex.outdated && mix deps.audit`
-- cargo: `cargo outdated && cargo audit`
-- pip: `pip list --outdated && pip-audit`
 
-Flag major updates, security advisories, unused dependencies.
+Run `/audit-deps` to completion. Flag major updates, security advisories, unused dependencies.
 
 ## Phase 2: Bug Review
 
@@ -117,7 +113,7 @@ Medium/Low issues: document in TODO.md or code comments.
 - Fixed issues with descriptions
 - Deferred issues with justification
 - Build/test status
-- Recommended follow-ups (`/cleanup`, `/performance`, `/deps`)
+- Recommended follow-ups (`/cleanup`, `/performance`)
 
 ## Guidelines
 
