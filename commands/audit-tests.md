@@ -43,14 +43,14 @@ Related: **`/deps`**, **`/review`**
 ### Phase 1: Audit Existing Tests
 
 Launch via Task tool (`subagent_type: "general-purpose"`):
-> "Review test files for redundancy. Flag: duplicate code paths, trivial tests, repetitive validation. Count tests per file."
+> "Review test files for redundancy with confidence scoring (0-100, report >= 80). Flag: duplicate code paths, trivial tests (getters, no-op assertions), repetitive validation. Count tests per file. Include file:line for each issue."
 
 Consider consolidating/removing issues with >=80 confidence.
 
 ### Phase 2: Identify Coverage Gaps
 
 Launch via Task tool (`subagent_type: "Explore"`):
-> "Identify critical untested paths. Prioritize: business logic, validation boundaries, error handling, edge cases. Skip: UI, delegating functions, framework wrappers."
+> "Identify critical untested paths by tracing execution flows and mapping code coverage gaps. Prioritize: business logic, validation boundaries, error handling, edge cases. Skip: UI, delegating functions, framework wrappers. Note file:line for each gap."
 
 Risk priority: **Critical** (business logic) > **High** (security) > **Medium** (error handling) > **Low** (obvious utilities)
 

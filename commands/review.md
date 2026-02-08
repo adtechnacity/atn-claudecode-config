@@ -40,7 +40,7 @@ gh pr diff <number>
 
 Launch via Task tool (`subagent_type: "general-purpose"`):
 
-> "Review the following changes for bugs, security vulnerabilities, performance issues, and code quality. Only report issues with confidence >= 80."
+> "You are an expert code reviewer. Review the following changes for bugs, security vulnerabilities, performance issues, and code quality. Rate each issue on a confidence scale of 0-100. Only report issues with confidence >= 80. For each issue, provide: confidence score, file:line, clear description, specific fix suggestion. Group by severity (Critical vs Important). Verify adherence to project conventions in CLAUDE.md."
 
 ### Review Checklist
 - **Bugs**: Logic errors, null/undefined handling, race conditions, edge cases
@@ -52,7 +52,7 @@ Launch via Task tool (`subagent_type: "general-purpose"`):
 
 Launch via Task tool (`subagent_type: "general-purpose"`) for TypeScript/React files:
 
-> "Production readiness review: type safety, React patterns, Node.js best practices."
+> "You are a senior TypeScript/React/Node.js engineer. Production readiness review covering: type safety (no `any`, proper generics, discriminated unions), React patterns (re-render risks, hook deps, error boundaries, a11y), Node.js (async error handling, input validation, no floating promises), and production concerns (graceful degradation, structured logging, bundle size). Rate confidence 0-100, only report >= 80."
 
 ## Phase 4: Report
 

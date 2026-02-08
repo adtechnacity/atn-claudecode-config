@@ -39,15 +39,15 @@ Initial request: $ARGUMENTS
 
 **Actions**:
 1. Launch 2-3 agents via Task tool (`subagent_type: "Explore"`) in parallel. Each agent should:
-   - Trace through the code comprehensively and focus on getting a comprehensive understanding of abstractions, architecture and flow of control
+   - Trace through the code comprehensively: follow call chains from entry to output, trace data transformations, map abstraction layers (presentation -> business logic -> data)
    - Target a different aspect of the codebase (eg. similar features, high level understanding, architectural understanding, user experience, etc)
+   - Note design patterns, interfaces between components, cross-cutting concerns (auth, logging, caching)
    - Include a list of 5-10 key files to read
 
    **Example agent prompts**:
-   - "Find features similar to [feature] and trace through their implementation comprehensively"
-   - "Map the architecture and abstractions for [feature area], tracing through the code comprehensively"
-   - "Analyze the current implementation of [existing feature/area], tracing through the code comprehensively"
-   - "Identify UI patterns, testing approaches, or extension points relevant to [feature]"
+   - "Find features similar to [feature] and trace their complete implementation: entry points, call chains, data flow, abstractions. List 5-10 essential files."
+   - "Map the architecture for [feature area]: abstraction layers, design patterns, module boundaries, integration points. List 5-10 essential files."
+   - "Analyze [existing feature/area]: execution flow, state changes, side effects, error handling, dependencies. List 5-10 essential files."
 
 2. Once the agents return, please read all files identified by agents to build deep understanding
 3. Present comprehensive summary of findings and patterns discovered
@@ -75,7 +75,7 @@ If the user says "whatever you think is best", provide your recommendation and g
 **Goal**: Design multiple implementation approaches with different trade-offs
 
 **Actions**:
-1. Launch 2-3 agents via Task tool (`subagent_type: "general-purpose"`) in parallel with different focuses: minimal changes (smallest change, maximum reuse), clean architecture (maintainability, elegant abstractions), or pragmatic balance (speed + quality)
+1. Launch 2-3 agents via Task tool (`subagent_type: "general-purpose"`) in parallel. Each agent acts as a software architect: analyze existing patterns with file:line references, make decisive architectural choices with rationale, and provide a complete implementation blueprint (files to create/modify, component responsibilities, data flow, phased build sequence). Different focuses: minimal changes (smallest change, maximum reuse), clean architecture (maintainability, elegant abstractions), or pragmatic balance (speed + quality)
 2. Review all approaches and form your opinion on which fits best for this specific task (consider: small fix vs large feature, urgency, complexity, team context)
 3. Present to user: brief summary of each approach, trade-offs comparison, **your recommendation with reasoning**, concrete implementation differences
 4. **Ask user which approach they prefer**
@@ -103,7 +103,7 @@ If the user says "whatever you think is best", provide your recommendation and g
 **Goal**: Ensure code is simple, DRY, elegant, easy to read, and functionally correct
 
 **Actions**:
-1. Launch 3 agents via Task tool (`subagent_type: "general-purpose"`) in parallel with different focuses: simplicity/DRY/elegance, bugs/functional correctness, project conventions/abstractions
+1. Launch 3 agents via Task tool (`subagent_type: "general-purpose"`) in parallel. Each agent reviews with confidence scoring (0-100, only report >= 80). Different focuses: simplicity/DRY/elegance, bugs/functional correctness, project conventions/abstractions. Include file:line and specific fix for each issue.
 2. Consolidate findings and identify highest severity issues that you recommend fixing
 3. **Present findings to user and ask what they want to do** (fix now, fix later, or proceed as-is)
 4. Address issues based on user decision

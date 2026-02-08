@@ -33,15 +33,15 @@ Hook: **`format-and-lint.sh`** handles formatting after edits
 - Noise (dividers, obvious headers)
 - Apologetic ("sorry this is hacky")
 
-Spawn agents via Task tool with `subagent_type: "Explore"` for investigation or `"general-purpose"` for review/fixes.
-
 ## Phase 1: Find Low-Value Comments
 
-> "Review comment quality. Flag: redundant, outdated, commented-out code, noise. Note file:line."
+Launch via Task tool (`subagent_type: "general-purpose"`):
+> "Review comment quality with confidence scoring (0-100, report >= 80). Flag: redundant (restates code), outdated (doesn't match behavior), commented-out code, noise (dividers, obvious headers). Note file:line for each."
 
 ## Phase 2: Find Missing Comments
 
-> "Identify complex code lacking explanation: algorithms, business logic, API integrations, workarounds, undocumented public exports. Note file:line."
+Launch via Task tool (`subagent_type: "Explore"`):
+> "Identify complex code lacking explanation: algorithms, business logic, API integrations, workarounds, undocumented public exports. Trace through the code to understand what each complex section does. Note file:line for each."
 
 ## Phase 3: Apply Changes
 
