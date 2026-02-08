@@ -6,9 +6,7 @@ Review code for bugs, security, performance, and quality issues.
 
 ## Integration
 
-Used by: **`/commit`** (Step 2), **`/audit-code`** (Phases 2-5)
-
-Related: **`/cleanup`**, **`/performance`**, **`/commit`**
+Standalone command. Related: **`/cleanup`**, **`/performance`**, **`/commit`**, **`/audit-code`**
 
 Hook: **`security-reminder.py`** catches insecure patterns on edits
 

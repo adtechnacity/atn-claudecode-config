@@ -6,7 +6,7 @@ Audit comments to ensure they add value. Remove redundant/outdated comments, add
 
 ## Integration
 
-Used by: **`/commit`** (Step 1), **`/ship`** (via `/commit`)
+Used by: **`/ship`** (via `/audit-all`)
 
 Related: **`/cleanup`** (commented-out code), **`/review`** (comment quality)
 

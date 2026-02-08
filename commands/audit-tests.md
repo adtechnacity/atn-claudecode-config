@@ -6,7 +6,7 @@ Audit test suite for coverage gaps and create high-value tests only.
 
 ## Integration
 
-Used by: **`/ship`** (Phase 1), **`/commit`** (Step 2)
+Used by: **`/ship`** (via `/audit-all`)
 Related: **`/deps`**, **`/review`**
 
 ## Build System Detection
