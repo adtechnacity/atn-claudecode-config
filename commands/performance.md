@@ -4,7 +4,7 @@ Profile, analyze, and optimize application performance.
 
 ## Analysis Modes
 
-### 1. Frontend: `/perf frontend`
+### 1. Frontend (`frontend`)
 
 **Chrome DevTools MCP:**
 ```
@@ -14,22 +14,22 @@ mcp__chrome-devtools__performance_analyze_insight
 
 **Core Web Vitals:**
 - LCP < 2.5s
-- FID < 100ms
+- INP < 200ms
 - CLS < 0.1
 - TTFB < 800ms
 
 **Bundle Analysis:** `npx @next/bundle-analyzer` | `npx vite-bundle-visualizer` | `npx webpack-bundle-analyzer stats.json`
 
-### 2. Backend: `/perf backend`
+### 2. Backend (`backend`)
 
 **Node.js:** `npx clinic doctor -- node server.js`
 **Elixir:** `:observer.start()` or Benchee
 
-### 3. Database: `/perf db`
+### 3. Database (`db`)
 
 Check query logs, N+1 patterns, execution plans: `EXPLAIN ANALYZE SELECT ...;`
 
-### 4. Function: `/perf function [name]`
+### 4. Function (`function [name]`)
 
 Add timing, run with representative data, analyze.
 
