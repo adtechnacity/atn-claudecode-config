@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.5] - 2026-02-08
+
+### Added
+- **`/worktree`**: Git worktree management command — create, list, remove, and cleanup worktrees for parallel feature development
+- **`finishing-a-development-branch`**: Added worktree integration references (pairs with `/worktree`)
+
+### Changed
+- `/context-scan` renamed to `/scan-context` — updated all references in README and CHANGELOG
+
 ## [0.3.4] - 2026-02-08
 
 ### Added
