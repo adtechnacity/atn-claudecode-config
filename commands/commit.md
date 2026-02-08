@@ -87,7 +87,27 @@ Order: Type check -> Lint -> Test -> Build
 
 ---
 
-## Step 4: Analyze Changes
+## Step 4: Simplify Changed Code
+
+Review recently modified files for opportunities to improve clarity and consistency without changing behavior. Launch via Task tool (`subagent_type: "general-purpose"`):
+
+> "You are an expert code simplification specialist focused on enhancing clarity, consistency, and maintainability while preserving exact functionality. Review the changed files and apply refinements that:
+>
+> **Preserve functionality**: Never change what the code does — only how it does it. All original features, outputs, and behaviors must remain intact.
+>
+> **Apply project standards**: Follow conventions from CLAUDE.md including import sorting, naming conventions, error handling patterns, and component patterns.
+>
+> **Enhance clarity**: Reduce unnecessary complexity and nesting. Eliminate redundant abstractions. Improve variable and function names. Consolidate related logic. Remove unnecessary comments that describe obvious code. Avoid nested ternaries — prefer switch/if-else. Choose clarity over brevity — explicit code is better than overly compact code.
+>
+> **Maintain balance**: Avoid over-simplification. Don't create overly clever solutions, combine too many concerns into single functions, remove helpful abstractions, or prioritize fewer lines over readability. Don't make code harder to debug or extend.
+>
+> **Scope**: Only refine code that was modified, not surrounding unchanged code. Report file:line and specific suggestions with confidence 0-100, only report >= 80."
+
+Apply improvements. Re-run validation (Step 3) if changes are made.
+
+---
+
+## Step 5: Analyze Changes
 
 ```bash
 git status
@@ -99,7 +119,7 @@ Verify: No unintended files (.env, node_modules), all necessary files included, 
 
 ---
 
-## Step 5: Stage Changes
+## Step 6: Stage Changes
 
 ```bash
 git add <files>
@@ -109,7 +129,7 @@ Include modified/new files. Exclude build artifacts and secrets.
 
 ---
 
-## Step 6: Create Commit
+## Step 7: Create Commit
 
 ### Format
 
@@ -134,7 +154,7 @@ EOF
 
 ---
 
-## Step 7: Verify
+## Step 8: Verify
 
 ```bash
 git status
@@ -143,7 +163,7 @@ git log -1
 
 ---
 
-## Step 8: Next Action (PROMPT USER)
+## Step 9: Next Action (PROMPT USER)
 
 **ASK USER**: "Commit successful! What would you like to do next?"
 
