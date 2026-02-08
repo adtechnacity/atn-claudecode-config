@@ -1,27 +1,7 @@
 #!/bin/bash
-# Hook: enforce-commit-skill.sh
-# Type: PreToolUse (Bash)
-# Purpose: Enforce using the /commit skill instead of raw git commit commands
-#
-# This hook ensures code quality by requiring the /commit workflow which includes:
-# - Code simplification via code-simplifier agent
-# - Comment auditing via code-reviewer agent
-# - Full validation (typecheck, lint, test, build)
-# - Security checks via security-scanner patterns
-#
-# Related hooks that also run during commit workflow:
-# - prevent-secrets-edit.sh: Blocks edits to sensitive files
-# - auto-format-on-save.sh: Auto-formats files after edits
-# - validate-before-push.sh: Validates before git push (if pushing after commit)
-#
-# Related agents:
-# - git-commit-validator: Handles the full commit validation process
-# - security-scanner: For comprehensive security audits
-#
-# Next steps after /commit:
-# - git push: Push directly to remote
-# - /pr: Create a pull request (optional)
-# - /ship: Full production release workflow
+# PreToolUse (Bash) hook: Blocks raw `git commit` — use /commit instead.
+# The /commit workflow runs validation, security checks, and formatting.
+# See commit.md for full details.
 
 set -euo pipefail
 

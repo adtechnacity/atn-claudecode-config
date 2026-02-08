@@ -10,9 +10,9 @@ Commit changes locally after quality checks. Does NOT push.
 
 Enforced by `enforce-commit-skill.sh` (blocks direct `git commit`).
 
-Active hooks: `prevent-secrets-edit.sh`, `auto-format-on-save.sh`
+Active hooks: `prevent-secrets-edit.sh`, `format-and-lint.sh`
 
-Related: `git-commit-validator` agent, `security-scanner` agent
+Related: `security-scanner` agent
 
 After committing: `git push`, `/pr`, or `/ship`
 
@@ -68,15 +68,14 @@ git checkout -b "<user-selected-branch-name>"
 
 ---
 
-## Step 2: Code Quality (on changed files)
+## Step 2: Quick Quality Check (on changed files)
 
-1. **Simplify Code**: Task tool with `subagent_type: "code-simplifier:code-simplifier"`
-2. **Audit Comments**: Follow audit-comments.md; use `feature-dev:code-reviewer` and `feature-dev:code-explorer`
-3. **Security Check**:
+1. **Security Check**: Scan staged changes for secrets:
    ```bash
    git diff --cached | grep -iE "(api[_-]?key|secret|password|token|credential|AKIA)" || true
    ```
    If secrets detected, **STOP** and alert user.
+2. **Quick Review**: Eyeball changed files for obvious issues (no agent dispatch). Thorough audits run via `/ship`.
 
 ---
 

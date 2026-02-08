@@ -6,9 +6,10 @@
 # Don't use strict mode for notifications - we want this to always succeed silently
 set +e
 
-# Get command and exit code from environment
-COMMAND="${CLAUDE_COMMAND:-}"
-EXIT_CODE="${CLAUDE_EXIT_CODE:-0}"
+# Parse JSON input from stdin (Claude Code hook protocol)
+input=$(cat)
+COMMAND=$(echo "$input" | jq -r '.tool_input.command // empty')
+EXIT_CODE=$(echo "$input" | jq -r '.tool_result.exit_code // 0')
 
 # Commands that warrant a notification
 LONG_RUNNING_PATTERNS=(

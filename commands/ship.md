@@ -69,20 +69,31 @@ Run in order: Type check -> Lint -> Test -> Build. Fix failures before proceedin
 
 ---
 
-## Phase 3: Version Update (MANDATORY)
+## Phase 3: Version Update (OPTIONAL)
 
 1. Check current version: `git tag --sort=-v:refname | head -1`
-2. Analyze changes for bump type
 
 **ASK USER** (use AskUserQuestion with options):
 - Header: "Version"
-- Question: "Version bump for this release? Current: v$CURRENT"
+- Question: "Create a new version for this release? Current: v$CURRENT"
+- Options:
+  - **Yes** - Bump version for this release
+  - **No** - Skip versioning (push changes only)
+
+**If Yes:**
+2. Analyze changes for bump type
+
+**ASK USER** (use AskUserQuestion with options):
+- Header: "Bump type"
+- Question: "Version bump type?"
 - Options:
   - **v$PATCH (patch)** - Bug fixes, small changes
   - **v$MINOR (minor)** - New features
   - **v$MAJOR (major)** - Breaking changes
 
 3. Update version file(s) if applicable
+
+**If No:** Skip to Phase 4. Git workflow will push without version tag.
 
 ---
 
@@ -115,10 +126,11 @@ This must happen BEFORE the git workflow so changelog is included in the release
 1. `git status` and review
 2. Stage files (exclude build artifacts, include CHANGELOG.md if updated)
 
-3. **Create release branch:**
+3. **If versioning enabled:** Create release branch:
    ```bash
    git checkout -b "release/v$VERSION"
    ```
+   **If versioning skipped:** Stay on current branch.
 
 4. Commit with heredoc:
    ```bash
@@ -131,19 +143,30 @@ This must happen BEFORE the git workflow so changelog is included in the release
 
 5. **ASK USER** (use AskUserQuestion with options):
    - Header: "Ship method"
-   - Question: "How do you want to ship this release?"
+   - Question: "How do you want to ship these changes?"
    - Options:
-     - **Push to main** - Merges to main, creates tag, and pushes
+     - **Push to main** - Merges to main via PR, creates tag (if versioned), and pushes
      - **Create PR** - Creates a PR for review before merging
+     - **Push branch only** - Pushes current branch directly, no PR
 
 6. Execute chosen workflow:
 
    **Push to main:**
    ```bash
    git push origin <current-branch>
+   ```
+   If versioning enabled:
+   ```bash
    git tag -a "v$VERSION" -m "Release v$VERSION"
    git push origin "v$VERSION"
    gh pr create --title "Release v$VERSION" --body "Release v$VERSION" --base main
+   ```
+   If versioning skipped:
+   ```bash
+   gh pr create --title "<commit-message>" --body "<summary of changes>" --base main
+   ```
+   Then merge:
+   ```bash
    gh pr merge --merge --delete-branch
    git checkout main
    git pull origin main
@@ -152,15 +175,37 @@ This must happen BEFORE the git workflow so changelog is included in the release
    **Create PR:**
    ```bash
    git push origin <current-branch>
+   ```
+   If versioning enabled:
+   ```bash
    gh pr create --title "Release v$VERSION" --body "Release v$VERSION"
+   ```
+   If versioning skipped:
+   ```bash
+   gh pr create --title "<commit-message>" --body "<summary of changes>"
    ```
    Stop here. User will merge PR manually later.
 
+   **Push branch only:**
+   ```bash
+   git push origin <current-branch>
+   ```
+   Stop here. No PR created.
+
 ---
 
-## Phase 7: GitHub Release (MANDATORY)
+## Phase 7: GitHub Release (OPTIONAL)
 
-Create a GitHub release using the changelog content:
+**Skip this phase if versioning was skipped in Phase 3.**
+
+**ASK USER** (use AskUserQuestion with options):
+- Header: "Release"
+- Question: "Create a GitHub release for v$VERSION?"
+- Options:
+  - **Yes** - Create GitHub release with release notes
+  - **No** - Skip GitHub release
+
+**If Yes:**
 
 1. Extract release notes for this version from CHANGELOG.md (or use generated notes if no changelog)
 2. Create the release:

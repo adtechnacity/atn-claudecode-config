@@ -1,89 +1,93 @@
-# Code Review Workflow
+---
+description: Code review for staged, branch, file, or PR changes
+---
 
-Review code changes for quality, correctness, security, and maintainability.
+Review code for bugs, security, performance, and quality issues.
+
+## Integration
+
+Used by: **`/commit`** (Step 2), **`/audit-code`** (Phases 2-5)
+
+Related: **`/cleanup`**, **`/performance`**, **`/commit`**
+
+Hook: **`security-reminder.py`** catches insecure patterns on edits
 
 ## Modes
 
-### 1. PR Review: `/review pr [number|url]`
-```bash
-gh pr view [number] --json title,body,files,additions,deletions,commits
-gh pr diff [number]
-gh api repos/{owner}/{repo}/pulls/{number}/comments
-```
+- `/review` - Review unstaged changes (`git diff`)
+- `/review staged` - Review staged changes (`git diff --cached`)
+- `/review file <path>` - Review a specific file
+- `/review branch` - Review all changes on current branch vs main
+- `/review pr <number>` - Review a pull request
 
-### 2. Branch Review: `/review branch [name]`
-```bash
-git diff main...[branch] --stat
-git diff main...[branch]
-```
+## Agent Integration
 
-### 3. Staged Review: `/review staged` or `/review`
+| Subagent Type | Purpose |
+|---------------|---------|
+| `code-reviewer` | Confidence-scored review (>=80 threshold) |
+| `typescript-code-reviewer` | TypeScript/React/Node.js specialist |
+| `security-scanner` | OWASP Top 10, CVE scanning |
+
+## Phase 1: Gather Changes
+
 ```bash
-git diff --cached --stat
+# Default: unstaged changes
+git diff
+
+# Staged
 git diff --cached
+
+# Branch diff vs main
+git diff main...HEAD
+
+# PR
+gh pr diff <number>
 ```
 
-### 4. File Review: `/review file [path]`
-Read and analyze the entire file.
+## Phase 2: Code Review
 
-### 5. Release Review: `/review release [tag]` or `/review release [from]..[to]`
-```bash
-git tag -l --sort=-version:refname | head -10
-PREV_TAG=$(git tag -l --sort=-version:refname | grep -A1 "^[tag]$" | tail -1)
-git diff $PREV_TAG..[tag] --stat
-git log --oneline [from]..[to]
-```
+Launch via Task tool (`subagent_type: "code-reviewer"`):
 
-## Review Checklist
+> "Review the following changes for bugs, security vulnerabilities, performance issues, and code quality. Only report issues with confidence >= 80."
 
-### Critical (Must Fix)
-- Security vulnerabilities (SQL injection, XSS, CSRF, auth bypass)
-- Data integrity (race conditions, corruption risks)
-- Error handling (unhandled exceptions, missing cases)
-- Breaking changes (API violations, backward incompatibility)
+### Review Checklist
+- **Bugs**: Logic errors, null/undefined handling, race conditions, edge cases
+- **Security**: Injection risks, auth gaps, input validation, secret exposure
+- **Performance**: O(n^2)+ complexity, missing memoization, N+1 queries, memory leaks
+- **Quality**: Naming, duplication, complexity, type safety, error handling
 
-### High (Should Fix)
-- Type safety (missing types, any usage, unsafe casts)
-- Performance (N+1 queries, memory leaks, unnecessary re-renders)
-- Logic errors (off-by-one, incorrect conditions, edge cases)
-- Test coverage for new functionality
+## Phase 3: TypeScript-Specific Review (if applicable)
 
-### Medium (Consider)
-- Code clarity (naming, complexity)
-- DRY violations
-- Framework best practices
+Launch via Task tool (`subagent_type: "typescript-code-reviewer"`) for TypeScript/React files:
 
-### Low (Nitpicks)
-- Style (if not auto-formatted)
-- Documentation gaps
-- Minor improvements
+> "Production readiness review: type safety, React patterns, Node.js best practices."
 
-## Output Format
+## Phase 4: Report
 
 ```markdown
-## Code Review Summary
+## Code Review
 
-**Scope:** [What was reviewed]
-**Risk Level:** [Low/Medium/High/Critical]
+**Risk Level:** Low/Medium/High/Critical
+**Production Ready:** Yes/No/With Changes
 
-### Critical Issues
-### Improvements
+### Critical Issues (Must Fix)
+| Issue | Location | Impact | Fix |
+
+### Improvements (Should Fix)
+| Issue | Location | Effort | Benefit |
+
 ### Suggestions
-### Positive Notes
+- [Suggestion with rationale]
+
+### Summary
+**Priority Actions:** 1. ... 2. ... 3. ...
+**Next Steps:** Fix issues -> /commit -> git push
 ```
-
-## Tools
-
-- **Explore agent** - Context and related code
-- **LSP** - References, definitions, types
-- **Grep** - Pattern search
-- **typescript-code-reviewer agent** - TypeScript-specific review
 
 ## Guidelines
 
-- Be constructive
-- Explain the "why"
-- Provide code examples
-- Acknowledge good patterns
-- Prioritize by impact
-- Skip style nitpicks if auto-formatters exist
+- Only report issues with confidence >= 80
+- Be actionable: include file:line and specific fix
+- Distinguish bugs from style preferences
+- Consider project conventions (CLAUDE.md)
+- Balance thoroughness with pragmatism

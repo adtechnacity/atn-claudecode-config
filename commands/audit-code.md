@@ -8,7 +8,7 @@ Comprehensive code audit focused on improving existing code, not adding features
 
 Used by: **`/ship`** (Phase 1), **`/commit`** (manual)
 
-Related: **`/cleanup`**, **`/perf`**, **`/deps`**, **`/review`**
+Related: **`/cleanup`**, **`/performance`**, **`/deps`**, **`/review`**
 
 ## Build System Detection
 
@@ -25,8 +25,8 @@ Skip unavailable commands.
 
 | Agent | Phase | Purpose |
 |-------|-------|---------|
-| `feature-dev:code-explorer` | Performance | Map hot paths and execution flows |
-| `feature-dev:code-reviewer` | Security, Maintainability, Reliability | Review with confidence scoring (>=80 threshold) |
+| `code-explorer` | Performance | Map hot paths and execution flows |
+| `code-reviewer` | Security, Maintainability, Reliability | Review with confidence scoring (>=80 threshold) |
 | `security-scanner` | Security | OWASP Top 10, CVE scanning, secret detection |
 | `performance-analyzer` | Performance | Core Web Vitals, bottleneck identification |
 
@@ -64,7 +64,7 @@ Combine agent issues (>=80 confidence) with manual findings. Classify by severit
 ### 3.1 Performance Analyzer Agent
 > "Analyze bottlenecks, Core Web Vitals, bundle sizes, render performance."
 
-Or run `/perf` command.
+Or run `/performance` command.
 
 ### 3.2 Code Explorer (Hot Paths)
 > "Trace hot paths: performance-critical sections, frequently called functions, data pipelines, execution flows."
@@ -116,7 +116,7 @@ Medium/Low issues: document in TODO.md or code comments.
 - Fixed issues with descriptions
 - Deferred issues with justification
 - Build/test status
-- Recommended follow-ups (`/cleanup`, `/perf`, `/deps`)
+- Recommended follow-ups (`/cleanup`, `/performance`, `/deps`)
 
 ## Guidelines
 

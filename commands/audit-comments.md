@@ -10,7 +10,7 @@ Used by: **`/commit`** (Step 1), **`/ship`** (via `/commit`)
 
 Related: **`/cleanup`** (commented-out code), **`/review`** (comment quality)
 
-Hook: **`auto-format-on-save.sh`** handles formatting after edits
+Hook: **`format-and-lint.sh`** handles formatting after edits
 
 ## Comment Principles
 
@@ -37,8 +37,8 @@ Hook: **`auto-format-on-save.sh`** handles formatting after edits
 
 | Agent | Purpose |
 |-------|---------|
-| `feature-dev:code-reviewer` | Find low-value comments |
-| `feature-dev:code-explorer` | Find complex code lacking explanation |
+| `code-reviewer` | Find low-value comments |
+| `code-explorer` | Find complex code lacking explanation |
 
 ## Phase 1: Find Low-Value Comments
 

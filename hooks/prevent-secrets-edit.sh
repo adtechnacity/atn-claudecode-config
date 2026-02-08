@@ -5,8 +5,9 @@
 
 set -euo pipefail
 
-# Get file path from environment (set by Claude Code hooks)
-FILE_PATH="${CLAUDE_FILE_PATH:-}"
+# Parse JSON input from stdin (Claude Code hook protocol)
+input=$(cat)
+FILE_PATH=$(echo "$input" | jq -r '.tool_input.file_path // empty')
 
 # Exit early if no file path provided
 if [[ -z "$FILE_PATH" ]]; then
@@ -48,7 +49,7 @@ for pattern in "${SENSITIVE_PATTERNS[@]}"; do
         echo "  1. View the file with 'cat $FILE_PATH'"
         echo "  2. Edit it manually outside Claude Code"
         echo "  3. Or temporarily disable this hook"
-        exit 1
+        exit 2
     fi
 done
 
