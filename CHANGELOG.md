@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.3] - 2026-02-08
+
+### Added
+- **`task-orchestration`** skill: Convert plans into Claude Tasks with dependency graphs, execute in parallel waves with agent teams
+
+### Changed
+- `writing-plans` skill: Added Task Orchestration as recommended execution handoff option
+- `subagent-driven-development` skill: Fixed stale `code-reviewer` subagent type to `general-purpose`
+
 ## [0.3.2] - 2026-02-08
 
 ### Added

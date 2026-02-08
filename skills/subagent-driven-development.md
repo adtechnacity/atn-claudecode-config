@@ -65,7 +65,7 @@ Dispatch via Task tool (`subagent_type: "general-purpose"`):
 
 ## Code Quality Reviewer Template
 
-Dispatch via Task tool (`subagent_type: "code-reviewer"`):
+Dispatch via Task tool (`subagent_type: "general-purpose"`):
 
 > Review the implementation for code quality. Focus on: clean code, test coverage, maintainability, naming, duplication, complexity. Only report issues with confidence >= 80.
 >
