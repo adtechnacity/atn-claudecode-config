@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2026-02-08
+
+### Changed
+- Renamed `/deps` to `/audit-deps` for consistent naming across audit commands
+- `/audit-code` Phase 1.2 now invokes `/audit-deps` instead of running raw dependency commands
+- `/audit-all` now includes `/audit-deps` as Phase 5 (previously listed as a follow-up)
+- Fixed `/perf` reference to `/performance` in `/audit-all`
+
 ## [0.3.0] - 2026-02-08
 
 ### Added
