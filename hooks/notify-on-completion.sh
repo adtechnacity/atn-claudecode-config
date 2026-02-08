@@ -6,9 +6,10 @@
 # Don't use strict mode for notifications - we want this to always succeed silently
 set +e
 
-# Get command and exit code from environment
-COMMAND="${CLAUDE_COMMAND:-}"
-EXIT_CODE="${CLAUDE_EXIT_CODE:-0}"
+# Parse JSON input from stdin (Claude Code hook protocol)
+input=$(cat)
+COMMAND=$(echo "$input" | jq -r '.tool_input.command // empty')
+EXIT_CODE=$(echo "$input" | jq -r '.tool_result.exit_code // 0')
 
 # Commands that warrant a notification
 LONG_RUNNING_PATTERNS=(
@@ -52,7 +53,13 @@ if [[ "$should_notify" == true ]] && command -v osascript &>/dev/null; then
         sound="Basso"
     fi
 
-    osascript -e "display notification \"$matched_command $status\" with title \"Claude Code\" sound name \"$sound\"" 2>/dev/null || true
+    # Sanitize variables for AppleScript (escape backslashes and double quotes)
+    safe_command="${matched_command//\\/\\\\}"
+    safe_command="${safe_command//\"/\\\"}"
+    safe_status="${status//\\/\\\\}"
+    safe_status="${safe_status//\"/\\\"}"
+
+    osascript -e "display notification \"$safe_command $safe_status\" with title \"Claude Code\" sound name \"$sound\"" 2>/dev/null || true
 fi
 
 # Always exit successfully - notifications should never block operations

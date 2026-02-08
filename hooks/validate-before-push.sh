@@ -5,8 +5,9 @@
 
 set -euo pipefail
 
-# Get command from environment (set by Claude Code hooks)
-COMMAND="${CLAUDE_COMMAND:-}"
+# Parse JSON input from stdin (Claude Code hook protocol)
+input=$(cat)
+COMMAND=$(echo "$input" | jq -r '.tool_input.command // empty')
 
 # Only check git push commands
 if [[ "$COMMAND" != *"git push"* ]]; then
@@ -25,7 +26,7 @@ fi
 
 # Check if we're on a protected branch
 CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "")
-PROTECTED_BRANCHES=("main" "master" "production" "release")
+PROTECTED_BRANCHES=("main" "master" "production" "develop" "staging" "release")
 
 for branch in "${PROTECTED_BRANCHES[@]}"; do
     if [[ "$CURRENT_BRANCH" == "$branch" ]]; then
@@ -35,7 +36,7 @@ for branch in "${PROTECTED_BRANCHES[@]}"; do
             echo ""
             echo "Force pushing to $branch can cause data loss and break CI/CD."
             echo "If this is intentional, push manually outside Claude Code."
-            exit 1
+            exit 2
         fi
     fi
 done

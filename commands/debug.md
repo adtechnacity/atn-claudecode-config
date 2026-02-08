@@ -58,6 +58,34 @@ npm test
 # Run reproduction case - verify error gone
 ```
 
+## Escalation: 3+ Failed Fixes → Question Architecture
+
+If you've tried 3+ fixes and each reveals a new problem in a different place:
+
+1. **STOP** — don't attempt fix #4
+2. This pattern indicates an **architectural problem**, not a bug
+3. Ask: Is this pattern fundamentally sound, or are we fighting inertia?
+4. Discuss with user before attempting more fixes
+
+## Multi-Component Diagnostics
+
+When debugging across system boundaries (CI → build → deploy, API → service → DB):
+
+1. Add logging at **each component boundary** before proposing fixes
+2. Log what enters and exits each layer
+3. Run once to gather evidence showing **where** data breaks
+4. Then investigate that specific component
+
+## Red Flags — Return to Step 2
+
+Stop and re-investigate if you catch yourself:
+- Proposing fixes without tracing data flow
+- "Quick fix for now, investigate later"
+- "Just try changing X and see if it works"
+- Adding multiple changes at once to "save time"
+- "I don't fully understand but this might work"
+- Previous fix didn't work and you're already proposing the next one
+
 ## Common Patterns
 
 | Category | Check For |

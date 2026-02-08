@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-02-08
+
+### Added
+- **CLAUDE.md**: Project instructions file with MCP servers, CLI tools, coding conventions, and git workflow
+- **Skills**: audit-website, dispatching-parallel-agents, executing-plans, finishing-a-development-branch, subagent-driven-development, test-driven-development, using-git-worktrees, web-design-guidelines, writing-plans
+- **Commands**: deps (dependency audit and management)
+- **Hooks**: format-and-lint.sh (unified formatting and linting on file save)
+
+### Removed
+- **Agents**: code-simplifier, feature-dev-code-architect, feature-dev-code-explorer, feature-dev-code-reviewer, git-commit-validator, test-generator, typescript-code-reviewer (replaced by built-in subagent types)
+- **Commands**: ralph-loop-help (consolidated), review (consolidated into audit-code)
+- **Hooks**: auto-format-on-save.sh, lint-on-save.sh, test-reminder.sh (replaced by format-and-lint.sh)
+
+### Changed
+- Consolidated /review into /audit-code with new Bug Review phase and TypeScript-specific review
+- Updated all commands to use valid subagent types (Explore, general-purpose) with enriched prompt guidance
+- Narrowed overly broad "private"/"secret" patterns in prevent-secrets-edit.sh to specific key patterns
+- Corrected inaccurate "Used by" integration references across audit commands
+- Removed stale code-simplifier agent references from enforce-commit-skill.sh
+- Added AppleScript variable sanitization in notify-on-completion.sh
+- Updated frontend-design and schema-designer skills
+- Streamlined hooks: branch-protection, enforce-commit-skill, notify-on-completion, ralph-loop-stop, validate-before-push
+
 ## [0.2.5] - 2026-01-18
 
 ### Added

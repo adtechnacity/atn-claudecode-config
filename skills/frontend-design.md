@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, or applications. Generates creative, polished code that avoids generic AI aesthetics.
+description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
 license: Complete terms in LICENSE.txt
 ---
 
@@ -40,3 +40,28 @@ Interpret creatively and make unexpected choices that feel genuinely designed fo
 **IMPORTANT**: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.
 
 Remember: Claude is capable of extraordinary creative work. Don't hold back, show what can truly be created when thinking outside the box and committing fully to a distinctive vision.
+
+## Production Quality Checklist
+
+Before delivering any frontend work, verify:
+
+**Accessibility (CRITICAL)**
+- Color contrast minimum 4.5:1 ratio (WCAG AA)
+- Visible focus rings on all interactive elements
+- 44x44px minimum touch targets
+- Disable buttons during async operations
+
+**Performance (HIGH)**
+- WebP images with `srcset` and lazy loading
+- Respect `prefers-reduced-motion`
+- Minimum 16px body text on mobile
+
+**Layout (HIGH)**
+- Defined z-index scale (10, 20, 30, 50)
+- Smooth transitions 150-300ms
+- Proper light/dark mode contrast
+
+**Pre-Delivery**
+- SVG icons only (no emojis in UI)
+- Consistent icon set throughout
+- Keyboard navigation works end-to-end

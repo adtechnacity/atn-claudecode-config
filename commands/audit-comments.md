@@ -6,11 +6,11 @@ Audit comments to ensure they add value. Remove redundant/outdated comments, add
 
 ## Integration
 
-Used by: **`/commit`** (Step 1), **`/ship`** (via `/commit`)
+Used by: **`/ship`** (via `/audit-all`)
 
-Related: **`/cleanup`** (commented-out code), **`/review`** (comment quality)
+Related: **`/cleanup`** (commented-out code), **`/audit-code`** (code quality)
 
-Hook: **`auto-format-on-save.sh`** handles formatting after edits
+Hook: **`format-and-lint.sh`** handles formatting after edits
 
 ## Comment Principles
 
@@ -33,20 +33,15 @@ Hook: **`auto-format-on-save.sh`** handles formatting after edits
 - Noise (dividers, obvious headers)
 - Apologetic ("sorry this is hacky")
 
-## Agent Integration
-
-| Agent | Purpose |
-|-------|---------|
-| `feature-dev:code-reviewer` | Find low-value comments |
-| `feature-dev:code-explorer` | Find complex code lacking explanation |
-
 ## Phase 1: Find Low-Value Comments
 
-> "Review comment quality. Flag: redundant, outdated, commented-out code, noise. Note file:line."
+Launch via Task tool (`subagent_type: "general-purpose"`):
+> "Review comment quality with confidence scoring (0-100, report >= 80). Flag: redundant (restates code), outdated (doesn't match behavior), commented-out code, noise (dividers, obvious headers). Note file:line for each."
 
 ## Phase 2: Find Missing Comments
 
-> "Identify complex code lacking explanation: algorithms, business logic, API integrations, workarounds, undocumented public exports. Note file:line."
+Launch via Task tool (`subagent_type: "Explore"`):
+> "Identify complex code lacking explanation: algorithms, business logic, API integrations, workarounds, undocumented public exports. Trace through the code to understand what each complex section does. Note file:line for each."
 
 ## Phase 3: Apply Changes
 

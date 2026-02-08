@@ -6,7 +6,7 @@ Ensure documentation accurately reflects implementation.
 
 ## Integration
 
-Used by `/ship` (Phase 1). Related: `/setup`, `/review`, `api-designer`, `schema-designer`
+Used by `/ship` (Phase 1). Related: `/audit-code`, `/init`, `api-designer`, `schema-designer`
 
 ## Phase 1: Codebase Analysis
 
@@ -18,7 +18,7 @@ Note claims, features, specs as baseline.
 
 ### 1.2 Map Implementation
 
-Launch `feature-dev:code-explorer` (Task tool, `subagent_type: "feature-dev:code-explorer"`):
+Launch via Task tool (`subagent_type: "Explore"`):
 
 > "Map codebase architecture: (1) Core types/structures, (2) Entry points/flows, (3) External integrations/APIs, (4) Storage layer, (5) Key modules and responsibilities. Note interfaces, functions, behaviors."
 
@@ -49,14 +49,14 @@ Compare findings against docs:
 - Missing error codes
 - Missing auth docs
 
-Use `api-designer` for comprehensive API updates.
+Use `api-designer` skill for comprehensive API updates.
 
 ## Phase 3: Updates
 
 - **README**: Match functionality, update instructions, verify features
 - **Memory File**: Update architecture, complete lists, fix constants
 - **Specs**: Flag gaps for product decision, update diffs
-- **API Docs**: Use `api-designer`, document all endpoints
+- **API Docs**: Use `api-designer` skill, document all endpoints
 
 ## Phase 4: Verification
 
@@ -76,4 +76,4 @@ Use `api-designer` for comprehensive API updates.
 - Flag product decisions (don't assume intent)
 - Keep docs concise but complete
 - Preserve existing structure
-- Use `/setup` for initial documentation
+- Use `/init` for initial project setup

@@ -31,6 +31,7 @@ Set up Claude Code configuration for a project.
 ## Directory Structure
 src/     # Source code
 tests/   # Test files
+docs/    # Documentation files
 
 ## Commands
 - `npm run dev` - Development server

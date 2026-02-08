@@ -6,8 +6,8 @@ Audit test suite for coverage gaps and create high-value tests only.
 
 ## Integration
 
-Used by: **`/ship`** (Phase 1), **`/commit`** (Step 2)
-Related: **`/deps`**, **`/review`**, **`typescript-code-reviewer`** agent
+Used by: **`/ship`** (via `/audit-all`)
+Related: **`/deps`**, **`/audit-code`**
 
 ## Build System Detection
 
@@ -42,15 +42,15 @@ Related: **`/deps`**, **`/review`**, **`typescript-code-reviewer`** agent
 
 ### Phase 1: Audit Existing Tests
 
-Spawn `feature-dev:code-reviewer`:
-> "Review test files for redundancy. Flag: duplicate code paths, trivial tests, repetitive validation. Count tests per file."
+Launch via Task tool (`subagent_type: "general-purpose"`):
+> "Review test files for redundancy with confidence scoring (0-100, report >= 80). Flag: duplicate code paths, trivial tests (getters, no-op assertions), repetitive validation. Count tests per file. Include file:line for each issue."
 
 Consider consolidating/removing issues with >=80 confidence.
 
 ### Phase 2: Identify Coverage Gaps
 
-Spawn `feature-dev:code-explorer`:
-> "Identify critical untested paths. Prioritize: business logic, validation boundaries, error handling, edge cases. Skip: UI, delegating functions, framework wrappers."
+Launch via Task tool (`subagent_type: "Explore"`):
+> "Identify critical untested paths by tracing execution flows and mapping code coverage gaps. Prioritize: business logic, validation boundaries, error handling, edge cases. Skip: UI, delegating functions, framework wrappers. Note file:line for each gap."
 
 Risk priority: **Critical** (business logic) > **High** (security) > **Medium** (error handling) > **Low** (obvious utilities)
 
