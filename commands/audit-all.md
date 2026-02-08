@@ -8,7 +8,7 @@ Run comprehensive audit of the entire codebase.
 
 ## Integration
 
-Combines: `/audit-code`, `/audit-tests`, `/audit-docs`, `/audit-comments`
+Combines: `/audit-code`, `/audit-tests`, `/audit-docs`, `/audit-comments`, `/audit-deps`
 
 Used by: `/ship` can use this instead of running individual audits
 
@@ -50,6 +50,14 @@ Run `/audit-comments` to completion.
 
 ---
 
+## Phase 5: Dependency Audit
+
+Run `/audit-deps` to completion.
+
+**Focus**: Security vulnerabilities, outdated packages, unused dependencies
+
+---
+
 ## Summary Report
 
 After all phases complete, provide:
@@ -60,7 +68,8 @@ After all phases complete, provide:
 | Tests | - | - | - |
 | Docs | - | - | - |
 | Comments | - | - | - |
+| Deps | - | - | - |
 
 **Build Status**: Pass/Fail
 
-**Recommended Follow-ups**: `/cleanup`, `/perf`, `/deps`
+**Recommended Follow-ups**: `/cleanup`, `/performance`
