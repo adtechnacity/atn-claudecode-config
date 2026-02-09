@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - `/context-scan` renamed to `/scan-context` — updated all references in README and CHANGELOG
+- **CLAUDE.md**: Updated MCP server list — added brevo, cloudflare-dns, gtm (renamed from google-tag-manager-mcp-server), restored snowflake, updated cloudflare description
 
 ## [0.3.4] - 2026-02-08
 
