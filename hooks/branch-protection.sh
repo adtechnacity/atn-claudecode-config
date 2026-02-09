@@ -12,6 +12,10 @@ PROTECTED_BRANCHES="main master production develop staging release"
 if echo "$COMMAND" | grep -qE '^git (commit|push)'; then
   CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "")
 
+  if [[ -z "$CURRENT_BRANCH" ]]; then
+    exit 0  # Not on a named branch (detached HEAD or not a repo), nothing to protect
+  fi
+
   for branch in $PROTECTED_BRANCHES; do
     if [ "$CURRENT_BRANCH" = "$branch" ]; then
       echo "BLOCKED: Cannot commit/push directly to '$branch' branch." >&2

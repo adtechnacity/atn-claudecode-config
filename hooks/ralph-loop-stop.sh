@@ -22,17 +22,17 @@ FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$RALPH_STATE_FILE")
 ITERATION=$(echo "$FRONTMATTER" | grep '^iteration:' | sed 's/iteration: *//')
 MAX_ITERATIONS=$(echo "$FRONTMATTER" | grep '^max_iterations:' | sed 's/max_iterations: *//')
 # Extract completion_promise and strip surrounding quotes if present
-COMPLETION_PROMISE=$(echo "$FRONTMATTER" | grep '^completion_promise:' | sed 's/completion_promise: *//' | sed 's/^"\(.*\)"$/\1/')
+COMPLETION_PROMISE=$(echo "$FRONTMATTER" | grep '^completion_promise:' | sed 's/completion_promise: *//' | sed 's/^"\(.*\)"$/\1/' | sed 's/\\"/"/g; s/\\\\/\\/g')
 
 # Validate numeric fields before arithmetic operations
-if [[ ! "$ITERATION" =~ ^[0-9]+$ ]]; then
+if [[ ! "$ITERATION" =~ ^[0-9]{1,6}$ ]]; then
   echo "⚠️  Ralph loop: 'iteration' is not a number (got: '$ITERATION'). State file corrupted." >&2
   echo "   Stopping. Run /ralph-loop to start fresh." >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
-if [[ ! "$MAX_ITERATIONS" =~ ^[0-9]+$ ]]; then
+if [[ ! "$MAX_ITERATIONS" =~ ^[0-9]{1,6}$ ]]; then
   echo "⚠️  Ralph loop: 'max_iterations' is not a number (got: '$MAX_ITERATIONS'). State file corrupted." >&2
   echo "   Stopping. Run /ralph-loop to start fresh." >&2
   rm "$RALPH_STATE_FILE"

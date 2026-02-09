@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.6] - 2026-02-09
+
+### Fixed
+- **branch-protection.sh**: Added explicit guard for empty branch detection — prevents silent bypass on detached HEAD or non-repo contexts
+- **ralph-loop-setup.sh**: Escape `\` and `"` in completion promise YAML to prevent frontmatter corruption
+- **ralph-loop-stop.sh**: Cap numeric fields to 6 digits to prevent arithmetic overflow; unescape completion promise when parsing
+
 ## [0.3.5] - 2026-02-08
 
 ### Added
