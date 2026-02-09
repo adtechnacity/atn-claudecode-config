@@ -7,13 +7,15 @@ The following MCP servers are available for interacting with external services:
 - **analytics-mcp** - Google Analytics reporting
 - **aws** - AWS prompt understanding
 - **aws-cloudwatch** - CloudWatch logs, metrics, alarms
+- **brevo** - Email marketing, CRM, contacts, campaigns (email/SMS/WhatsApp), deals, templates
 - **chrome-devtools** - Browser debugging including browser extensions
-- **cloudflare** - DNS, Workers, R2, D1, KV, Queues, Domain Registration
+- **cloudflare** - Workers, R2, D1, KV, Queues, Workflows, Cron, Secrets, Env vars
+- **cloudflare-dns** - DNS record management (create, list, update, delete records and zones)
 - **context7** - Library and API documentation lookup
-- **google-tag-manager-mcp-server** - Google Tag Manager
 - **growthbook** - Feature flags and A/B testing
+- **gtm** - Google Tag Manager (accounts, containers, variables, GA4/Facebook pixel setup)
 - **sentry** - Error tracking and monitoring
-- **snowflake** - Data warehouse queries in Snowflake
+- **snowflake** - Data warehouse queries (SQL via Snowflake)
 
 ## Error Investigation with Sentry
 
