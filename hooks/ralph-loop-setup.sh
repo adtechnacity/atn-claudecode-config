@@ -88,7 +88,7 @@ if [[ $# -eq 1 ]]; then
   fi
 
   # Remaining text (trimmed) is the prompt
-  PROMPT="$(echo "$INPUT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+  PROMPT="$(printf '%s\n' "$INPUT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
 
 # Multi-argument mode: normal argv parsing (direct script invocation)
 else
