@@ -1,8 +1,3 @@
----
-name: component-factory
-description: Creates UI components following best practices. Use when building new React, Vue, or Svelte components.
----
-
 # Component Patterns
 
 ## React Component Structure

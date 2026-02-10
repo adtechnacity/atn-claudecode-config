@@ -1,6 +1,6 @@
 ---
 name: database-expert
-description: Database optimization expert for query optimization, schema design, migration planning, and debugging.
+description: Database optimization expert. USE WHEN optimizing slow queries, designing schemas, planning migrations, fixing N+1 queries, adding indexes, reviewing Prisma/Drizzle/TypeORM models, or debugging database performance.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---

@@ -1,8 +1,3 @@
----
-name: error-handler
-description: Implements robust error handling with custom errors, boundaries, and API responses.
----
-
 # Error Handling Patterns
 
 ## TypeScript Custom Errors

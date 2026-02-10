@@ -1,8 +1,3 @@
----
-name: subagent-driven-development
-description: Use when executing implementation plans with independent tasks in the current session - dispatches fresh subagent per task with two-stage review
----
-
 # Subagent-Driven Development
 
 Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance first, then code quality.
@@ -12,7 +7,7 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 ## When to Use
 
 - Have an implementation plan with mostly independent tasks
-- Want to stay in the current session (vs `executing-plans` for parallel sessions)
+- Want to stay in the current session (vs `workflows/execute.md` for parallel sessions)
 - Tasks can be implemented one at a time without tight coupling
 
 ## The Process
@@ -28,7 +23,7 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
    - If issues found: implementer fixes, reviewer re-reviews
    - Mark task complete
 3. **After all tasks** — Dispatch final code reviewer for entire implementation
-4. **Complete** — Use `finishing-a-development-branch` skill
+4. **Complete** — Follow `workflows/finish-branch.md`
 
 ## Implementer Prompt Template
 
@@ -91,8 +86,6 @@ Dispatch via Task tool (`subagent_type: "general-purpose"`):
 
 ## Integration
 
-**Required workflow skills:**
-- `using-git-worktrees` — Set up isolated workspace before starting
-- `writing-plans` — Creates the plan this skill executes
-- `finishing-a-development-branch` — Complete development after all tasks
-- `test-driven-development` — Subagents follow TDD for each task
+**Calls:** `workflows/finish-branch.md` — Complete development after all tasks
+
+**Subagents follow:** `test-driven-development` skill for each task

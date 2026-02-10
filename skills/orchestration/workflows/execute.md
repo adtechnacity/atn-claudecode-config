@@ -1,8 +1,3 @@
----
-name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
----
-
 # Executing Plans
 
 ## Overview
@@ -46,8 +41,8 @@ Based on feedback:
 
 After all tasks complete and verified:
 - Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+- **REQUIRED:** Follow `workflows/finish-branch.md`
+- Verify tests, present options, execute choice
 
 ## When to Stop and Ask for Help
 
@@ -71,14 +66,10 @@ After all tasks complete and verified:
 - Review plan critically first
 - Follow plan steps exactly
 - Don't skip verifications
-- Reference skills when plan says to
 - Between batches: just report and wait
 - Stop when blocked, don't guess
 - Never start implementation on main/master branch without explicit user consent
 
 ## Integration
 
-**Required workflow skills:**
-- **using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
-- **writing-plans** - Creates the plan this skill executes
-- **finishing-a-development-branch** - Complete development after all tasks
+**Calls:** `workflows/finish-branch.md` — Complete development after all tasks

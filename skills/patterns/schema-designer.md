@@ -73,11 +73,3 @@ CREATE TABLE audit_log (
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation ON posts USING (tenant_id = current_setting('app.current_tenant')::uuid);
 ```
-
-## Ask Me To
-
-- Design/review database schemas
-- Optimize queries with indexes
-- Plan migrations
-- Convert between formats (SQL/ORM)
-- Design for specific access patterns

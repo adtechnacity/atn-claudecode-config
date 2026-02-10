@@ -1,6 +1,7 @@
 ---
+name: performance-analyzer
 model: sonnet
-description: Performance analysis agent for identifying bottlenecks and optimization opportunities
+description: Performance analysis agent. USE WHEN profiling, finding bottlenecks, optimizing speed, analyzing Core Web Vitals, bundle size, render performance, slow queries, or memory leaks.
 tools:
   - Read
   - Glob

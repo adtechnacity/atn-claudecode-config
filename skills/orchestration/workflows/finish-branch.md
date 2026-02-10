@@ -1,8 +1,3 @@
----
-name: finishing-a-development-branch
-description: Use when implementation is complete and you need to decide how to integrate the work - guides merge, PR, or cleanup
----
-
 # Finishing a Development Branch
 
 Guide completion of development work by presenting clear options and handling chosen workflow.
@@ -87,6 +82,4 @@ For Option 3 — keep worktree.
 
 ## Integration
 
-**Called by:** `subagent-driven-development`, `executing-plans`
-
-**Pairs with:** `using-git-worktrees` skill (worktree creation guidance; this skill handles the finish side — merge, PR, cleanup)
+**Called by:** `workflows/subagent-dev.md`, `workflows/execute.md`
