@@ -16,7 +16,9 @@ telemetry/
 todos/
 chrome/
 tasks/
+teams/
 mcp-servers/
+image-cache/
 
 # Claude Code operational files
 .lsp.json

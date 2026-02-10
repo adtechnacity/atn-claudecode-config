@@ -89,6 +89,4 @@ For Option 3 — keep worktree.
 
 **Called by:** `subagent-driven-development`, `executing-plans`
 
-**Pairs with:** `/worktree` command (creates worktrees; this skill handles the finish side — merge, PR, cleanup)
-
-**See also:** `/worktree remove` and `/worktree cleanup` for batch worktree removal
+**Pairs with:** `using-git-worktrees` skill (worktree creation guidance; this skill handles the finish side — merge, PR, cleanup)
