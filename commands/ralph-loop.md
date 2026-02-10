@@ -10,7 +10,10 @@ hide-from-slash-command-tool: "true"
 Execute the setup script to initialize the Ralph loop:
 
 ```!
-"/Users/luis/.claude/hooks/ralph-loop-setup.sh" $ARGUMENTS
+"/Users/luis/.claude/hooks/ralph-loop-setup.sh" "$(cat <<'RALPH_ARGS_EOF'
+$ARGUMENTS
+RALPH_ARGS_EOF
+)"
 ```
 
 Please work on the task. When you try to exit, the Ralph loop will feed the SAME PROMPT back to you for the next iteration. You'll see your previous work in files and git history, allowing you to iterate and improve.
