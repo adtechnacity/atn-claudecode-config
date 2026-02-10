@@ -6,7 +6,7 @@ Convert an implementation plan into a structured task graph using Claude's task 
 
 **Core principle:** Plans describe WHAT to build. This workflow converts that into a dependency-aware execution graph that maximizes throughput by running independent tasks in parallel while respecting sequential constraints.
 
-**Announce at start:** "I'm using the task-orchestration skill to break this plan into tasks and set up the execution graph."
+**Announce at start:** "I'm using the orchestration skill to break this plan into tasks and set up the execution graph."
 
 ## When to Use
 
