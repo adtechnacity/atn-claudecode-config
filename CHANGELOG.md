@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.8] - 2026-02-10
+
+### Removed
+- **`/worktree`**: Removed git worktree management command (use `using-git-worktrees` skill instead)
+
+### Changed
+- **`.gitignore`**: Added `image-cache/` and `teams/` to ignored directories
+- **`finishing-a-development-branch`**: Updated references from deleted `/worktree` command to `using-git-worktrees` skill
+
 ## [0.3.7] - 2026-02-09
 
 ### Fixed
