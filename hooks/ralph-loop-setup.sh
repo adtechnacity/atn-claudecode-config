@@ -10,11 +10,9 @@ PROMPT_PARTS=()
 MAX_ITERATIONS=0
 COMPLETION_PROMISE="null"
 
-# Parse options and positional arguments
-while [[ $# -gt 0 ]]; do
-  case $1 in
-    -h|--help)
-      cat << 'HELP_EOF'
+# Show help text
+show_help() {
+  cat << 'HELP_EOF'
 Ralph Loop - Interactive self-referential development loop
 
 USAGE:
@@ -56,61 +54,79 @@ MONITORING:
   # View full state:
   head -10 .claude/ralph-loop.local.md
 HELP_EOF
-      exit 0
-      ;;
-    --max-iterations)
-      if [[ -z "${2:-}" ]]; then
-        echo "❌ Error: --max-iterations requires a number argument" >&2
-        echo "" >&2
-        echo "   Valid examples:" >&2
-        echo "     --max-iterations 10" >&2
-        echo "     --max-iterations 50" >&2
-        echo "     --max-iterations 0  (unlimited)" >&2
-        echo "" >&2
-        echo "   You provided: --max-iterations (with no number)" >&2
-        exit 1
-      fi
-      if ! [[ "$2" =~ ^[0-9]+$ ]]; then
-        echo "❌ Error: --max-iterations must be a positive integer or 0, got: $2" >&2
-        echo "" >&2
-        echo "   Valid examples:" >&2
-        echo "     --max-iterations 10" >&2
-        echo "     --max-iterations 50" >&2
-        echo "     --max-iterations 0  (unlimited)" >&2
-        echo "" >&2
-        echo "   Invalid: decimals (10.5), negative numbers (-5), text" >&2
-        exit 1
-      fi
-      MAX_ITERATIONS="$2"
-      shift 2
-      ;;
-    --completion-promise)
-      if [[ -z "${2:-}" ]]; then
-        echo "❌ Error: --completion-promise requires a text argument" >&2
-        echo "" >&2
-        echo "   Valid examples:" >&2
-        echo "     --completion-promise 'DONE'" >&2
-        echo "     --completion-promise 'TASK COMPLETE'" >&2
-        echo "     --completion-promise 'All tests passing'" >&2
-        echo "" >&2
-        echo "   You provided: --completion-promise (with no text)" >&2
-        echo "" >&2
-        echo "   Note: Multi-word promises must be quoted!" >&2
-        exit 1
-      fi
-      COMPLETION_PROMISE="$2"
-      shift 2
-      ;;
-    *)
-      # Non-option argument - collect all as prompt parts
-      PROMPT_PARTS+=("$1")
-      shift
-      ;;
-  esac
-done
+  exit 0
+}
 
-# Join all prompt parts with spaces
-PROMPT="${PROMPT_PARTS[*]}"
+# Single-argument mode: when the command template passes all args as one string
+# (via heredoc to avoid shell quoting issues with apostrophes, quotes, etc.)
+if [[ $# -eq 1 ]]; then
+  INPUT="$1"
+
+  # Check for help
+  if [[ "$INPUT" =~ (^|[[:space:]])(-h|--help)([[:space:]]|$) ]]; then
+    show_help
+  fi
+
+  # Extract --max-iterations N
+  if [[ "$INPUT" =~ --max-iterations[[:space:]]+([0-9]+) ]]; then
+    MAX_ITERATIONS="${BASH_REMATCH[1]}"
+    INPUT="${INPUT/--max-iterations ${BASH_REMATCH[1]}/}"
+  fi
+
+  # Extract --completion-promise with single quotes
+  if [[ "$INPUT" =~ --completion-promise[[:space:]]+\'([^\']+)\' ]]; then
+    COMPLETION_PROMISE="${BASH_REMATCH[1]}"
+    INPUT="${INPUT/--completion-promise \'${BASH_REMATCH[1]}\'/}"
+  # Extract --completion-promise with double quotes
+  elif [[ "$INPUT" =~ --completion-promise[[:space:]]+\"([^\"]+)\" ]]; then
+    COMPLETION_PROMISE="${BASH_REMATCH[1]}"
+    INPUT="${INPUT/--completion-promise \"${BASH_REMATCH[1]}\"/}"
+  # Extract --completion-promise single word
+  elif [[ "$INPUT" =~ --completion-promise[[:space:]]+([^[:space:]]+) ]]; then
+    COMPLETION_PROMISE="${BASH_REMATCH[1]}"
+    INPUT="${INPUT/--completion-promise ${BASH_REMATCH[1]}/}"
+  fi
+
+  # Remaining text (trimmed) is the prompt
+  PROMPT="$(printf '%s\n' "$INPUT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
+# Multi-argument mode: normal argv parsing (direct script invocation)
+else
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -h|--help)
+        show_help
+        ;;
+      --max-iterations)
+        if [[ -z "${2:-}" ]]; then
+          echo "Error: --max-iterations requires a number argument" >&2
+          exit 1
+        fi
+        if ! [[ "$2" =~ ^[0-9]+$ ]]; then
+          echo "Error: --max-iterations must be a positive integer or 0, got: $2" >&2
+          exit 1
+        fi
+        MAX_ITERATIONS="$2"
+        shift 2
+        ;;
+      --completion-promise)
+        if [[ -z "${2:-}" ]]; then
+          echo "Error: --completion-promise requires a text argument" >&2
+          exit 1
+        fi
+        COMPLETION_PROMISE="$2"
+        shift 2
+        ;;
+      *)
+        PROMPT_PARTS+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  # Join all prompt parts with spaces
+  PROMPT="${PROMPT_PARTS[*]}"
+fi
 
 # Validate prompt is non-empty
 if [[ -z "$PROMPT" ]]; then

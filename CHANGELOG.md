@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.7] - 2026-02-09
+
+### Fixed
+- **ralph-loop command**: Wrap `$ARGUMENTS` in heredoc to prevent shell quoting errors from apostrophes and special characters in prompts
+- **ralph-loop-setup.sh**: Add single-argument parsing mode with regex-based option extraction for safe heredoc passthrough
+- **ralph-loop-setup.sh**: Use `printf` instead of `echo` for user input to avoid flag misinterpretation
+
 ## [0.3.6] - 2026-02-09
 
 ### Fixed
