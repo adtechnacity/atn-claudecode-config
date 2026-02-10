@@ -17,6 +17,7 @@ todos/
 chrome/
 tasks/
 mcp-servers/
+image-cache/
 
 # Claude Code operational files
 .lsp.json
