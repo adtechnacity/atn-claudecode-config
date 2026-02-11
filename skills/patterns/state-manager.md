@@ -1,8 +1,3 @@
----
-name: state-manager
-description: Implements state management following project patterns. Supports React Context, Zustand, Redux, and more.
----
-
 # State Management Patterns
 
 ## When to Use What

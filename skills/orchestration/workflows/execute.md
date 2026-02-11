@@ -1,8 +1,3 @@
----
-name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
----
-
 # Executing Plans
 
 ## Overview
@@ -11,7 +6,7 @@ Load plan, review critically, execute tasks in batches, report for review betwee
 
 **Core principle:** Batch execution with checkpoints for architect review.
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+**Announce at start:** "I'm using the orchestration skill to implement this plan."
 
 ## The Process
 
@@ -19,7 +14,7 @@ Load plan, review critically, execute tasks in batches, report for review betwee
 1. Read plan file
 2. Review critically - identify any questions or concerns about the plan
 3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+4. If no concerns: Create task list and proceed
 
 ### Step 2: Execute Batch
 **Default: First 3 tasks**
@@ -45,9 +40,9 @@ Based on feedback:
 ### Step 5: Complete Development
 
 After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+- Announce: "I'm using the orchestration skill to finish this development branch."
+- **REQUIRED:** Follow `workflows/finish-branch.md`
+- Verify tests, present options, execute choice
 
 ## When to Stop and Ask for Help
 
@@ -71,14 +66,10 @@ After all tasks complete and verified:
 - Review plan critically first
 - Follow plan steps exactly
 - Don't skip verifications
-- Reference skills when plan says to
 - Between batches: just report and wait
 - Stop when blocked, don't guess
 - Never start implementation on main/master branch without explicit user consent
 
 ## Integration
 
-**Required workflow skills:**
-- **using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
-- **writing-plans** - Creates the plan this skill executes
-- **finishing-a-development-branch** - Complete development after all tasks
+**Calls:** `workflows/finish-branch.md` — Complete development after all tasks

@@ -1,8 +1,3 @@
----
-name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
----
-
 # Writing Plans
 
 ## Overview
@@ -11,9 +6,7 @@ Write comprehensive implementation plans assuming the engineer has zero context 
 
 Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
-
-**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
+**Announce at start:** "I'm using the orchestration skill to create the implementation plan."
 
 **Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
 
@@ -33,7 +26,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use executing-plans to implement this plan task-by-task.
+> **For Claude:** REQUIRED: Use the Orchestration skill to implement this plan task-by-task.
 
 **Goal:** [One sentence describing what this builds]
 
@@ -91,7 +84,6 @@ git commit -m "feat: add specific feature"
 - Exact file paths always
 - Complete code in plan (not "add validation")
 - Exact commands with expected output
-- Reference relevant skills with @ syntax
 - DRY, YAGNI, TDD, frequent commits
 
 ## Execution Handoff
@@ -109,15 +101,15 @@ After saving the plan, offer execution choice:
 **Which approach?"**
 
 **If Task Orchestration chosen:**
-- **REQUIRED SUB-SKILL:** Use task-orchestration
+- Use `workflows/orchestrate.md`
 - Creates dependency graph, dispatches parallel agents for independent tasks
 - Review checkpoints between execution waves
 
 **If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use subagent-driven-development
+- Use `workflows/subagent-dev.md`
 - Stay in this session
 - Fresh subagent per task + code review
 
 **If Parallel Session chosen:**
 - Guide them to open new session in worktree
-- **REQUIRED SUB-SKILL:** New session uses executing-plans
+- New session uses `workflows/execute.md`

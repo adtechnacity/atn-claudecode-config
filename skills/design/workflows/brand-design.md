@@ -1,11 +1,4 @@
----
-name: brand-designer
-description: Expert in brand identity, logo design, and visual brand systems
-version: 1.0.0
-tags: [branding, logo-design, identity, visual-identity, brand-guidelines]
----
-
-# Brand Designer Skill
+# Brand Designer
 
 Create cohesive brand identities, logos, and visual brand systems.
 
@@ -134,9 +127,3 @@ async function generateFavicons() {
   }
 }
 ```
-
-## When to Use
-
-- Creating brand identities, logos, visual systems
-- Building brand guidelines and templates
-- Ensuring brand consistency across assets

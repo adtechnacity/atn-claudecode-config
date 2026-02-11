@@ -1,6 +1,6 @@
 ---
 name: accessibility-auditor
-description: Audits code for accessibility (WCAG 2.1). Use when reviewing UI components, fixing a11y issues, or ensuring compliance.
+description: Audits code for accessibility (WCAG 2.1). USE WHEN reviewing UI components for a11y, fixing screen reader issues, checking color contrast, keyboard navigation, ARIA attributes, focus management, or ensuring WCAG compliance.
 tools: Read, Grep, Glob
 model: sonnet
 ---

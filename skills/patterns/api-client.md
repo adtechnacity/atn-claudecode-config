@@ -1,8 +1,3 @@
----
-name: api-client
-description: Creates type-safe API clients with error handling, retries, and authentication.
----
-
 # API Client Patterns
 
 ## TypeScript Fetch Wrapper

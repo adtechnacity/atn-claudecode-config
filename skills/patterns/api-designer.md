@@ -83,7 +83,7 @@ interface ApiError {
 ### Pagination
 ```json
 {
-  "data": [...],
+  "data": [],
   "meta": { "page": 1, "per_page": 20, "total": 100 },
   "links": { "self": "/users?page=1", "next": "/users?page=2" }
 }

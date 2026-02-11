@@ -1,21 +1,16 @@
----
-name: task-orchestration
-description: Use after creating a plan to break it into Claude Tasks with dependencies, then orchestrate execution with parallel and sequential agents
----
-
 # Task Orchestration
 
 ## Overview
 
 Convert an implementation plan into a structured task graph using Claude's task system (TaskCreate, TaskUpdate, TaskList). Set dependencies, identify parallelizable work, and orchestrate execution using agent teams and parallel dispatch.
 
-**Core principle:** Plans describe WHAT to build. This skill converts that into a dependency-aware execution graph that maximizes throughput by running independent tasks in parallel while respecting sequential constraints.
+**Core principle:** Plans describe WHAT to build. This workflow converts that into a dependency-aware execution graph that maximizes throughput by running independent tasks in parallel while respecting sequential constraints.
 
-**Announce at start:** "I'm using the task-orchestration skill to break this plan into tasks and set up the execution graph."
+**Announce at start:** "I'm using the orchestration skill to break this plan into tasks and set up the execution graph."
 
 ## When to Use
 
-- After `writing-plans` creates an implementation plan
+- After `workflows/write-plan.md` creates an implementation plan
 - After `/review-plan` approves a plan
 - When you have a multi-task plan and want structured execution tracking
 - When tasks have dependencies that determine execution order
@@ -112,7 +107,7 @@ For each wave, identify all unblocked tasks (no pending `blockedBy` dependencies
 
 **If 2+ tasks are unblocked and independent:**
 
-Dispatch parallel agents using the `dispatching-parallel-agents` pattern. Send all Task tool calls in a single message:
+Dispatch parallel agents using the `workflows/parallel-dispatch.md` pattern. Send all Task tool calls in a single message:
 
 ```
 Task(
@@ -125,7 +120,7 @@ Task(
 
 **If only 1 task is unblocked:**
 
-Dispatch a single subagent per the `subagent-driven-development` pattern.
+Dispatch a single subagent per the `workflows/subagent-dev.md` pattern.
 
 ### 3.2 Track Progress
 
@@ -166,17 +161,7 @@ After all tasks are marked complete:
 
 1. Run full validation: typecheck, lint, test, build
 2. Review TaskList to confirm all tasks are completed
-3. Use `finishing-a-development-branch` skill to complete the work
-
-## Integration
-
-**Workflow position:** `writing-plans` → **task-orchestration** → `executing-plans` or `subagent-driven-development`
-
-**Required skills:**
-- **`writing-plans`** — Creates the plan this skill orchestrates
-- **`dispatching-parallel-agents`** — Pattern for parallel agent dispatch
-- **`subagent-driven-development`** — Pattern for sequential task execution with review
-- **`finishing-a-development-branch`** — Complete development after all tasks
+3. Use `workflows/finish-branch.md` to complete the work
 
 ## Key Constraints
 

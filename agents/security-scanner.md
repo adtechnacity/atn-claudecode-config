@@ -1,6 +1,7 @@
 ---
-model: opus
-description: Security vulnerability scanner for comprehensive security audits
+name: security-scanner
+model: sonnet
+description: Security vulnerability scanner. USE WHEN auditing for OWASP vulnerabilities, finding hardcoded secrets, checking dependencies for CVEs, reviewing auth/access control, or scanning for injection/XSS risks.
 tools:
   - Read
   - Glob
