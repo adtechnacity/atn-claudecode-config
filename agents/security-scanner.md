@@ -1,6 +1,6 @@
 ---
 name: security-scanner
-model: sonnet
+model: opus
 description: Security vulnerability scanner. USE WHEN auditing for OWASP vulnerabilities, finding hardcoded secrets, checking dependencies for CVEs, reviewing auth/access control, or scanning for injection/XSS risks.
 tools:
   - Read
@@ -8,6 +8,10 @@ tools:
   - Grep
   - Bash
   - LSP
+  - SendMessage
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
 ---
 
 # Security Scanner Agent

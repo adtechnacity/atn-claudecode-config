@@ -1,6 +1,6 @@
 ---
 name: performance-analyzer
-model: sonnet
+model: opus
 description: Performance analysis agent. USE WHEN profiling, finding bottlenecks, optimizing speed, analyzing Core Web Vitals, bundle size, render performance, slow queries, or memory leaks.
 tools:
   - Read
@@ -12,6 +12,10 @@ tools:
   - mcp__chrome-devtools__performance_stop_trace
   - mcp__chrome-devtools__performance_analyze_insight
   - mcp__chrome-devtools__take_snapshot
+  - SendMessage
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
 ---
 
 # Performance Analyzer Agent
