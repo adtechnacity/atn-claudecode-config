@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - **Skills**: Reorganized 16 flat skill files into 3 domain directories with SKILL.md routing (`orchestration/`, `design/`, `patterns/`)
 - **Skills**: Each domain has a SKILL.md with trigger-based routing table pointing to workflow/context files
 - **Skills**: Updated all internal cross-references to use lowercase kebab-case paths
+- **Skills**: Renamed `web-audit` to `audit-ui` for consistent `audit-<thing>` naming convention across all audit skills
 - **Agents**: Added missing `name` field to `performance-analyzer` and `security-scanner` agents
 - **Agents**: Improved all agent descriptions with explicit `USE WHEN` trigger keywords for better auto-matching
 - **Skills**: Improved `domain-name-brainstormer` description with trigger keywords

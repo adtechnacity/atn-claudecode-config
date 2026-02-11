@@ -18,5 +18,5 @@ Frontend design, UI review, and brand identity workflows.
 ## Quick Decision
 
 - **Building new UI?** → `frontend-design`
-- **Reviewing existing UI?** → `web-audit`
+- **Reviewing existing UI?** → `audit-ui`
 - **Creating brand identity?** → `brand-design`
