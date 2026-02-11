@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-02-10
+
+### Added
+- **Agent Teams integration**: Upgraded `/audit-code`, `/audit-all`, and `/feature-dev` workflows with inter-agent communication via TeamCreate, SendMessage, TaskCreate, and TaskList
+- **`parallel-dispatch.md`**: Expanded Agent Teams section with decision criteria, setup/teardown patterns, communication patterns, error recovery, and examples
+- **`orchestrate.md`**: Added "Agent Teams for Soft Dependencies" section for optional team-based execution
+
+### Changed
+- **Agents**: All 5 custom agents (security-scanner, performance-analyzer, accessibility-auditor, database-expert, refactoring-expert) upgraded to `model: opus` with team tools (SendMessage, TaskCreate, TaskUpdate, TaskList)
+- **`/audit-code`**: Now creates a team with cross-phase context sharing — agents post findings via TaskCreate, later-phase agents check TaskList to avoid duplicates. Supports dual-mode (standalone team vs inside `/audit-all`)
+- **`/audit-all`**: Replaced sequential execution with flat mega-team — Wave 1 runs code audit phases + dependency audit in parallel, auto-fix gate between waves, Wave 2 runs test/docs/comments audits in parallel with Wave 1 context
+- **`/feature-dev`**: Explorer, architect, and reviewer agents now coordinate via teams — explorers share patterns via SendMessage, architects read each other's proposals via TaskList, reviewers deduplicate findings
+
 ## [0.3.9] - 2026-02-10
 
 ### Changed

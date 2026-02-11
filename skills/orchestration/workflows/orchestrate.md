@@ -153,7 +153,7 @@ When the plan identifies tasks with **informational (not blocking) dependencies*
 
 **How:**
 ```
-TeamCreate(team_name: "<plan>-<timestamp>")
+TeamCreate(team_name: "<plan>-<YYYYMMDD-HHmmss>")
 # Spawn agents as teammates instead of independent Task calls
 # Agents share findings via SendMessage and TaskCreate
 # See workflows/parallel-dispatch.md "Agent Teams" section for full pattern
