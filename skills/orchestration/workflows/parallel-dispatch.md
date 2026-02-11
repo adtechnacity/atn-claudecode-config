@@ -126,16 +126,112 @@ Return: Summary of what you found and what you fixed.
 - **Background agents can't prompt:** `run_in_background: true` agents auto-deny permission prompts and cannot use MCP tools
 - **One message = parallel:** All Task calls in a single message run concurrently; sequential messages run sequentially
 
-## Agent Teams (Experimental)
+## Agent Teams
 
-For complex coordination where agents need to **communicate with each other**, use agent teams. Unlike parallel dispatch where agents are fully independent, agent teams let agents share context and coordinate.
+For complex coordination where agents need to **communicate with each other**, use agent teams. Unlike parallel dispatch where agents are fully independent, agent teams let agents share context, coordinate, and avoid duplicate work.
 
-**Enable with:** `export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
+### When to Use Teams vs Independent Dispatch
 
-Use agent teams when:
-- Agents need to share intermediate findings
-- One agent's output informs another's approach
-- Tasks have soft dependencies (not blocking, but informative)
+| Signal | Use Teams | Use Independent Dispatch |
+|--------|-----------|------------------------|
+| Cross-cutting findings | Agents audit overlapping code areas | Each agent works on separate files |
+| Shared root causes | Security + reliability might find same issue | Problems are in different subsystems |
+| Duplicate avoidance | Multiple reviewers could report same finding | No overlap in scope |
+| Soft dependencies | One agent's output informs another's approach | Tasks are truly isolated |
+| Phased execution | Later agents benefit from earlier findings | All agents start and finish independently |
+
+**Default to independent dispatch.** Only use teams when the signals above apply.
+
+### Team Setup Pattern
+
+```
+# 1. Create team with unique timestamp
+TeamCreate(team_name: "<workflow>-<YYYYMMDD-HHmmss>")
+
+# 2. Spawn teammates (all in a single message for parallel start)
+Task(
+  subagent_type: "general-purpose",
+  team_name: "<workflow>-<YYYYMMDD-HHmmss>",
+  name: "agent-name",
+  prompt: "...",
+  model: "opus"
+)
+
+# 3. Create and assign tasks
+TaskCreate(subject: "...", description: "...")
+TaskUpdate(taskId: "1", owner: "agent-name")
+
+# 4. Coordinate via messages
+SendMessage(type: "message", recipient: "agent-name", content: "...", summary: "...")
+```
+
+### Communication Patterns
+
+**Finding sharing** — agents post findings as tasks with structured metadata:
+```
+TaskCreate(
+  subject: "XSS in user-input.ts:42",
+  description: "Unescaped user input passed to innerHTML...",
+  metadata: {type: "finding", severity: "High", phase: 3, files: ["src/user-input.ts"]}
+)
+```
+
+**Context passing** — lead relays prior findings to next-phase agents:
+```
+SendMessage(
+  type: "message",
+  recipient: "next-phase-agent",
+  content: "Prior phases found 3 issues in auth/: XSS, missing CSRF, weak hashing. Focus extra attention there. Skip already-reported issues.",
+  summary: "Prior findings context for next phase"
+)
+```
+
+**Dedup** — agents check TaskList before reporting:
+```
+# Agent checks existing findings before creating a new one
+TaskList()  # Review existing findings
+# Only create if not already reported
+```
+
+### Teardown Pattern
+
+```
+# 1. Request shutdown for all agents
+SendMessage(type: "shutdown_request", recipient: "agent-1", content: "Work complete")
+SendMessage(type: "shutdown_request", recipient: "agent-2", content: "Work complete")
+
+# 2. Wait for confirmations
+
+# 3. Delete team
+TeamDelete()
+```
+
+### Error Recovery
+
+If a teammate crashes mid-task:
+1. Its tasks remain in `in_progress` — mark them back to `pending`
+2. Optionally spawn a replacement agent on the same team
+3. Remaining agents continue unaffected
+4. Lead accounts for missing output in final synthesis
+
+### Stale Team Cleanup
+
+At workflow start, check for leftover teams from crashed previous runs:
+```
+# Check ~/.claude/teams/ for stale team directories
+# If found: TeamDelete() the stale team before creating a new one
+```
+
+### Example: Audit With Cross-Cutting Findings
+
+Security scanner finds SQL injection in `db/queries.ts`. Reliability reviewer independently finds the same function lacks error handling. With a team:
+- Security scanner posts finding as a task
+- Reliability reviewer sees it via TaskList, skips the duplicate, focuses on other error handling gaps
+- Result: No duplicate findings, better coverage
+
+### Counter-Example: Test Fixing (No Team Needed)
+
+Three test files failing with unrelated root causes. Each fix agent works on different files with no overlap. A team would add communication overhead with zero benefit. Use independent parallel dispatch instead.
 
 ## Common Mistakes
 

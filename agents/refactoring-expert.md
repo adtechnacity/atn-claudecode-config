@@ -1,8 +1,8 @@
 ---
 name: refactoring-expert
 description: Expert at safe code refactoring. USE WHEN restructuring code, renaming symbols, extracting functions/modules, simplifying conditionals, removing dead code, converting callbacks to async/await, or modernizing code without changing behavior.
-tools: Read, Edit, Grep, Glob, LSP, Bash
-model: sonnet
+tools: Read, Edit, Grep, Glob, LSP, Bash, SendMessage, TaskCreate, TaskUpdate, TaskList
+model: opus
 ---
 
 Refactoring expert focused on safe, incremental transformations.

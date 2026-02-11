@@ -145,7 +145,23 @@ If a blocking task fails:
 3. Re-verify the fix
 4. Then continue with unblocked tasks
 
-### 3.4 Review Between Waves
+### 3.4 Optional: Agent Teams for Soft Dependencies
+
+When the plan identifies tasks with **informational (not blocking) dependencies** — where one task's output would help but isn't required by another — consider using Agent Teams instead of independent dispatch.
+
+**When to use:** Tasks in the same wave could benefit from sharing intermediate results. Example: backend API task and frontend component task run in parallel, but the frontend agent benefits from knowing the exact API response shape as the backend agent defines it.
+
+**How:**
+```
+TeamCreate(team_name: "<plan>-<timestamp>")
+# Spawn agents as teammates instead of independent Task calls
+# Agents share findings via SendMessage and TaskCreate
+# See workflows/parallel-dispatch.md "Agent Teams" section for full pattern
+```
+
+**Default behavior remains independent parallel dispatch.** Only use teams when the plan explicitly identifies soft dependencies between parallel tasks.
+
+### 3.5 Review Between Waves
 
 After each wave completes:
 - Show what was implemented

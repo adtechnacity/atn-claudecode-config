@@ -37,19 +37,29 @@ Initial request: $ARGUMENTS
 
 **Goal**: Understand relevant existing code and patterns at both high and low levels
 
+**Team Setup**:
+```
+# Clean up stale teams from previous runs
+# Check ~/.claude/teams/ for feature-dev-* directories and delete if found
+
+TeamCreate(team_name: "feature-dev-<YYYYMMDD-HHmmss>")
+```
+
 **Actions**:
-1. Launch 2-3 agents via Task tool (`subagent_type: "Explore"`) in parallel. Each agent should:
-   - Trace through the code comprehensively: follow call chains from entry to output, trace data transformations, map abstraction layers (presentation -> business logic -> data)
-   - Target a different aspect of the codebase (eg. similar features, high level understanding, architectural understanding, user experience, etc)
-   - Note design patterns, interfaces between components, cross-cutting concerns (auth, logging, caching)
-   - Include a list of 5-10 key files to read
+1. Spawn 3 Explore-type teammates on the team (all in a single message):
 
-   **Example agent prompts**:
-   - "Find features similar to [feature] and trace their complete implementation: entry points, call chains, data flow, abstractions. List 5-10 essential files."
-   - "Map the architecture for [feature area]: abstraction layers, design patterns, module boundaries, integration points. List 5-10 essential files."
-   - "Analyze [existing feature/area]: execution flow, state changes, side effects, error handling, dependencies. List 5-10 essential files."
+   ```
+   Task(subagent_type: "Explore", team_name: "feature-dev-<ts>", name: "explorer-similar", model: "opus",
+     prompt: "Find features similar to [feature] and trace their complete implementation: entry points, call chains, data flow, abstractions. List 5-10 essential files. When you find key patterns, message explorer-arch via SendMessage: 'Found relevant pattern: [name] in [files] — may affect architecture mapping'. Post each key file as a task via TaskCreate(subject: 'Key file: path/to/file.ts', metadata: {type: 'key-file', aspect: 'similar'}).")
 
-2. Once the agents return, please read all files identified by agents to build deep understanding
+   Task(subagent_type: "Explore", team_name: "feature-dev-<ts>", name: "explorer-arch", model: "opus",
+     prompt: "Map the architecture for [feature area]: abstraction layers, design patterns, module boundaries, integration points. List 5-10 essential files. When you find module boundaries, message explorer-similar via SendMessage: 'Found module boundary: [description] — relevant to similar feature search'. Post each key file as a task via TaskCreate(subject: 'Key file: path/to/file.ts', metadata: {type: 'key-file', aspect: 'arch'}).")
+
+   Task(subagent_type: "Explore", team_name: "feature-dev-<ts>", name: "explorer-ux", model: "opus",
+     prompt: "Analyze [existing feature/area]: execution flow, state changes, side effects, error handling, dependencies, user-facing behavior. List 5-10 essential files. Post each key file as a task via TaskCreate(subject: 'Key file: path/to/file.ts', metadata: {type: 'key-file', aspect: 'ux'}).")
+   ```
+
+2. Once the agents return, read all key-file tasks from TaskList. Read those files to build deep understanding.
 3. Present comprehensive summary of findings and patterns discovered
 
 ---
@@ -74,9 +84,29 @@ If the user says "whatever you think is best", provide your recommendation and g
 
 **Goal**: Design multiple implementation approaches with different trade-offs
 
+**Phase Transition**: Shutdown Phase 2 explorers, spawn architect teammates on the same team.
+
+```
+SendMessage(type: "shutdown_request", recipient: "explorer-similar", content: "Exploration complete")
+SendMessage(type: "shutdown_request", recipient: "explorer-arch", content: "Exploration complete")
+SendMessage(type: "shutdown_request", recipient: "explorer-ux", content: "Exploration complete")
+```
+
 **Actions**:
-1. Launch 2-3 agents via Task tool (`subagent_type: "general-purpose"`) in parallel. Each agent acts as a software architect: analyze existing patterns with file:line references, make decisive architectural choices with rationale, and provide a complete implementation blueprint (files to create/modify, component responsibilities, data flow, phased build sequence). Different focuses: minimal changes (smallest change, maximum reuse), clean architecture (maintainability, elegant abstractions), or pragmatic balance (speed + quality)
-2. Review all approaches and form your opinion on which fits best for this specific task (consider: small fix vs large feature, urgency, complexity, team context)
+1. Spawn 3 architect teammates on the same team (all in a single message):
+
+   ```
+   Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "architect-minimal", model: "opus",
+     prompt: "[Full codebase context from Phase 2]. Act as a software architect focused on MINIMAL CHANGES: smallest change, maximum reuse of existing code. Analyze existing patterns with file:line references, make decisive architectural choices with rationale, provide a complete implementation blueprint (files to create/modify, component responsibilities, data flow, phased build sequence). Read other architects' proposals via TaskList to ensure yours is distinct. Post your proposal as a task via TaskCreate(subject: 'Architecture: Minimal', description: '...full proposal...', metadata: {type: 'proposal', approach: 'minimal'}).")
+
+   Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "architect-clean", model: "opus",
+     prompt: "[Full codebase context from Phase 2]. Act as a software architect focused on CLEAN ARCHITECTURE: ideal structure, maintainability, elegant abstractions. Analyze existing patterns with file:line references, make decisive architectural choices with rationale, provide a complete implementation blueprint. Read other architects' proposals via TaskList to ensure yours is distinct. Post your proposal as a task via TaskCreate(subject: 'Architecture: Clean', description: '...full proposal...', metadata: {type: 'proposal', approach: 'clean'}).")
+
+   Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "architect-pragmatic", model: "opus",
+     prompt: "[Full codebase context from Phase 2]. Act as a software architect focused on PRAGMATIC BALANCE: speed + quality. Analyze existing patterns with file:line references, make decisive architectural choices with rationale, provide a complete implementation blueprint. Read other architects' proposals via TaskList to ensure yours is distinct. Post your proposal as a task via TaskCreate(subject: 'Architecture: Pragmatic', description: '...full proposal...', metadata: {type: 'proposal', approach: 'pragmatic'}).")
+   ```
+
+2. Read all proposal tasks from TaskList. Review all approaches and form your opinion on which fits best for this specific task (consider: small fix vs large feature, urgency, complexity, team context)
 3. Present to user: brief summary of each approach, trade-offs comparison, **your recommendation with reasoning**, concrete implementation differences
 4. **Ask user which approach they prefer**
 
@@ -85,6 +115,14 @@ If the user says "whatever you think is best", provide your recommendation and g
 ## Phase 5: Implementation
 
 **Goal**: Build the feature
+
+**Phase Transition**: Shutdown Phase 4 architects.
+
+```
+SendMessage(type: "shutdown_request", recipient: "architect-minimal", content: "Design complete")
+SendMessage(type: "shutdown_request", recipient: "architect-clean", content: "Design complete")
+SendMessage(type: "shutdown_request", recipient: "architect-pragmatic", content: "Design complete")
+```
 
 **DO NOT START WITHOUT USER APPROVAL**
 
@@ -103,8 +141,20 @@ If the user says "whatever you think is best", provide your recommendation and g
 **Goal**: Ensure code is simple, DRY, elegant, easy to read, and functionally correct
 
 **Actions**:
-1. Launch 3 agents via Task tool (`subagent_type: "general-purpose"`) in parallel. Each agent reviews with confidence scoring (0-100, only report >= 80). Different focuses: simplicity/DRY/elegance, bugs/functional correctness, project conventions/abstractions. Include file:line and specific fix for each issue.
-2. Consolidate findings and identify highest severity issues that you recommend fixing
+1. Spawn 3 reviewer teammates on the same team (all in a single message):
+
+   ```
+   Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "reviewer-simplicity", model: "opus",
+     prompt: "Review the implementation for simplicity, DRY, and elegance. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', focus: 'simplicity'}).")
+
+   Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "reviewer-correctness", model: "opus",
+     prompt: "Review the implementation for bugs, functional correctness, and edge cases. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', focus: 'correctness'}).")
+
+   Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "reviewer-conventions", model: "opus",
+     prompt: "Review the implementation for project conventions, proper abstractions, and integration correctness. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', focus: 'conventions'}).")
+   ```
+
+2. Read all finding tasks from TaskList. Consolidate and identify highest severity issues that you recommend fixing.
 3. **Present findings to user and ask what they want to do** (fix now, fix later, or proceed as-is)
 4. Address issues based on user decision
 
@@ -121,5 +171,29 @@ If the user says "whatever you think is best", provide your recommendation and g
    - Key decisions made
    - Files modified
    - Suggested next steps
+
+## Team Teardown
+
+After Phase 6 (or Phase 7 if reviewers are still active):
+
+```
+# Shutdown all remaining agents
+SendMessage(type: "shutdown_request", recipient: "reviewer-simplicity", content: "Review complete")
+SendMessage(type: "shutdown_request", recipient: "reviewer-correctness", content: "Review complete")
+SendMessage(type: "shutdown_request", recipient: "reviewer-conventions", content: "Review complete")
+
+# After all confirm shutdown
+TeamDelete()
+```
+
+## Error Recovery
+
+If an explorer/architect/reviewer crashes mid-phase:
+1. Continue with remaining agents in that phase (2 out of 3 is still useful)
+2. Note the gap in the phase summary
+3. Optionally spawn a replacement agent on the same team
+4. Do not block the workflow — partial results are valuable
+
+See `workflows/parallel-dispatch.md` "Agent Teams" section for full team coordination patterns.
 
 ---
