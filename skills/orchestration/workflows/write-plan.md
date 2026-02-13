@@ -97,7 +97,7 @@ Expected: PASS
 
 ```bash
 git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
+# Use /commit skill (raw git commit is blocked by hook)
 ```
 ```
 

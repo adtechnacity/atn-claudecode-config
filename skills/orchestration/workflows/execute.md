@@ -67,7 +67,7 @@ Based on feedback:
 - Execute next wave
 - Repeat until all tasks complete
 
-### Step 5: Complete Development
+### Step 6: Complete Development
 
 After all tasks complete and verified:
 - Announce: "I'm using the orchestration skill to finish this development branch."

@@ -5,7 +5,7 @@ argument-hint: Path to plan file or paste plan inline
 
 ## Integration
 
-Related: **`writing-plans`** skill (creates plans), **`/feature-dev`** (guided development)
+Related: **`orchestration`** skill (`workflows/write-plan.md` creates plans, `workflows/orchestrate.md` builds task graphs), **`/feature-dev`** (guided development)
 
 ## Phase 1: Understand the Plan
 
@@ -175,6 +175,14 @@ Based on user answers, propose specific edits to the plan:
 **ASK USER**: "Would you like me to apply these updates to the plan file?"
 
 If yes, edit the plan file directly.
+
+## Phase 6: Execution Handoff
+
+After updates are applied (or if no updates needed):
+
+**ASK USER**: "Plan review complete. Ready to execute?"
+
+If yes, proceed to the orchestration skill's `workflows/orchestrate.md` to break the plan into a prioritized task graph with dependencies and execute using Claude Tasks and Team Agents.
 
 ## Options
 

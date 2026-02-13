@@ -120,7 +120,7 @@ Task(
 
 **If only 1 task is unblocked:**
 
-Dispatch a single subagent per the `workflows/subagent-dev.md` pattern.
+Dispatch a single `Task(subagent_type: "general-purpose")` with the full task description from TaskGet.
 
 ### 3.2 Track Progress
 

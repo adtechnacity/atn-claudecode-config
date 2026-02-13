@@ -82,4 +82,4 @@ For Option 3 — keep worktree.
 
 ## Integration
 
-**Called by:** `workflows/subagent-dev.md`, `workflows/execute.md`
+**Called by:** `workflows/orchestrate.md`, `workflows/subagent-dev.md`, `workflows/execute.md`
