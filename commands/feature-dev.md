@@ -13,7 +13,7 @@ You are helping a developer implement a new feature. Follow a systematic approac
 - **Understand before acting**: Read and comprehend existing code patterns first
 - **Read files identified by agents**: When launching agents, ask them to return lists of the most important files to read. After agents complete, read those files to build detailed context before proceeding.
 - **Simple and elegant**: Prioritize readable, maintainable, architecturally sound code
-- **Use TodoWrite**: Track all progress throughout
+- **Use Claude Tasks**: Track all progress via TaskCreate/TaskUpdate/TaskList throughout
 
 ---
 
@@ -24,7 +24,7 @@ You are helping a developer implement a new feature. Follow a systematic approac
 Initial request: $ARGUMENTS
 
 **Actions**:
-1. Create todo list with all phases
+1. Create task list with all phases using TaskCreate
 2. If feature unclear, ask user for:
    - What problem are they solving?
    - What should the feature do?
@@ -112,9 +112,9 @@ SendMessage(type: "shutdown_request", recipient: "explorer-ux", content: "Explor
 
 ---
 
-## Phase 5: Implementation
+## Phase 5: Task Graph & Implementation
 
-**Goal**: Build the feature
+**Goal**: Break chosen architecture into a prioritized task graph with dependencies, then execute using agent teams
 
 **Phase Transition**: Shutdown Phase 4 architects.
 
@@ -126,13 +126,86 @@ SendMessage(type: "shutdown_request", recipient: "architect-pragmatic", content:
 
 **DO NOT START WITHOUT USER APPROVAL**
 
-**Actions**:
-1. Wait for explicit user approval
-2. Read all relevant files identified in previous phases
-3. Implement following chosen architecture
-4. Follow codebase conventions strictly
-5. Write clean, well-documented code
-6. Update todos as you progress
+### 5.1 Build Task Graph
+
+After user approves an architecture approach:
+
+1. Break the chosen architecture into bite-sized tasks (each 2-5 minutes of work)
+2. Create all tasks using TaskCreate with:
+   - **subject**: Imperative form (e.g., "Implement user auth middleware")
+   - **description**: Full context — files to create/modify, steps, acceptance criteria, test requirements. Include ALL context since subagents have no conversation history.
+   - **activeForm**: Present continuous (e.g., "Implementing user auth middleware")
+3. Set dependencies using TaskUpdate with `addBlockedBy`/`addBlocks`:
+   - Schema/types before business logic
+   - Infrastructure before features
+   - Tests alongside implementation (TDD pairs are one unit)
+   - Integration tests after components exist
+4. Identify parallel execution lanes — tasks that touch different files with no dependency relationship
+
+### 5.2 Present Execution Graph
+
+Show the user the task graph organized into waves:
+
+```markdown
+## Task Execution Graph
+
+### Wave 1 (parallel — no dependencies)
+- [ ] Task 1: [name] (S)
+- [ ] Task 2: [name] (M)
+
+### Wave 2 (after Wave 1)
+- [ ] Task 3: [name] — blocked by Task 1
+- [ ] Task 4: [name] — blocked by Tasks 1, 2
+
+### Final
+- [ ] Task 5: Integration tests — blocked by all above
+```
+
+**ASK USER**: "Does this execution order look right? Any tasks that should be reordered or split?"
+
+### 5.3 Execute by Waves
+
+For each wave, dispatch unblocked tasks using agent teams:
+
+**If 2+ tasks are unblocked and independent:**
+
+Spawn implementation agents as teammates on the existing `feature-dev-<ts>` team (all Task calls in a single message):
+
+```
+Task(
+  subagent_type: "general-purpose",
+  team_name: "feature-dev-<ts>",
+  name: "impl-task-N",
+  model: "opus",
+  description: "Implement [task name]",
+  prompt: "[FULL task description from TaskGet — all context, files, steps, acceptance criteria]"
+)
+```
+
+**If only 1 task is unblocked:**
+
+Dispatch a single subagent with full task context.
+
+### 5.4 Track Progress
+
+After each agent completes:
+1. Review the agent's output
+2. Verify the work (run tests, check files)
+3. Mark task completed: `TaskUpdate(taskId, status: "completed")`
+4. Check TaskList for newly unblocked tasks
+5. Dispatch next wave
+
+### 5.5 Review Between Waves
+
+After each wave:
+- Show what was implemented and test results
+- Show which tasks are now unblocked
+- **ASK USER**: "Wave N complete. Ready to proceed with Wave N+1?"
+
+### 5.6 Handle Failures
+
+- If agent fails: keep task `in_progress`, create fix subtask, dispatch fix agent
+- If blocking task fails: do NOT dispatch blocked tasks — fix blocker first
 
 ---
 
@@ -165,7 +238,7 @@ SendMessage(type: "shutdown_request", recipient: "architect-pragmatic", content:
 **Goal**: Document what was accomplished
 
 **Actions**:
-1. Mark all todos complete
+1. Mark all tasks complete via TaskUpdate
 2. Summarize:
    - What was built
    - Key decisions made

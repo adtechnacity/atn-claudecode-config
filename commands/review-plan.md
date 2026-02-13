@@ -98,13 +98,35 @@ Evaluate the plan against each category. For each finding, note severity (Critic
 
 ---
 
-## Phase 3: Consistency Check
+## Phase 3: Consistency & Dependency Check
 
+### 3.1 Codebase Consistency
 - Does the plan contradict existing codebase patterns?
 - Are there naming inconsistencies?
-- Does the task ordering make sense (dependencies respected)?
 - Are file paths accurate (verify against actual codebase)?
 - Does the plan follow project conventions from CLAUDE.md?
+
+### 3.2 Task Dependencies & Prioritization
+
+**Every plan must be executable as a prioritized task graph.** Verify:
+
+- **Explicit dependencies**: Each task clearly states what it depends on (or is explicitly independent)
+- **Correct ordering**: Schema/types before business logic, infrastructure before features, tests alongside implementation
+- **Parallelizable work identified**: Tasks that touch different files with no shared state should be grouped into parallel waves
+- **No hidden dependencies**: Check for implicit ordering — e.g., Task 5 modifies a file that Task 3 creates, but no dependency is stated
+- **Granularity**: Tasks are bite-sized (2-5 minutes each) — flag tasks that are too large and suggest splitting
+- **Wave structure**: Tasks should be organizable into execution waves where each wave's tasks can run in parallel
+
+**If the plan lacks explicit dependency information**, flag this as a **Critical Gap** and suggest adding a dependency graph section:
+
+```markdown
+## Task Dependencies
+Task 1: [name] — no dependencies (Wave 1)
+Task 2: [name] — no dependencies (Wave 1)
+Task 3: [name] — blocked by Task 1 (Wave 2)
+Task 4: [name] — blocked by Tasks 1, 2 (Wave 2)
+Task 5: Integration — blocked by all (Wave 3)
+```
 
 ---
 

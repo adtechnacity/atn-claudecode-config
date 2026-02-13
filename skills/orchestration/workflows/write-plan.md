@@ -26,7 +26,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For Claude:** REQUIRED: Use the Orchestration skill to implement this plan task-by-task.
+> **For Claude:** REQUIRED: Use the Orchestration skill to break this plan into a prioritized task graph with dependencies, then execute using Claude Tasks and Team Agents.
 
 **Goal:** [One sentence describing what this builds]
 
@@ -36,6 +36,27 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 ---
 ```
+
+## Task Dependencies
+
+**Every plan MUST include a dependency section after all tasks are defined:**
+
+```markdown
+## Task Dependencies
+
+Task 1: [name] — no dependencies (Wave 1)
+Task 2: [name] — no dependencies (Wave 1)
+Task 3: [name] — blocked by Task 1 (Wave 2)
+Task 4: [name] — blocked by Tasks 1, 2 (Wave 2)
+Task 5: Integration tests — blocked by all (Wave 3)
+```
+
+Dependency rules:
+- Schema/types before business logic
+- Infrastructure/config before features
+- TDD pairs (test + implementation) are a single task
+- Integration tests after all components exist
+- Identify parallel lanes — tasks touching different files with no shared state
 
 ## Task Structure
 
@@ -88,28 +109,21 @@ git commit -m "feat: add specific feature"
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After saving the plan, **automatically proceed to Task Orchestration** unless the user requests otherwise:
 
-**"Plan complete and saved to `docs/plans/<filename>.md`. Three execution options:**
+**"Plan complete and saved to `docs/plans/<filename>.md`. Proceeding to break this into a prioritized task graph with dependencies for parallel execution."**
 
-**1. Task Orchestration (recommended)** - Break into Claude Tasks with dependencies, execute in parallel waves with agent teams
+**Then immediately use `workflows/orchestrate.md`** to:
+1. Analyze the plan and build the dependency graph
+2. Create all tasks via TaskCreate with full context and dependencies
+3. Present the execution graph organized into waves
+4. Ask user approval before executing
 
-**2. Subagent-Driven (this session)** - I dispatch fresh subagent per task, review between tasks, fast iteration
+**If user explicitly requests an alternative:**
 
-**3. Parallel Session (separate)** - Open new session with executing-plans, batch execution with checkpoints
+| Request | Workflow | When to Use |
+|---------|----------|-------------|
+| "Execute with subagents" | `workflows/subagent-dev.md` | Single session, sequential with reviews |
+| "Execute in separate session" | `workflows/execute.md` | Parallel session in worktree |
 
-**Which approach?"**
-
-**If Task Orchestration chosen:**
-- Use `workflows/orchestrate.md`
-- Creates dependency graph, dispatches parallel agents for independent tasks
-- Review checkpoints between execution waves
-
-**If Subagent-Driven chosen:**
-- Use `workflows/subagent-dev.md`
-- Stay in this session
-- Fresh subagent per task + code review
-
-**If Parallel Session chosen:**
-- Guide them to open new session in worktree
-- New session uses `workflows/execute.md`
+**Default is always Task Orchestration** — it maximizes throughput via parallel waves and provides the best progress tracking via Claude Tasks.

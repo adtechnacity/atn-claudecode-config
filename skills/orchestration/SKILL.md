@@ -21,12 +21,14 @@ End-to-end workflow for planning, executing, and completing multi-step developme
 ## Typical Pipeline
 
 ```
-WritePlan → Orchestrate → Execute/SubagentDev (using ParallelDispatch) → FinishBranch
+WritePlan → Orchestrate (auto) → Execute with Teams/ParallelDispatch → FinishBranch
 ```
+
+**Key principle:** Every plan MUST be broken into a prioritized task graph with dependencies before execution. `WritePlan` automatically flows into `Orchestrate`. All execution paths use Claude Tasks (TaskCreate/TaskUpdate/TaskList) for progress tracking.
 
 ## Quick Decision
 
-- **Have requirements, no plan yet?** → `WritePlan`
+- **Have requirements, no plan yet?** → `WritePlan` (auto-flows into `Orchestrate`)
 - **Have plan, need task graph?** → `Orchestrate`
 - **Have tasks, need execution?** → `Execute` (new session) or `SubagentDev` (this session)
 - **Multiple independent tasks?** → `ParallelDispatch`
