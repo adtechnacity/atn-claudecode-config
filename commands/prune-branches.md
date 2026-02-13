@@ -47,18 +47,21 @@ fi
 ### Step 3: Identify Merged Branches
 
 **Protected branches (never delete):**
-- main, master, develop, staging, production
+
+- main, master, dev, develop, staging, production
 - Current branch (the one you're on)
 - Any branch matching user-provided `--exclude` pattern
 
 **Find merged local branches:**
+
 ```bash
-git branch --merged $BASE | grep -vE '^\*|^\s*(main|master|develop|staging|production)\s*$'
+git branch --merged $BASE | grep -vE '^\*|^\s*(main|master|dev|develop|staging|production)\s*$'
 ```
 
 **Find merged remote branches:**
+
 ```bash
-git branch -r --merged origin/$BASE | grep -vE 'origin/(main|master|develop|staging|production|HEAD)'
+git branch -r --merged origin/$BASE | grep -vE 'origin/(main|master|dev|develop|staging|production|HEAD)'
 ```
 
 ### Step 3.5: Verify Release Branches
@@ -70,11 +73,13 @@ For each branch matching `release/*` or `release-*` pattern:
 1. **Extract version** from branch name (e.g., `release/v1.2.0` → `v1.2.0`)
 
 2. **Check for corresponding tag:**
+
    ```bash
    git tag -l "v1.2.0" "1.2.0"  # Check both with and without 'v' prefix
    ```
 
 3. **Check for GitHub release** (if gh CLI available):
+
    ```bash
    gh release view v1.2.0 --json tagName 2>/dev/null
    ```
@@ -85,14 +90,15 @@ For each branch matching `release/*` or `release-*` pattern:
    - ❌ **Protected**: No tag found - do NOT suggest for deletion
 
 **Display release branch status:**
+
 ```markdown
 ### Release Branch Verification
 
-| Branch | Tag | Release | Status |
-|--------|-----|---------|--------|
-| release/v1.2.0 | ✅ v1.2.0 | ✅ Released | Safe to prune |
-| release/v1.3.0 | ✅ v1.3.0 | ❌ Missing | ⚠️ Warn before prune |
-| release/v1.4.0 | ❌ Missing | ❌ Missing | 🛡️ Protected |
+| Branch         | Tag        | Release     | Status               |
+| -------------- | ---------- | ----------- | -------------------- |
+| release/v1.2.0 | ✅ v1.2.0  | ✅ Released | Safe to prune        |
+| release/v1.3.0 | ✅ v1.3.0  | ❌ Missing  | ⚠️ Warn before prune |
+| release/v1.4.0 | ❌ Missing | ❌ Missing  | 🛡️ Protected         |
 ```
 
 **Automatic protection**: Release branches without a corresponding tag are automatically excluded from the prune candidates and added to the protected list.
@@ -105,10 +111,12 @@ Show all branches that would be deleted:
 ## Branches to Prune
 
 ### Local Branches
+
 - feature/old-feature
 - fix/completed-bugfix
 
 ### Remote Branches
+
 - origin/feature/old-feature
 - origin/fix/completed-bugfix
 
@@ -118,10 +126,12 @@ Total: X local, Y remote branches
 ### Step 5: Execute (if --execute flag)
 
 If `--execute` was NOT provided:
+
 - Display the candidates only
 - Remind user to run with `--execute` to delete
 
 If `--execute` WAS provided:
+
 - Confirm with user before proceeding
 - Delete local branches: `git branch -d <branch>`
 - Delete remote branches: `git push origin --delete <branch>`
@@ -133,23 +143,27 @@ If `--execute` WAS provided:
 ## Prune Results
 
 ### Deleted
+
 - Local: X branches
 - Remote: Y branches
 
 ### Skipped (protected)
+
 - main, develop, etc.
 
 ### Release Branches Protected (no tag/release)
+
 - release/v1.4.0 - No tag found
 
 ### Errors (if any)
+
 - [branch]: [error message]
 ```
 
 ## Safety Protocols
 
 1. **Dry-run default** - Shows candidates without deleting unless `--execute` is used
-2. **Protected branches** - main, master, develop, staging, production are never deleted
+2. **Protected branches** - main, master, dev, develop, staging, production are never deleted
 3. **Current branch** - Never deletes the branch you're currently on
 4. **Merge verification** - Only deletes branches confirmed merged via `git branch --merged`
 5. **Release branch verification** - Release branches require a corresponding tag before pruning; branches without tags are automatically protected
