@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2026-02-13
+
+### Changed
+- **`/review-plan`**: Full rewrite as multi-agent review engine — 7-phase pipeline with 6 specialized agents (codebase-validator, dependency-tracer, impact-analyzer, architecture-reviewer, security-ops-reviewer, debt-docs-reviewer), Consumer Map for blast radius analysis, risk scoring (0-100) with severity weights and blast radius multiplier, CodeRabbit-style report with verdict system (APPROVE/APPROVE WITH CHANGES/REVISE/REJECT), confidence threshold of 75
+
 ## [0.5.0] - 2026-02-13
 
 ### Added
