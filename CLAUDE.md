@@ -7,7 +7,7 @@ The following MCP servers are available for interacting with external services:
 - **analytics-mcp** - Google Analytics reporting
 - **aws** - AWS prompt understanding
 - **aws-cloudwatch** - CloudWatch logs, metrics, alarms
-- **brevo** - Email marketing, CRM, contacts, campaigns (email/SMS/WhatsApp), deals, templates
+- **klaviyo** - Email marketing automation: profiles, events, campaigns, flows, segments, templates, reporting
 - **chrome-devtools** - Browser debugging including browser extensions
 - **cloudflare** - Workers, R2, D1, KV, Queues, Workflows, Cron, Secrets, Env vars
 - **cloudflare-dns** - DNS record management (create, list, update, delete records and zones)
@@ -28,6 +28,7 @@ When investigating errors, bugs, or production issues, **always use Sentry first
 5. **Trace requests**: Use `mcp__sentry__get_trace_details` for distributed tracing
 
 **When to use Sentry:**
+
 - User reports a bug or error
 - Investigating production failures
 - Debugging API errors or 500s
@@ -35,6 +36,7 @@ When investigating errors, bugs, or production issues, **always use Sentry first
 - Understanding error frequency and impact
 
 **Typical workflow:**
+
 1. Search issues for keywords or error messages
 2. Get details on the most relevant issue
 3. Review stack trace and breadcrumbs
@@ -54,6 +56,7 @@ The following CLI tools are installed and available via Bash:
 ## Coding Conventions
 
 ### TypeScript/React
+
 - Prefer `const` over `let`; never use `var`
 - Use named exports over default exports
 - Prefer `interface` over `type` for object shapes
@@ -64,6 +67,7 @@ The following CLI tools are installed and available via Bash:
 - Destructure props in function signature
 
 ### React Patterns
+
 - Functional components only (no class components)
 - Custom hooks for shared logic (`use` prefix)
 - Colocate state as close to usage as possible
@@ -71,12 +75,14 @@ The following CLI tools are installed and available via Bash:
 - Use `Suspense` + `ErrorBoundary` for async boundaries
 
 ### Node.js / API
+
 - Always handle async errors with try/catch or .catch()
 - Validate input at API boundaries (zod, etc.)
 - Use structured logging (JSON format)
 - Never log sensitive data (tokens, passwords, PII)
 
 ### Testing
+
 - Tests live next to source files (`*.test.ts` / `*.spec.ts`)
 - Prefer `vitest` or project-configured runner
 - Test behavior, not implementation details
@@ -84,6 +90,7 @@ The following CLI tools are installed and available via Bash:
 - Always enforce Test Driven Development
 
 ### Git Workflow
+
 - Use conventional commits: `feat:`, `fix:`, `update:`, `docs:`, `test:`, `chore:`
 - Always use `/commit` (not raw `git commit`) - enforced by hook
 - Branch naming: `<type>/<short-description>` (kebab-case)
@@ -91,6 +98,7 @@ The following CLI tools are installed and available via Bash:
 - Full release flow: `/commit` -> `/pr` -> `/ship`
 
 ### General Rules
+
 - Keep functions under 50 lines
 - Max 3 levels of nesting
 - No magic numbers - use named constants
