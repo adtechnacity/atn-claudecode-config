@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 2026-02-13
+
+### Added
+- **Klaviyo integration docs**: Added comprehensive Klaviyo MCP documentation to CLAUDE.md with tools table, workflow examples, and usage notes
+- **Status line script**: Added `statusline.sh` for Claude Code status bar showing branch, model, context usage, and cost
+
+### Changed
+- **CLAUDE.md**: Replaced Brevo MCP reference with Klaviyo, improved markdown formatting with consistent blank lines between sections
+- **`statusline.sh`**: Hardened with input validation, empty input handling, numeric clamping, and cost format validation
+
 ## [0.4.0] - 2026-02-10
 
 ### Added
