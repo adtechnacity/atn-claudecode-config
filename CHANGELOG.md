@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.2] - 2026-02-13
+
+### Changed
+- **`/debug`**: Full rewrite as multi-agent hypothesis-driven debugging engine — 7-phase pipeline (gather context, external intelligence, codebase investigation, hypothesis formation, hypothesis verification, fix implementation, verification & report), Sentry/DevTools/CloudWatch integration for external intelligence gathering, 2-3 parallel Explore agents (error-tracer, change-analyzer, conditional dependency-mapper), structured hypothesis tracking with Phase 4-5 loop (up to 3 attempts before escalation), bug category detection (7 types) driving tool and agent selection, confidence threshold of 70, structured Debug Report with evidence chain
+
 ## [0.5.1] - 2026-02-13
 
 ### Changed
