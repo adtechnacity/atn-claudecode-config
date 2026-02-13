@@ -43,6 +43,34 @@ When investigating errors, bugs, or production issues, **always use Sentry first
 4. Check related events for patterns
 5. Use Seer analysis for complex issues
 
+## Email Marketing with Klaviyo
+
+Use the Klaviyo MCP for managing email marketing, customer profiles, and automation.
+
+**Tools by category:**
+
+| Category          | Tools                                                                                     | Purpose                         |
+| ----------------- | ----------------------------------------------------------------------------------------- | ------------------------------- |
+| **Profiles**      | `get_profiles`, `get_profile`, `create_profile`, `update_profile`                         | Manage customer data            |
+| **Subscriptions** | `subscribe_profile_to_marketing`, `unsubscribe_profile_from_marketing`                    | Manage opt-in/out               |
+| **Events**        | `get_events`, `create_event`, `get_metrics`, `get_metric`                                 | Track and query customer events |
+| **Campaigns**     | `get_campaigns`, `get_campaign`, `create_campaign`, `assign_template_to_campaign_message` | Email campaigns                 |
+| **Flows**         | `get_flows`, `get_flow`                                                                   | Automation flows                |
+| **Segments**      | `get_segments`, `get_segment`, `get_lists`, `get_list`                                    | Audience targeting              |
+| **Templates**     | `get_email_template`, `create_email_template`                                             | Email HTML templates            |
+| **Reporting**     | `get_campaign_report`, `get_flow_report`                                                  | Performance analytics           |
+| **Other**         | `get_account_details`, `get_catalog_items`, `upload_image_from_url`                       | Account, catalog, images        |
+
+**Common workflows:**
+
+1. **Look up a customer**: `get_profiles` filtered by email, then `get_events` for their activity
+2. **Check campaign performance**: `get_campaigns` to find it, then `get_campaign_report` for metrics
+3. **Review automation**: `get_flows` to list flows, `get_flow` + `get_flow_report` for details
+4. **Create a campaign**: `create_email_template` -> `create_campaign` -> `assign_template_to_campaign_message`
+5. **Track a custom event**: `create_event` with metric name and profile identifier
+
+**Note:** Klaviyo handles marketing automation (flows, campaigns, segmentation). Transactional emails (order confirmations, delivery notifications) are sent via **Resend**.
+
 ## CLI Tools
 
 The following CLI tools are installed and available via Bash:
