@@ -12,8 +12,10 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 
 ## The Process
 
-1. **Read plan** — Extract all tasks with full text, create task tracker
-2. **Per task:**
+1. **Read plan** — Extract all tasks with full text
+2. **Build task graph** — Create all tasks via TaskCreate with subject, description, and activeForm. Set dependencies via TaskUpdate with `addBlockedBy`/`addBlocks` (schema/types before logic, infrastructure before features, TDD pairs as single units, integration tests last). Present the prioritized task graph to the user for approval.
+3. **Per task** (in dependency order):
+   - Mark as `in_progress` via TaskUpdate
    - Dispatch implementer subagent with full task context
    - Answer any clarifying questions before work begins
    - Implementer implements, tests, commits, and self-reviews
@@ -21,9 +23,10 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
    - If issues found: implementer fixes, reviewer re-reviews
    - Dispatch code quality reviewer
    - If issues found: implementer fixes, reviewer re-reviews
-   - Mark task complete
-3. **After all tasks** — Dispatch final code reviewer for entire implementation
-4. **Complete** — Follow `workflows/finish-branch.md`
+   - Mark task `completed` via TaskUpdate
+   - Check TaskList for newly unblocked tasks
+4. **After all tasks** — Dispatch final code reviewer for entire implementation
+5. **Complete** — Follow `workflows/finish-branch.md`
 
 ## Implementer Prompt Template
 

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-02-13
+
+### Added
+- **Task graph enforcement**: All plan workflows now create prioritized task graphs with dependencies before execution
+- **`write-plan.md`**: Plans now include mandatory Task Dependencies section with wave-based dependency graph
+- **`review-plan.md`**: Added Phase 3.2 (Task Dependencies & Prioritization check) and Phase 6 (Execution Handoff to orchestrate.md)
+
+### Changed
+- **`feature-dev.md`**: Replaced simple Phase 5 (Implementation) with full Task Graph & Implementation phase — builds dependency graph via TaskCreate/TaskUpdate, presents wave-based execution plan, dispatches team agents per wave, tracks progress via TaskList
+- **`write-plan.md`**: Plan execution now auto-flows into Task Orchestration (orchestrate.md) instead of offering 3 equal choices. Plan header instructs Claude to use Tasks + Team Agents
+- **`execute.md`**: Replaced simple batch execution with task graph creation, wave identification, and parallel dispatch for independent tasks
+- **`orchestrate.md`**: Clarified single-task dispatch (was ambiguously referencing subagent-dev.md as a "pattern")
+- **`subagent-dev.md`**: Added task graph creation step — was the only execution path that bypassed task graph enforcement
+- **`SKILL.md`**: Updated pipeline to show Orchestrate as default (includes execution), clarified alternative paths (SubagentDev, Execute)
+- **`finish-branch.md`**: Added orchestrate.md to "Called by" integration list
+- **`review-plan.md`**: Fixed stale `writing-plans` skill reference to `orchestration`
+
 ## [0.4.2] - 2026-02-13
 
 ### Changed
