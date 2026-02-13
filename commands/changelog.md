@@ -4,7 +4,10 @@ description: Generate changelog from git history. Creates release notes from com
 
 # Changelog Generator
 
-Generate changelog from git commits. Integrates with `/ship`.
+## Integration
+Related: **`/ship`** (triggers changelog generation), **`/commit`** (provides conventional commit history)
+
+Generate changelog from git commits.
 
 ## Steps
 
@@ -65,6 +68,6 @@ Insert new entry before first `## [` line. Preserve header. Create file if neede
 | `--append` | Prepend to CHANGELOG.md | - |
 | `--version=<ver>` | Override version | auto-detect |
 
-## Integration with /ship
+## Usage with /ship
 
 After `/ship`: version tag becomes `--to` target. Use `--append` to auto-update CHANGELOG.md.

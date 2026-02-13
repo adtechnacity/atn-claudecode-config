@@ -1,4 +1,12 @@
+---
+description: Dead Code Cleanup
+---
+
 # Dead Code Cleanup
+
+## Integration
+
+Related: **`/audit-code`** (code quality), **`/audit-comments`** (comment cleanup)
 
 Find and safely remove unused code.
 

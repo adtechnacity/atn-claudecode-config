@@ -5,6 +5,9 @@ argument-hint: Optional feature description
 
 # Feature Development
 
+## Integration
+Related: **`/commit`** (after implementation), **`/ship`** (production release), **`/scan-context`** (Phase 2 uses similar exploration)
+
 You are helping a developer implement a new feature. Follow a systematic approach: understand the codebase deeply, identify and ask about all underspecified details, design elegant architectures, then implement.
 
 ## Core Principles
@@ -218,13 +221,13 @@ After each wave:
 
    ```
    Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "reviewer-simplicity", model: "opus",
-     prompt: "Review the implementation for simplicity, DRY, and elegance. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', focus: 'simplicity'}).")
+     prompt: "Review the implementation for simplicity, DRY, and elegance. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', category: 'simplicity', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 6, files: ['path']}).")
 
    Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "reviewer-correctness", model: "opus",
-     prompt: "Review the implementation for bugs, functional correctness, and edge cases. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', focus: 'correctness'}).")
+     prompt: "Review the implementation for bugs, functional correctness, and edge cases. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', category: 'correctness', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 6, files: ['path']}).")
 
    Task(subagent_type: "general-purpose", team_name: "feature-dev-<ts>", name: "reviewer-conventions", model: "opus",
-     prompt: "Review the implementation for project conventions, proper abstractions, and integration correctness. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', focus: 'conventions'}).")
+     prompt: "Review the implementation for project conventions, proper abstractions, and integration correctness. Confidence scoring (0-100, only report >= 80). Include file:line and specific fix for each issue. Before concluding, check TaskList for findings from other reviewers to skip duplicates. Post each finding as a task via TaskCreate(subject: '...', metadata: {type: 'finding', category: 'conventions', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 6, files: ['path']}).")
    ```
 
 2. Read all finding tasks from TaskList. Consolidate and identify highest severity issues that you recommend fixing.

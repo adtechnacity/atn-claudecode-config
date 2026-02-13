@@ -1,4 +1,12 @@
+---
+description: Pull Request Workflow
+---
+
 # Pull Request Workflow
+
+## Integration
+
+Related: **`/commit`** (pre-PR), **`/ship`** (full release flow), **`/fix-pr-comments`** (post-review)
 
 Create a well-structured PR for the current branch.
 
