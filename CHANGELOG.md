@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.2] - 2026-02-13
+
+### Changed
+- **`prune-branches.md`**: Added `dev` to protected branches list in grep filters and safety protocols, fixed markdown formatting (blank lines, table alignment)
+
 ## [0.4.1] - 2026-02-13
 
 ### Added
