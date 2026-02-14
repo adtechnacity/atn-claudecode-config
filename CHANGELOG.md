@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.5] - 2026-02-14
+
+### Added
+- **`vercel-react-best-practices`**: Installed Vercel React best practices skill from `vercel-labs/agent-skills` — 57 performance optimization rules across 8 categories (eliminating waterfalls, bundle size, server-side performance, client-side data fetching, re-render optimization, rendering performance, JS performance, advanced patterns), auto-triggers on React/Next.js tasks, includes compiled AGENTS.md and 59 individual rule reference files
+
 ## [0.5.4] - 2026-02-14
 
 ### Added
