@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.4] - 2026-02-14
+
+### Added
+- **`/review-code`**: New CodeRabbit-style multi-agent code review command — diff-scoped review (branch, PR, or files), 5 specialized agents (change-validator, impact-tracer, correctness-reviewer, security-reviewer, architecture-reviewer), Consumer Map with blast radius scoring, file-by-file inline findings with line references, risk scoring (0-100) with blast radius multiplier, verdict system (APPROVE/APPROVE WITH SUGGESTIONS/REQUEST CHANGES/REJECT), offers to fix issues
+
+### Changed
+- **`/review-plan`**: Simplified to focus on plan-level concerns — reduced from 6 agents to 3 (codebase-scout, completeness-analyzer, risk-assessor), removed deep code analysis (consumer maps, blast radius, security scanning, architecture anti-patterns) now handled by `/review-code`, focuses on completeness/gaps, ambiguity, edge cases, task structure, scope assessment, rollback safety, and execution readiness
+- **`settings.json`**: Added `Skill(review-code)` permission
+
 ## [0.5.3] - 2026-02-13
 
 ### Fixed
