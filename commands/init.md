@@ -4,6 +4,9 @@ description: Initialize Claude configuration for a project. Creates CLAUDE.md an
 
 # Project Initialization
 
+## Integration
+Related: **`/scan-context`** (post-init context loading), **`/audit-ai`** (AI readiness audit)
+
 Set up Claude Code configuration for a project.
 
 ## Steps

@@ -38,7 +38,7 @@ session management, role-based access control, and account settings page
 /review-plan docs/plans/2026-02-08-notifications.md
 ```
 ```
-Use task-orchestration to break this plan into tasks and execute it
+Use orchestration to break this plan into tasks and execute it
 ```
 
 ### Quick fix
@@ -120,7 +120,7 @@ Design the database schema for a multi-tenant project management app
 | Flow | Commands |
 |------|----------|
 | **New project** | `/init` → `/scan-context` → `/feature-dev` → `/commit` → `/ship` |
-| **Major feature** | `/feature-dev` → `writing-plans` → `/review-plan` → `task-orchestration` → `/commit` → `/ship` |
+| **Major feature** | `/feature-dev` → `orchestration` > `write-plan` → `/review-plan` → `orchestration` > `orchestrate` → `/commit` → `/ship` |
 | **Quick change** | (edit) → `/commit` → `/pr` or `/ship` |
 | **Debug** | `/debug` or `/sentry-triage` → fix → `/commit` |
 | **Autonomous** | `/ralph-loop` → `/cancel-ralph` when done |
@@ -193,13 +193,12 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
 
 | Skill | Purpose |
 |-------|---------|
-| `writing-plans` | Implementation plans with bite-sized tasks |
-| `executing-plans` | Batch execution with review checkpoints |
-| `subagent-driven-development` | Fresh subagent per task + 2-stage review |
-| `task-orchestration` | Claude Tasks with dependencies and parallel waves |
-| `dispatching-parallel-agents` | Run independent tasks concurrently |
-| `using-git-worktrees` | Isolated workspaces for development |
-| `finishing-a-development-branch` | Verify, merge/PR, clean up worktree |
+| `orchestration` > `write-plan` | Implementation plans with bite-sized tasks |
+| `orchestration` > `execute` | Batch execution with review checkpoints |
+| `orchestration` > `subagent-dev` | Fresh subagent per task + 2-stage review |
+| `orchestration` > `orchestrate` | Claude Tasks with dependencies and parallel waves |
+| `orchestration` > `parallel-dispatch` | Run independent tasks concurrently |
+| `orchestration` > `finish-branch` | Verify, merge/PR, clean up branch |
 | `test-driven-development` | Red-Green-Refactor enforcement |
 
 **Design & Architecture:**
@@ -207,9 +206,9 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
 | Skill | Purpose |
 |-------|---------|
 | `frontend-design` | Production-grade UI avoiding generic AI patterns |
-| `web-design-guidelines` | Vercel Web Interface Guidelines review |
+| `design` > `audit-ui` | Vercel Web Interface Guidelines review |
 | `component-factory` | UI components (React, Vue, Svelte) with a11y |
-| `brand-designer` | Brand identity, logos, color palettes, typography |
+| `design` > `brand-design` | Brand identity, logos, color palettes, typography |
 | `schema-designer` | Database schema with normalization and indexing |
 | `api-designer` | REST/GraphQL API design with OpenAPI specs |
 | `api-client` | Type-safe API clients with retries and auth |
@@ -228,9 +227,9 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
 | `prevent-large-file-edit.sh` | PreToolUse (Edit/Write) | Block edits to oversized files |
 | `validate-before-push.sh` | PreToolUse (Bash) | Warn before push, block force-push |
 | `format-and-lint.sh` | PostToolUse (Edit/Write) | Auto-format and lint after edits |
-| `dependency-check.sh` | PostToolUse (Edit/Write) | Check for dependency changes |
+| `dependency-check.sh` | PreToolUse (Bash) | Check for dependency changes |
 | `notify-on-completion.sh` | PostToolUse (Bash) | Desktop notification on long commands |
-| `security-reminder.py` | PostToolUse (Bash) | Security reminders |
+| `security-reminder.py` | PreToolUse (Edit/Write/MultiEdit) | Security reminders |
 | `ralph-loop-setup.sh` | Bash | Initialize Ralph Loop state |
 | `ralph-loop-stop.sh` | Stop | Manage Ralph Loop iteration |
 
@@ -265,7 +264,7 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
       └───────┬──────┘  └──────┬──────┘  └───────┬───────┘
               │                │                  │
       ┌───────▼──────┐        │          ┌───────▼───────┐
-      │writing-plans │        │          │/sentry-triage │
+      │  write-plan  │        │          │/sentry-triage │
       └───────┬──────┘        │          └───────┬───────┘
               │                │                  │
       ┌───────▼──────┐        │                  │
@@ -273,11 +272,11 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
       └───────┬──────┘        │                  │
               │                │                  │
      ┌────────▼────────┐      │                  │
-     │task-orchestration│      │                  │
-     │  or subagent-   │      │                  │
-     │  driven-dev     │      │                  │
-     │  or executing-  │      │                  │
-     │  plans          │      │                  │
+     │  orchestrate   │      │                  │
+     │  or subagent-  │      │                  │
+     │  dev           │      │                  │
+     │  or execute    │      │                  │
+     │               │      │                  │
      └────────┬────────┘      │                  │
               │                │                  │
               └────────┬───────┴──────────────────┘
@@ -312,12 +311,16 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
   │  protection   │  │  lint           │  │  stop           │
   │ enforce-      │  │ notify-on-      │  │                 │
   │  commit-skill │  │  completion     │  │                 │
-  │ prevent-      │  │ dependency-     │  │                 │
-  │  secrets-edit │  │  check          │  │                 │
-  │ prevent-      │  │ security-       │  │                 │
-  │  large-file   │  │  reminder       │  │                 │
+  │ prevent-      │  │                 │  │                 │
+  │  secrets-edit │  │                 │  │                 │
+  │ prevent-      │  │                 │  │                 │
+  │  large-file   │  │                 │  │                 │
   │ validate-     │  │                 │  │                 │
   │  before-push  │  │                 │  │                 │
+  │ dependency-   │  │                 │  │                 │
+  │  check        │  │                 │  │                 │
+  │ security-     │  │                 │  │                 │
+  │  reminder     │  │                 │  │                 │
   └───────────────┘  └─────────────────┘  └─────────────────┘
 ```
 

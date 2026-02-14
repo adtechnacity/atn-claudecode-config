@@ -187,7 +187,7 @@ Your job: trace the bug through the codebase and map the complete execution path
 For each finding, post a task via TaskCreate:
   subject: '[Trace] <brief description>'
   description: Full details with file:line references
-  metadata: {type: 'finding', category: 'trace', confidence: <0-100>, phase: 3, files: ['path']}
+  metadata: {type: 'finding', category: 'trace', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 3, files: ['path']}
 
 Only report findings with confidence >= 70.
 
@@ -216,7 +216,7 @@ Before starting, check TaskList for findings from error-tracer. Focus on files t
 For each finding, post a task via TaskCreate:
   subject: '[Change] <brief description>'
   description: Full details with commit hash, file:line references
-  metadata: {type: 'finding', category: 'change', confidence: <0-100>, phase: 3, files: ['path']}
+  metadata: {type: 'finding', category: 'change', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 3, files: ['path']}
 
 Only report findings with confidence >= 70.
 
@@ -248,7 +248,7 @@ Post the Consumer Map as a task:
   TaskCreate(subject: 'Consumer Map', description: '<full structured map>', metadata: {type: 'consumer-map', phase: 3})
 
 For each high-blast-radius finding, post:
-  TaskCreate(subject: '[Blast Radius] <brief description>', description: '...', metadata: {type: 'finding', category: 'blast-radius', confidence: <0-100>, phase: 3, files: ['path']})
+  TaskCreate(subject: '[Blast Radius] <brief description>', description: '...', metadata: {type: 'finding', category: 'blast-radius', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 3, files: ['path']})
 
 Only report findings with confidence >= 70.")
 ```

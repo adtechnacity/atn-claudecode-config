@@ -1,4 +1,12 @@
+---
+description: Safe Rollback
+---
+
 # Safe Rollback
+
+## Integration
+
+Related: **`/ship`** (post-ship recovery), **`/prune-branches`** (branch cleanup)
 
 Safely revert changes. Handles code rollbacks and tag management.
 

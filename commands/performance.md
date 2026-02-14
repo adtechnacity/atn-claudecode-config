@@ -1,4 +1,14 @@
+---
+description: Performance Analysis
+---
+
 # Performance Analysis
+
+## Integration
+
+Related: **`/audit-code`** (Phase 4 performance audit), **`/debug`** (performance category)
+
+MCP: **chrome-devtools** (browser profiling), **aws-cloudwatch** (backend metrics)
 
 Profile, analyze, and optimize application performance.
 

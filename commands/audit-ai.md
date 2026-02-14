@@ -19,21 +19,44 @@ Analyze codebase quality specifically for AI agent contributors. Judge every asp
 
 ## Phase 1: Deep Codebase Exploration
 
-Launch agents via Task tool (`subagent_type: "Explore"`) to map the entire project:
+Launch both agents in a single message (`run_in_background: true`):
 
-> "Map the complete codebase architecture: directory structure, module boundaries, dependency graph, entry points, data flow, and key abstractions. Identify the tech stack, frameworks, and patterns in use. List all configuration files, build systems, and tooling. Note any implicit conventions that aren't documented anywhere. Report file counts and average sizes per directory."
+### 1.1 Architecture Mapper
 
-Also explore:
+Launch via Task tool (`subagent_type: "Explore"`, `run_in_background: true`):
+> "Map the complete codebase architecture: directory structure, module boundaries, dependency graph, entry points, data flow, and key abstractions. Identify the tech stack, frameworks, and patterns in use. List all configuration files, build systems, and tooling. Note any implicit conventions that aren't documented anywhere. Report file counts and average sizes per directory.
+>
+> Post each significant finding as a task via TaskCreate:
+>   subject: '[Architecture] <brief description>'
+>   description: Full details with file references
+>   metadata: {type: 'finding', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 1, audit: 'ai', files: ['path']}
+>
+> Also post key files: TaskCreate(subject: 'Key file: path/to/file', metadata: {type: 'key-file', aspect: 'architecture'})"
 
-> "Trace the 3-5 most critical execution paths end-to-end: user-facing features, API request lifecycle, data pipelines. For each, note every file touched, every transformation applied, and every decision point. Identify where an AI agent would struggle to follow the flow."
+### 1.2 Critical Path Tracer
 
-Read key files identified by agents.
+Launch via Task tool (`subagent_type: "Explore"`, `run_in_background: true`):
+> "Trace the 3-5 most critical execution paths end-to-end: user-facing features, API request lifecycle, data pipelines. For each, note every file touched, every transformation applied, and every decision point. Identify where an AI agent would struggle to follow the flow.
+>
+> Post each significant finding as a task via TaskCreate:
+>   subject: '[Critical Path] <brief description>'
+>   description: Full details with file:line references
+>   metadata: {type: 'finding', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 1, audit: 'ai', files: ['path']}
+>
+> Also post key files: TaskCreate(subject: 'Key file: path/to/file', metadata: {type: 'key-file', aspect: 'critical-path'})"
+
+After both agents return, read all findings and key files from TaskList. Read key files to build deep understanding.
 
 ---
 
 ## Phase 2: AI Agent Ergonomics Audit
 
 Evaluate each category. For every finding, rate impact on AI agent effectiveness (Critical/High/Medium/Low) and provide a specific fix.
+
+**TaskCreate note**: Post significant findings (severity Critical or High) via TaskCreate with:
+```
+metadata: {type: 'finding', severity: 'Critical|High', confidence: <0-100>, phase: 2, audit: 'ai', files: ['path']}
+```
 
 ### 2.1 Context Window Efficiency
 
@@ -133,6 +156,8 @@ How easily can an AI agent find what it needs:
 
 ## Phase 3: Architecture Assessment
 
+**Cross-phase context relay**: Before dispatching this agent, read all findings from TaskList (Phases 1-2). Build a summary of the key findings and embed it in the agent prompt so it has full context from prior phases.
+
 Evaluate the overall architecture — not how it IS, but how it SHOULD BE for the problem being solved:
 
 - **Is the architecture appropriate for the problem?** A simple CRUD app shouldn't have microservice complexity. A complex domain shouldn't be in a single file.
@@ -142,11 +167,21 @@ Evaluate the overall architecture — not how it IS, but how it SHOULD BE for th
 
 Launch via Task tool (`subagent_type: "general-purpose"`):
 
-> "You are a senior software architect. Evaluate this codebase's architecture against the problem it solves. Don't anchor to the current implementation — assess whether the chosen patterns, abstractions, and structure are the best approach for this domain. Flag: over-engineering, under-engineering, mismatched patterns (e.g., microservice patterns in a monolith), premature abstractions, and missing abstractions. For each finding, suggest the ideal approach with rationale."
+> "You are a senior software architect. Evaluate this codebase's architecture against the problem it solves. Don't anchor to the current implementation — assess whether the chosen patterns, abstractions, and structure are the best approach for this domain. Flag: over-engineering, under-engineering, mismatched patterns (e.g., microservice patterns in a monolith), premature abstractions, and missing abstractions. For each finding, suggest the ideal approach with rationale.
+>
+> **Context from prior phases:**
+> [EMBED Phase 1-2 findings summary from TaskList here]
+>
+> Post each finding as a task via TaskCreate:
+>   subject: '[Architecture] <brief description>'
+>   description: Full details with file references and rationale
+>   metadata: {type: 'finding', severity: 'Critical|High|Medium|Low', confidence: <0-100>, phase: 3, audit: 'ai', files: ['path']}"
 
 ---
 
 ## Phase 4: Prioritized Remediation Plan
+
+Read all findings from TaskList (filter by `metadata.audit: "ai"`) to build the remediation plan from structured data.
 
 ### 4.1 Categorize All Findings
 
@@ -219,7 +254,15 @@ Organize fixes into phases that build on each other:
 **Phase C**: [list tasks, estimated scope]
 ```
 
-**ASK USER**: Present the full report and ask which phase to begin, or if they want to generate a detailed implementation plan via **`writing-plans`** skill.
+**ASK USER**: Present the full report and ask which phase to begin, or if they want to generate a detailed implementation plan via **`orchestration`** skill.
+
+## Error Recovery
+
+If an agent crashes mid-phase:
+1. Phase 1: The other parallel agent's findings are still valid — continue with partial context
+2. Phase 2: Lead-driven, no agent to crash — but if interrupted, resume from the last category evaluated
+3. Phase 3: Partial Phase 1-2 context is still useful for architecture assessment — note the gap
+4. Do not block on partial failure — partial results are valuable
 
 ## Options
 

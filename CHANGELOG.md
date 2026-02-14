@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.3] - 2026-02-13
+
+### Fixed
+- **README.md**: Hook architecture diagram now correctly places `dependency-check` and `security-reminder` under PreToolUse (were incorrectly shown under PostToolUse)
+
+### Changed
+- **`settings.json`**: Removed ~86 redundant specific Bash permissions — `Bash(bash:*)` already grants all access
+- **`/changelog`**, **`/init`**, **`/scan-context`**, **`/feature-dev`**: Added standard `## Integration` sections with cross-references to related commands
+
 ## [0.5.2] - 2026-02-13
 
 ### Changed

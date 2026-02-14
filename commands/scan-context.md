@@ -2,6 +2,9 @@
 description: Prime Claude with project context. Run at session start for faster, more accurate responses.
 ---
 
+## Integration
+Related: **`/init`** (project setup), **`/feature-dev`** (Phase 2 uses similar exploration)
+
 Rapidly build a mental model of the project.
 
 **Principle:** Read selectively, summarize aggressively. Extract what matters for making decisions — never dump raw file contents.
