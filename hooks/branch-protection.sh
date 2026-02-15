@@ -9,7 +9,7 @@ COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 PROTECTED_BRANCHES="main master production develop staging release"
 
 # Check if this is a git commit or push command
-if echo "$COMMAND" | grep -qE '^git (commit|push)'; then
+if echo "$COMMAND" | grep -qE '\bgit\s+(commit|push)\b'; then
   CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "")
 
   if [[ -z "$CURRENT_BRANCH" ]]; then

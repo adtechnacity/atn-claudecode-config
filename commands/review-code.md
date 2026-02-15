@@ -11,6 +11,17 @@ Related: **`/audit-code`** (full codebase audit), **`/codex-review`** (Codex pee
 
 **Key distinction**: `/review-code` reviews **changes only** (diff-scoped, like CodeRabbit). `/audit-code` audits the **entire codebase**.
 
+## Build System Detection
+
+| Indicator | Type Check | Lint | Test | Build |
+|-----------|------------|------|------|-------|
+| `package.json` | `npm run typecheck` | `npm run lint` | `npm test` | `npm run build` |
+| `mix.exs` | `mix compile --warnings-as-errors` | `mix credo` | `mix test` | `mix compile` |
+| `Cargo.toml` | `cargo check` | `cargo clippy` | `cargo test` | `cargo build` |
+| `pyproject.toml` | `mypy .` | `ruff check .` | `pytest` | N/A |
+
+Skip unavailable commands.
+
 ## Phase 1: Determine Review Scope
 
 Detect the base branch dynamically:
@@ -446,7 +457,7 @@ Based on user choice:
 ### 7.4 Re-validate (if fixes applied)
 
 After applying fixes:
-1. Re-run type checker and linter (use Build System Detection table from `/commit`)
+1. Re-run type checker and linter (use Build System Detection table above)
 2. Run tests if available
 3. Update the verdict and risk score based on remaining findings
 4. Show updated summary: "Fixed [N] issues. Verdict changed from REQUEST CHANGES → APPROVE WITH SUGGESTIONS."

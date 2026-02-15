@@ -47,7 +47,13 @@ Use `model: "opus"` for all agents.
 
 ### Inside `/audit-all` Mode
 
-Skip TeamCreate — the parent team already exists. Agents are spawned by the `/audit-all` lead. Proceed directly to Phase 1.
+Skip TeamCreate — the parent team already exists. Agents are spawned by the `/audit-all` lead.
+
+**Phase adjustments when inside `/audit-all`:**
+- **Skip Phase 1.2** (`/audit-deps`) — `/audit-all` runs a separate `deps-auditor` agent independently
+- **Skip Phase 7** (Fixes and Reporting) — `/audit-all` handles auto-fixing and summary reporting
+
+Proceed directly to Phase 1.1.
 
 ## Phase 1: Static Analysis
 
