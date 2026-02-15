@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.7] - 2026-02-15
+
+### Fixed
+- **`branch-protection.sh`**: Allow tag-only pushes on protected branches — `git push origin v*` and `git push origin refs/tags/*` are now permitted while branch pushes remain blocked
+
 ## [0.5.6] - 2026-02-14
 
 ### Changed
