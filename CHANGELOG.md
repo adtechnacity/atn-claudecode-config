@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.8] - 2026-02-15
+
+### Fixed
+- **`/ship`**: Fixed merge workflow — use explicit branch deletion instead of `--delete-branch` flag, fetch instead of checkout+pull after merge, tag `origin/main` directly so version tags land on the correct commit
+
 ## [0.5.7] - 2026-02-15
 
 ### Fixed
