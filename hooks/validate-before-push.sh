@@ -31,7 +31,7 @@ PROTECTED_BRANCHES=("main" "master" "production" "develop" "staging" "release")
 for branch in "${PROTECTED_BRANCHES[@]}"; do
     if [[ "$CURRENT_BRANCH" == "$branch" ]]; then
         # Check for force push
-        if [[ "$COMMAND" == *"--force"* ]] || [[ "$COMMAND" == *"-f"* ]]; then
+        if (echo "$COMMAND" | grep -qE '(\s|^)--force(\s|$)' || echo "$COMMAND" | grep -qE '(\s)-f(\s|$)') && ! echo "$COMMAND" | grep -q -- '--force-with-lease'; then
             echo "BLOCKED: Force push to protected branch '$branch' is not allowed."
             echo ""
             echo "Force pushing to $branch can cause data loss and break CI/CD."

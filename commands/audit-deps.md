@@ -6,7 +6,7 @@ Check dependencies for outdated packages, security vulnerabilities, and unused m
 
 ## Integration
 
-Used by: **`/audit-code`** (Phase 1.2), **`/audit-all`** (via `/audit-code`)
+Used by: **`/audit-code`** (Phase 1.2, standalone only), **`/audit-all`** (independent `deps-auditor` agent)
 
 Related: **`/audit-code`**, **`/commit`**, **`/ship`**
 

@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.6] - 2026-02-14
+
+### Changed
+- **`/review-code`**: Added Phase 7 (Propose Fixes & Clarify) — asks clarification questions for ambiguous findings, generates concrete diff-style fix proposals for Critical/High issues, applies fixes with user approval, re-validates after changes. Added Build System Detection table
+- **`/pr`**: Integrated `/review-code` as a pre-PR gate — runs code review automatically in Step 2, gates PR creation on verdict (APPROVE/REQUEST CHANGES/REJECT), includes review verdict and risk score in PR body, offers escape hatches for skipped fixes
+
+### Fixed
+- **`branch-protection.sh`**: Fixed grep pattern bypass — removed `^` anchor, now uses `\bgit\s+(commit|push)\b` to catch compound commands (`cd repo && git commit`)
+- **`validate-before-push.sh`**: Fixed `-f` flag false positive on branch names containing `-f` (e.g., `feature/fix-fonts`), now excludes `--force-with-lease` (safe force push variant)
+- **`prevent-secrets-edit.sh`**: Switched from substring path matching to basename matching — fixes false positives on `.env.example`, `credentials-helper.ts`, `secrets-manager.ts`. Added safe allowlist for template files
+- **`format-and-lint.sh`**: Fixed CWD-relative `package.json` check — now walks up from file's directory to find project root
+- **`notify-on-completion.sh`**: Added numeric validation for EXIT_CODE to prevent AppleScript injection
+- **`/audit-code`**: Added mode detection — skips Phase 1.2 (`/audit-deps`) and Phase 7 (fixes/reporting) when running inside `/audit-all` to prevent duplicate work
+- **`/audit-deps`**: Fixed Integration section — correctly describes standalone vs `/audit-all` usage
+- **`/commit`**: Removed incorrect `security-scanner` agent reference from Integration section
+
 ## [0.5.5] - 2026-02-14
 
 ### Added

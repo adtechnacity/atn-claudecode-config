@@ -12,8 +12,6 @@ Enforced by `enforce-commit-skill.sh` (blocks direct `git commit`).
 
 Active hooks: `prevent-secrets-edit.sh`, `format-and-lint.sh`
 
-Related: `security-scanner` agent
-
 After committing: `git push`, `/pr`, or `/ship`
 
 ## Build System Detection

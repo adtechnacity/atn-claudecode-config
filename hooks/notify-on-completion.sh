@@ -10,6 +10,7 @@ set +e
 input=$(cat)
 COMMAND=$(echo "$input" | jq -r '.tool_input.command // empty')
 EXIT_CODE=$(echo "$input" | jq -r '.tool_result.exit_code // 0')
+[[ "$EXIT_CODE" =~ ^[0-9]+$ ]] || EXIT_CODE=1
 
 # Commands that warrant a notification
 LONG_RUNNING_PATTERNS=(

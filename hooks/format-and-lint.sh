@@ -28,8 +28,19 @@ EXT="${FILE_PATH##*.}"
 
 case "$EXT" in
     ts|tsx|js|jsx|mjs|cjs|json|css|scss|less|md|yaml|yml)
-        if command -v npx &>/dev/null && [[ -f "package.json" ]]; then
-            npx prettier --write "$FILE_PATH" 2>/dev/null || true
+        # Find project root by walking up from the file's directory
+        FILE_DIR=$(dirname "$FILE_PATH")
+        PROJECT_ROOT=""
+        SEARCH_DIR="$FILE_DIR"
+        while [[ "$SEARCH_DIR" != "/" ]]; do
+            if [[ -f "$SEARCH_DIR/package.json" ]]; then
+                PROJECT_ROOT="$SEARCH_DIR"
+                break
+            fi
+            SEARCH_DIR=$(dirname "$SEARCH_DIR")
+        done
+        if command -v npx &>/dev/null && [[ -n "$PROJECT_ROOT" ]]; then
+            (cd "$PROJECT_ROOT" && npx prettier --write "$FILE_PATH" 2>/dev/null || true)
         fi
         ;;
     ex|exs)

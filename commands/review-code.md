@@ -5,9 +5,22 @@ argument-hint: PR number, file paths, or blank for branch diff
 
 ## Integration
 
-Related: **`/audit-code`** (full codebase audit), **`/codex-review`** (Codex peer review), **`/fix-pr-comments`** (fix bot comments), **`/pr`** (create PR)
+Used by: **`/pr`** (runs automatically before PR creation)
+
+Related: **`/audit-code`** (full codebase audit), **`/codex-review`** (Codex peer review), **`/fix-pr-comments`** (fix bot comments)
 
 **Key distinction**: `/review-code` reviews **changes only** (diff-scoped, like CodeRabbit). `/audit-code` audits the **entire codebase**.
+
+## Build System Detection
+
+| Indicator | Type Check | Lint | Test | Build |
+|-----------|------------|------|------|-------|
+| `package.json` | `npm run typecheck` | `npm run lint` | `npm test` | `npm run build` |
+| `mix.exs` | `mix compile --warnings-as-errors` | `mix credo` | `mix test` | `mix compile` |
+| `Cargo.toml` | `cargo check` | `cargo clippy` | `cargo test` | `cargo build` |
+| `pyproject.toml` | `mypy .` | `ruff check .` | `pytest` | N/A |
+
+Skip unavailable commands.
 
 ## Phase 1: Determine Review Scope
 
@@ -387,17 +400,67 @@ risk = severity_weight x confidence / 100
 3. **[Consider]**: [optional improvement]
 ```
 
-### 6.5 Offer to Fix
+---
 
-Based on the verdict:
+## Phase 7: Propose Fixes & Clarify
 
-- **APPROVE**: "Code review passed. No issues found."
-- **APPROVE WITH SUGGESTIONS**: "Code looks good overall. [N] suggestions for improvement."
-  **ASK USER**: "Want me to apply the suggested improvements?"
-- **REQUEST CHANGES**: "Found [N] issues that should be addressed before merging."
-  **ASK USER**: "Want me to fix the Critical/High issues now?"
-- **REJECT**: "Found fundamental issues with this approach. Recommend revisiting the design."
-  Present specific concerns and alternative approaches.
+After generating the report, proactively address findings.
+
+### 7.1 Clarification Questions
+
+Review all findings for ambiguous intent — cases where the reviewer can't tell if the code is intentional or a bug. Group these and ask the user **once** using AskUserQuestion:
+
+Example scenarios requiring clarification:
+- A `// TODO` was added — is this intentional tech debt or forgotten work?
+- A function's error handling changed — was the old behavior a bug or a feature?
+- A new dependency was added when an existing utility could work — intentional choice?
+- An edge case is unhandled — is the caller guaranteed to prevent it?
+
+Skip this step if no ambiguities exist.
+
+### 7.2 Propose Fixes
+
+For all Critical and High findings, generate concrete fix proposals:
+
+```markdown
+### Proposed Fixes
+
+#### Fix 1: [Finding title]
+**File**: `path/to/file.ts` L42-L48
+**Issue**: [brief description]
+
+```diff
+- <current code>
++ <proposed fix>
+```
+
+#### Fix 2: ...
+```
+
+For Medium findings, list them as optional improvements.
+
+### 7.3 Apply Fixes
+
+**ASK USER** (use AskUserQuestion):
+- Header: "Fixes"
+- Question: "Found [N] issues. How would you like to proceed?"
+- Options:
+  - **Fix all Critical & High** — Apply [N] fixes automatically
+  - **Let me pick** — Review each fix individually
+  - **Skip fixes** — Continue without fixing (not recommended if REQUEST CHANGES/REJECT)
+
+Based on user choice:
+- **Fix all**: Apply all Critical/High fixes, then re-run validation (type check, lint, test if available)
+- **Let me pick**: Present each fix individually, apply approved ones, then re-run validation
+- **Skip fixes**: Proceed without changes
+
+### 7.4 Re-validate (if fixes applied)
+
+After applying fixes:
+1. Re-run type checker and linter (use Build System Detection table above)
+2. Run tests if available
+3. Update the verdict and risk score based on remaining findings
+4. Show updated summary: "Fixed [N] issues. Verdict changed from REQUEST CHANGES → APPROVE WITH SUGGESTIONS."
 
 ---
 
