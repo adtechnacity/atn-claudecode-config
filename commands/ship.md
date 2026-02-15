@@ -165,13 +165,13 @@ This must happen BEFORE the git workflow so changelog is included in the release
    ```
    Then merge and tag:
    ```bash
-   gh pr merge --merge --delete-branch
-   git checkout main
-   git pull origin main
+   gh pr merge --merge
+   git push origin --delete <current-branch>
+   git fetch origin main
    ```
    If versioning enabled, tag **after** merge so the tag sits on main:
    ```bash
-   git tag -a "v$VERSION" -m "Release v$VERSION"
+   git tag -a "v$VERSION" -m "Release v$VERSION" origin/main
    git push origin "v$VERSION"
    ```
 
