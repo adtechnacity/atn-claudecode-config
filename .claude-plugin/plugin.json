@@ -1,0 +1,10 @@
+{
+  "name": "atn-claudecode-config",
+  "description": "AdTechnacity development workflows — commands, skills, agents, and hooks for Claude Code",
+  "version": "1.0.0",
+  "author": {
+    "name": "AdTechnacity"
+  },
+  "repository": "https://github.com/adtechnacity/atn-claudecode-config",
+  "license": "MIT"
+}
