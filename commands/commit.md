@@ -8,8 +8,6 @@ Commit changes locally after quality checks. Does NOT push.
 
 ## Integration
 
-Enforced by `enforce-commit-skill.sh` (blocks direct `git commit`).
-
 Active hooks: `prevent-secrets-edit.sh`, `format-and-lint.sh`
 
 After committing: `git push`, `/pr`, or `/ship`

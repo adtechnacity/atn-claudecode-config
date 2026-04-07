@@ -4,7 +4,7 @@ Commands, skills, hooks, and agents for [Claude Code](https://docs.anthropic.com
 
 ## Usage Examples
 
-### Start a new product
+### Start a new project
 
 ```
 /scan-context
@@ -15,30 +15,13 @@ Tech stack: Next.js 15, PostgreSQL, Tailwind, deployed on Vercel.
 Set up the project structure and initialize everything.
 ```
 ```
-/feature-dev Add the main dashboard page with real-time revenue metrics
-```
-```
 /commit
 ```
 
-### Build a major feature
+### Plan and review
 
-```
-/feature-dev Add user authentication with OAuth (Google, GitHub),
-session management, role-based access control, and account settings page
-```
-> Walks through 7 phases: discovery, exploration, clarification, architecture, implementation, review, summary.
-
-### Plan first, review, then execute
-
-```
-/feature-dev Plan a notification system with email, in-app, and push channels
-```
 ```
 /review-plan docs/plans/2026-02-08-notifications.md
-```
-```
-Use orchestration to break this plan into tasks and execute it
 ```
 
 ### Quick fix
@@ -54,7 +37,7 @@ Fix it and make sure it's responsive down to 320px.
 ### Debug and investigate
 
 ```
-/debug Users are getting a blank screen after clicking "Export to CSV"
+/debug-it Users are getting a blank screen after clicking "Export to CSV"
 ```
 ```
 /sentry-triage analytics-dashboard
@@ -81,12 +64,6 @@ Fix it and make sure it's responsive down to 320px.
 /audit-ai                     # AI agent readiness audit (scored report)
 /performance frontend         # Core Web Vitals via Chrome DevTools
 /performance db               # Query analysis with EXPLAIN ANALYZE
-```
-
-### Autonomous development
-
-```
-/ralph-loop "Increase test coverage to 80%" --max-iterations 10
 ```
 
 ### Codex peer review
@@ -119,11 +96,10 @@ Design the database schema for a multi-tenant project management app
 
 | Flow | Commands |
 |------|----------|
-| **New project** | `/init` → `/scan-context` → `/feature-dev` → `/commit` → `/ship` |
-| **Major feature** | `/feature-dev` → `orchestration` > `write-plan` → `/review-plan` → `orchestration` > `orchestrate` → `/commit` → `/ship` |
+| **New project** | `/init` → `/scan-context` → `/commit` → `/ship` |
+| **Plan & build** | `/review-plan` → implement → `/commit` → `/ship` |
 | **Quick change** | (edit) → `/commit` → `/pr` or `/ship` |
-| **Debug** | `/debug` or `/sentry-triage` → fix → `/commit` |
-| **Autonomous** | `/ralph-loop` → `/cancel-ralph` when done |
+| **Debug** | `/debug-it` or `/sentry-triage` → fix → `/commit` |
 
 ### Quality
 
@@ -161,11 +137,10 @@ Design the database schema for a multi-tenant project management app
 |---------|-------------|
 | `/init` | Initialize Claude config for a project |
 | `/scan-context` | Prime Claude with project context |
-| `/feature-dev` | Guided 7-phase feature development |
 | `/commit` | Validate, simplify, and commit |
 | `/pr` | Create a pull request |
 | `/ship` | Full production release workflow |
-| `/debug` | Systematic debugging framework |
+| `/debug-it` | Hypothesis-driven debugging engine |
 | `/sentry-triage` | Sentry error triage and fixing |
 | `/fix-pr-comments` | Fix automated PR review comments |
 | `/review-plan` | Review implementation plans for gaps |
@@ -182,24 +157,10 @@ Design the database schema for a multi-tenant project management app
 | `/rollback` | Safe rollback |
 | `/changelog` | Generate changelog |
 | `/prune-branches` | Remove merged branches |
-| `/ralph-loop` | Autonomous development loop |
-| `/cancel-ralph` | Cancel active Ralph Loop |
 
 ### Skills
 
 Auto-invocable capabilities that provide patterns, templates, and specialized knowledge.
-
-**Workflow:**
-
-| Skill | Purpose |
-|-------|---------|
-| `orchestration` > `write-plan` | Implementation plans with bite-sized tasks |
-| `orchestration` > `execute` | Batch execution with review checkpoints |
-| `orchestration` > `subagent-dev` | Fresh subagent per task + 2-stage review |
-| `orchestration` > `orchestrate` | Claude Tasks with dependencies and parallel waves |
-| `orchestration` > `parallel-dispatch` | Run independent tasks concurrently |
-| `orchestration` > `finish-branch` | Verify, merge/PR, clean up branch |
-| `test-driven-development` | Red-Green-Refactor enforcement |
 
 **Design & Architecture:**
 
@@ -221,17 +182,12 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
 
 | Hook | Trigger | Purpose |
 |------|---------|---------|
-| `branch-protection.sh` | PreToolUse (Bash) | Block commits/pushes to protected branches |
-| `enforce-commit-skill.sh` | PreToolUse (Bash) | Require `/commit` over raw `git commit` |
 | `prevent-secrets-edit.sh` | PreToolUse (Edit/Write) | Block edits to secret-containing files |
 | `prevent-large-file-edit.sh` | PreToolUse (Edit/Write) | Block edits to oversized files |
 | `validate-before-push.sh` | PreToolUse (Bash) | Warn before push, block force-push |
 | `format-and-lint.sh` | PostToolUse (Edit/Write) | Auto-format and lint after edits |
 | `dependency-check.sh` | PreToolUse (Bash) | Check for dependency changes |
 | `notify-on-completion.sh` | PostToolUse (Bash) | Desktop notification on long commands |
-| `security-reminder.py` | PreToolUse (Edit/Write/MultiEdit) | Security reminders |
-| `ralph-loop-setup.sh` | Bash | Initialize Ralph Loop state |
-| `ralph-loop-stop.sh` | Stop | Manage Ralph Loop iteration |
 
 ### Agents
 
@@ -259,25 +215,13 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
               ┌─────────────────┼─────────────────┐
               │                 │                  │
       ┌───────▼──────┐  ┌──────▼──────┐  ┌───────▼───────┐
-      │ /feature-dev │  │   (edit)    │  │    /debug     │
-      │  7 phases    │  │  directly   │  │  systematic   │
+      │ /review-plan │  │   (edit)    │  │  /debug-it   │
+      │              │  │  directly   │  │  hypothesis  │
       └───────┬──────┘  └──────┬──────┘  └───────┬───────┘
               │                │                  │
-      ┌───────▼──────┐        │          ┌───────▼───────┐
-      │  write-plan  │        │          │/sentry-triage │
-      └───────┬──────┘        │          └───────┬───────┘
-              │                │                  │
-      ┌───────▼──────┐        │                  │
-      │ /review-plan │        │                  │
-      └───────┬──────┘        │                  │
-              │                │                  │
-     ┌────────▼────────┐      │                  │
-     │  orchestrate   │      │                  │
-     │  or subagent-  │      │                  │
-     │  dev           │      │                  │
-     │  or execute    │      │                  │
-     │               │      │                  │
-     └────────┬────────┘      │                  │
+              │                │          ┌───────▼───────┐
+              │                │          │/sentry-triage │
+              │                │          └───────┬───────┘
               │                │                  │
               └────────┬───────┴──────────────────┘
                        │
@@ -307,20 +251,14 @@ Auto-invocable capabilities that provide patterns, templates, and specialized kn
   ┌───────▼───────┐  ┌────────▼────────┐  ┌────────▼────────┐
   │  PreToolUse   │  │  PostToolUse    │  │     Stop        │
   │               │  │                 │  │                 │
-  │ branch-       │  │ format-and-     │  │ ralph-loop-     │
-  │  protection   │  │  lint           │  │  stop           │
-  │ enforce-      │  │ notify-on-      │  │                 │
-  │  commit-skill │  │  completion     │  │                 │
-  │ prevent-      │  │                 │  │                 │
-  │  secrets-edit │  │                 │  │                 │
-  │ prevent-      │  │                 │  │                 │
-  │  large-file   │  │                 │  │                 │
+  │ prevent-      │  │ format-and-     │  │  (none)         │
+  │  secrets-edit │  │  lint           │  │                 │
+  │ prevent-      │  │ notify-on-      │  │                 │
+  │  large-file   │  │  completion     │  │                 │
   │ validate-     │  │                 │  │                 │
   │  before-push  │  │                 │  │                 │
   │ dependency-   │  │                 │  │                 │
   │  check        │  │                 │  │                 │
-  │ security-     │  │                 │  │                 │
-  │  reminder     │  │                 │  │                 │
   └───────────────┘  └─────────────────┘  └─────────────────┘
 ```
 

@@ -5,7 +5,7 @@ argument-hint: Path to plan file or paste plan inline
 
 ## Integration
 
-Related: **`orchestration`** skill (`workflows/write-plan.md` creates plans, `workflows/orchestrate.md` builds task graphs), **`/feature-dev`** (guided development), **`/review-code`** (CodeRabbit-style code review)
+Related: **`/review-code`** (CodeRabbit-style code review)
 
 ## Phase 1: Load & Parse Plan (lead, no agents)
 
@@ -363,7 +363,7 @@ After updates are applied (or if no updates needed):
 
 **ASK USER**: "Plan review complete. Ready to execute?"
 
-If yes, proceed to the orchestration skill's `workflows/orchestrate.md` to break the plan into a prioritized task graph with dependencies and execute using Claude Tasks and Team Agents.
+If yes, break the plan into a prioritized task graph with dependencies and execute using Claude Tasks and Team Agents.
 
 ---
 

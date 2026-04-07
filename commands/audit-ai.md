@@ -254,7 +254,7 @@ Organize fixes into phases that build on each other:
 **Phase C**: [list tasks, estimated scope]
 ```
 
-**ASK USER**: Present the full report and ask which phase to begin, or if they want to generate a detailed implementation plan via **`orchestration`** skill.
+**ASK USER**: Present the full report and ask which phase to begin, or if they want to generate a detailed implementation plan.
 
 ## Error Recovery
 

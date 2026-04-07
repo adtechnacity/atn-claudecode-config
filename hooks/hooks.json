@@ -6,14 +6,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/branch-protection.sh"
-          },
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/enforce-commit-skill.sh"
-          },
-          {
-            "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/dependency-check.sh"
           },
           {
@@ -33,10 +25,6 @@
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/prevent-large-file-edit.sh"
           },
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/security-reminder.py"
-          }
         ]
       }
     ],
@@ -60,16 +48,6 @@
         ]
       }
     ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/ralph-loop-stop.sh"
-          }
-        ]
-      }
-    ]
+    "Stop": []
   }
 }

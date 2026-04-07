@@ -3,7 +3,7 @@ description: Prime Claude with project context. Run at session start for faster,
 ---
 
 ## Integration
-Related: **`/init`** (project setup), **`/feature-dev`** (Phase 2 uses similar exploration)
+Related: **`/init`** (project setup)
 
 Rapidly build a mental model of the project.
 
