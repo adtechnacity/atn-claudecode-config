@@ -4,9 +4,15 @@ description: Peer review code changes using OpenAI Codex agents for a second AI 
 
 Invoke Codex agents to peer review code changes independently from Claude.
 
-## Prerequisites
+## Prerequisites — MANDATORY
 
-Requires `codex-agent` CLI with tmux and Bun installed. Run `codex-agent health` to verify.
+**You MUST run this command first before doing anything else:**
+
+```bash
+codex-agent health
+```
+
+If the command succeeds (shows "Status: Ready"), proceed to Phase 1. If the command fails or is not found, stop and tell the user to install codex-agent. Do NOT skip this step. Do NOT assume the CLI is unavailable without running this command.
 
 ## Integration
 

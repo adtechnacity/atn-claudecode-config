@@ -145,4 +145,4 @@ If a teammate crashes:
 3. Optionally spawn a replacement on the same team
 4. Note the gap in the summary report
 
-See `workflows/parallel-dispatch.md` "Agent Teams" section for full team coordination patterns.
+Follow standard team coordination patterns: check TaskList for findings, use SendMessage for cross-agent communication.

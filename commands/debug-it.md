@@ -590,7 +590,7 @@ If a teammate crashes mid-phase:
 2. Continue with next phase (partial results are still valuable)
 3. Optionally spawn a replacement agent on the same team
 4. Note the gap in the Debug Report
-5. See `workflows/parallel-dispatch.md` "Agent Teams" section for full team coordination patterns
+5. Follow standard team coordination patterns: check TaskList for findings, use SendMessage for cross-agent communication
 
 ---
 

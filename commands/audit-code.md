@@ -203,4 +203,4 @@ If a teammate crashes mid-phase:
 - Test after fixing
 - Trust agent confidence >=80
 - Consider readability vs efficiency trade-offs
-- See `workflows/parallel-dispatch.md` "Agent Teams" section for team coordination patterns
+- Follow standard team coordination patterns: check TaskList for findings, use SendMessage for cross-agent communication

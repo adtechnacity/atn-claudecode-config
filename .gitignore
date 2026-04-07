@@ -19,12 +19,18 @@ tasks/
 teams/
 mcp-servers/
 image-cache/
+backups/
+sessions/
 
 # Claude Code operational files
 .lsp.json
 history.jsonl
 stats-cache.json
 security_warnings_state*
+mcp-needs-auth-cache.json
+vercel-plugin-*
+statusline-command.sh
+.DS_Store
 
 # Settings
 settings.local.json

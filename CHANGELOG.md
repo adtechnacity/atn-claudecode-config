@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2026-04-07
+
+### Added
+- **`/debug-it`**: New hypothesis-driven debugging engine with external intelligence (Sentry, DevTools, CloudWatch), parallel codebase investigation, and structured evidence chains
+
+### Removed
+- **Ralph Loop system**: Removed `/ralph-loop`, `/cancel-ralph` commands and `ralph-loop-setup.sh`, `ralph-loop-stop.sh` hooks
+- **Orchestration skill**: Removed entire `skills/orchestration/` directory (`write-plan`, `execute`, `subagent-dev`, `orchestrate`, `parallel-dispatch`, `finish-branch`)
+- **`/feature-dev`**: Removed guided feature development command
+- **`/debug`**: Replaced by `/debug-it`
+- **`branch-protection.sh`**: Removed branch protection hook
+- **`enforce-commit-skill.sh`**: Removed commit enforcement hook
+- **`security-reminder.py`**: Removed security reminder hook
+- **`test-driven-development`**: Removed TDD skill
+- **`statusline.sh`**: Removed statusline script
+- **`frontend-design.md`**: Removed in favor of `frontend-design` plugin skill
+
+### Changed
+- **`CLAUDE.md`**: Simplified to essential behavioral directives
+- **`settings.json`**: Removed references to deleted hooks
+- **`hooks/hooks.json`**: Cleaned up deleted hook references
+- **`skills/design/SKILL.md`**: Updated routing to use plugin skill for frontend design
+- **`README.md`**: Updated to reflect simplified configuration
+- **`/commit`**: Removed `enforce-commit-skill.sh` reference
+- **`/review-plan`**: Removed orchestration skill references
+- **Multiple commands**: Replaced `parallel-dispatch.md` references with inline guidance
+
 ## [0.5.8] - 2026-02-15
 
 ### Fixed
