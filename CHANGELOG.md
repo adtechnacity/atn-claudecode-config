@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.1] - 2026-04-30
+
+### Changed
+- **`/fix-pr-comments`**: Rewrote as a perpetual monitor. Polls CI/Actions and bot review comments continuously, fixes new bot comments and failed checks (lint, tests, build) iteratively, pushes after each round, and exits only when all required checks are green and no unprocessed bot comments remain. Fully autonomous with a stagnation guard to prevent loop bombs.
+- **`CLAUDE.md`**: Disambiguated `last30days` skill reference to `last30days:last30days`.
+
+### Added
+- **`.gitignore`**: Ignore runtime state files (`scheduled_tasks.lock`, `policy-limits.json`, `usage-data/`).
+
 ## [0.6.0] - 2026-04-07
 
 ### Added
