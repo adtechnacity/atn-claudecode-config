@@ -31,6 +31,9 @@ mcp-needs-auth-cache.json
 vercel-plugin-*
 statusline-command.sh
 .DS_Store
+scheduled_tasks.lock
+policy-limits.json
+usage-data/
 
 # Settings
 settings.local.json
