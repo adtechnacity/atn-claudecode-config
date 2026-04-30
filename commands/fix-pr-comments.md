@@ -91,6 +91,7 @@ gh api repos/{owner}/{repo}/pulls/<pr_number>/reviews --paginate
 | Snyk | `snyk-bot`, `snyk[bot]` |
 | Dependabot | `dependabot[bot]` |
 | GitHub Actions | `github-actions[bot]` |
+| Codex | `chatgpt-codex-connector[bot]`, `codex[bot]`, `openai-codex[bot]` |
 | Generic | any author ending in `[bot]` with file/line references or code suggestions |
 
 ### 2.2 Filter to actionable
