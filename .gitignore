@@ -21,6 +21,9 @@ mcp-servers/
 image-cache/
 backups/
 sessions/
+daemon/
+jobs/
+security/
 
 # Claude Code operational files
 .lsp.json
@@ -34,6 +37,13 @@ statusline-command.sh
 scheduled_tasks.lock
 policy-limits.json
 usage-data/
+daemon.log
+gh-pr-status-cache.json
+.last-cleanup
+.last-update-result.json
+
+# Secrets / credentials
+.credentials.json
 
 # Settings
 settings.local.json
